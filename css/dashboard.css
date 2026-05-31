@@ -1568,6 +1568,33 @@ body {
   flex-shrink: 0;
 }
 
+/* Design URL row */
+.design-url-row {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+}
+.design-url-row__btn {
+  flex-shrink: 0;
+  padding-bottom: 1px;
+}
+.design-url-row__btn .btn {
+  white-space: nowrap;
+}
+@media (max-width: 500px) {
+  .design-url-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .design-url-row__btn {
+    padding-bottom: 0;
+  }
+  .design-url-row__btn .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 /* Design color pickers */
 .color-picker-group {
   display: flex;
@@ -5228,4 +5255,305 @@ a.link:hover { text-decoration: underline; }
   .bp-review__pros-cons { grid-template-columns: 1fr; }
   .board-preview-frame__body { padding: var(--space-5) var(--space-4); }
   .stats-grid { grid-template-columns: 1fr 1fr; }
+}
+
+
+/* ============================================================
+   Mobile Bottom Navigation  (app-style, visible < 768px)
+   ============================================================ */
+
+.mobile-bottom-nav {
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--color-border-default);
+  z-index: calc(var(--z-overlay) + 1);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  /* safe-area aware height */
+  height: calc(60px + env(safe-area-inset-bottom, 0px));
+  box-shadow: 0 -1px 0 0 rgba(0,0,0,0.05), 0 -4px 16px rgba(0,0,0,0.06);
+}
+
+.mobile-bottom-nav__item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: var(--space-2) var(--space-1);
+  text-decoration: none;
+  color: var(--color-text-muted);
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  min-height: 60px;
+}
+
+.mobile-bottom-nav__item:active {
+  transform: scale(0.93);
+}
+
+.mobile-bottom-nav__icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  transition: transform var(--transition-fast);
+}
+
+.mobile-bottom-nav__label {
+  font-size: 10px;
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+  transition: color var(--transition-fast);
+  letter-spacing: 0.01em;
+}
+
+.mobile-bottom-nav__item--active {
+  color: var(--color-brand-primary);
+}
+
+.mobile-bottom-nav__item--active .mobile-bottom-nav__icon {
+  transform: translateY(-1px);
+}
+
+/* Active indicator dot */
+.mobile-bottom-nav__item--active::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  width: 4px;
+  height: 4px;
+  background: var(--color-brand-primary);
+  border-radius: 50%;
+}
+
+/* Hide on desktop */
+@media (min-width: 768px) {
+  .mobile-bottom-nav {
+    display: none;
+  }
+}
+
+/* ── Mobile content bottom padding (space for bottom nav) ── */
+@media (max-width: 767px) {
+  .dashboard-content {
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Tighter top padding on mobile */
+  .dashboard-content {
+    padding-top: var(--space-5);
+    padding-inline: var(--space-4);
+  }
+
+  /* Page title smaller on mobile */
+  .page-header__title,
+  .page-title {
+    font-size: var(--font-size-xl);
+  }
+
+  .page-header {
+    margin-bottom: var(--space-5);
+  }
+
+  /* Toast: bottom-center on mobile, above bottom nav */
+  .toast-container {
+    bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+    right: var(--space-4);
+    left: var(--space-4);
+    max-width: none;
+    align-items: center;
+  }
+
+  .toast {
+    width: 100%;
+  }
+
+  /* Settings tabs: horizontal scroll instead of wrap */
+  .settings-tabs {
+    display: flex;
+    flex-direction: row !important;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 0;
+    border-bottom: 2px solid var(--color-border-default);
+    padding-bottom: 0;
+  }
+  .settings-tabs::-webkit-scrollbar { display: none; }
+
+  .settings-tab {
+    flex-shrink: 0;
+    padding: var(--space-3) var(--space-3);
+    font-size: var(--font-size-xs);
+    min-height: 48px;
+    white-space: nowrap;
+  }
+
+  /* Keep icons on normal mobile, hide only if needed for space */
+  .settings-tab svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* Settings panels: no side margin needed */
+  .settings-layout {
+    gap: var(--space-4);
+  }
+
+  /* Settings sections: tighter padding */
+  .settings-section {
+    padding: var(--space-4);
+    border-radius: var(--radius-lg);
+  }
+
+  /* Settings fieldset */
+  .settings-fieldset {
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+  }
+
+  /* Form rows always single column on mobile */
+  .form-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Board cards: full width on smallest screens */
+  .board-cards-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  /* Filter bar stacked */
+  .filter-bar {
+    gap: var(--space-3);
+  }
+
+  /* Stat cards: 2-col always */
+  .stat-cards,
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+  }
+
+  /* Quick actions: 2-col */
+  .quick-actions,
+  .quick-actions-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2);
+  }
+
+  .quick-action {
+    padding: var(--space-3);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+    min-height: 80px;
+  }
+
+  /* Media grid: 2-col */
+  .media-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Topbar: hide breadcrumb label text on tiny screens */
+  .breadcrumb__link,
+  .breadcrumb__item:not(.breadcrumb__item--current) {
+    display: none;
+  }
+  .breadcrumb__item--current { font-size: var(--font-size-base); }
+
+  /* Board card actions touch-friendly */
+  .board-card__actions {
+    padding: var(--space-3);
+    gap: var(--space-2);
+  }
+
+  /* Improve color picker layout on mobile */
+  .color-picker-row {
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .color-picker-label {
+    min-width: 120px;
+    font-size: var(--font-size-xs);
+  }
+}
+
+/* Extra-small phones (< 380px) */
+@media (max-width: 380px) {
+  .dashboard-content {
+    padding-inline: var(--space-3);
+  }
+  .topbar {
+    padding-inline: var(--space-3);
+  }
+  .settings-tab svg { display: none; }
+}
+
+
+/* ============================================================
+   Settings — Design tab mobile improvements
+   ============================================================ */
+@media (max-width: 767px) {
+  /* Design preview card: full width */
+  .design-preview {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Website URL row stacked */
+  .design-url-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  /* Palette chips: smaller on mobile */
+  #design-palette button {
+    width: 30px !important;
+    height: 30px !important;
+  }
+}
+
+
+/* ============================================================
+   Pull-to-refresh feel — overscroll-behavior
+   ============================================================ */
+.dashboard-main {
+  overscroll-behavior-y: contain;
+}
+
+
+/* ============================================================
+   Smooth page transitions (mobile feel)
+   ============================================================ */
+@media (max-width: 767px) {
+  .settings-panel {
+    animation: panelFadeIn 0.18s ease-out both;
+  }
+
+  @keyframes panelFadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: none; }
+  }
+}
+
+
+/* ============================================================
+   Topbar safe-area awareness (iPhone notch landscape)
+   ============================================================ */
+.topbar {
+  padding-left: max(var(--space-5), env(safe-area-inset-left));
+  padding-right: max(var(--space-5), env(safe-area-inset-right));
 }
