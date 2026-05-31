@@ -516,82 +516,142 @@
             class="settings-panel"
             hidden
           >
-            <h2 class="settings-panel__heading">Design</h2>
-            <p class="settings-panel__description">Passe Farben und Branding für das Board-Editor-Interface deiner Kunden an.</p>
+            <h2 class="settings-panel__heading">Design &amp; Farben</h2>
+            <p class="settings-panel__description">
+              Hinterlege deine Website-URL — boards.solutions analysiert die Farben automatisch
+              und passt den eingebetteten Widget-Stil perfekt an deine Website an.
+            </p>
 
-            <form data-settings-form class="settings-form" novalidate>
+            <!-- ── Status banners ── -->
+            <div id="design-success" class="settings-banner settings-banner--success" hidden role="status" aria-live="polite">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+              Farbschema gespeichert — dein Widget passt sich ab sofort automatisch an.
+            </div>
+            <div id="design-error" class="settings-banner settings-banner--error" hidden role="alert" aria-live="assertive">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span id="design-error-text">Fehler.</span>
+            </div>
+
+            <form id="design-form" class="settings-form" novalidate>
+
+              <!-- ── Website URL + Analyse ── -->
+              <fieldset class="settings-fieldset">
+                <legend class="settings-fieldset__legend">Website-Analyse</legend>
+                <p class="form-hint">
+                  Gib deine Website-URL ein und klicke auf „Farben analysieren" —
+                  wir lesen dein Farbschema automatisch aus.
+                </p>
+                <div class="form-row" style="align-items: flex-end; gap: .75rem">
+                  <div class="form-group" style="flex:1">
+                    <label for="design-website-url" class="form-label">Website-URL</label>
+                    <input id="design-website-url" type="url" class="form-input"
+                      placeholder="https://deine-website.de" autocomplete="url">
+                  </div>
+                  <div class="form-group" style="flex-shrink:0; padding-bottom:1px">
+                    <button id="design-analyze-btn" type="button" class="btn btn--ghost">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                      <span id="design-analyze-text">Farben analysieren</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Detected palette -->
+                <div id="design-palette-wrap" hidden>
+                  <p class="form-label" style="margin-bottom:.5rem">Erkannte Farben — klicke zum Übernehmen:</p>
+                  <div id="design-palette" style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.5rem"></div>
+                  <p class="form-hint" id="design-palette-hint"></p>
+                </div>
+              </fieldset>
+
+              <!-- ── Color pickers ── -->
               <fieldset class="settings-fieldset">
                 <legend class="settings-fieldset__legend">Markenfarben</legend>
+                <p class="form-hint">Diese Farben werden auf dein eingebettetes Board-Widget angewendet.</p>
 
                 <div class="color-picker-row">
                   <div class="color-picker-group">
                     <label for="brand-primary" class="form-label">Primärfarbe</label>
                     <div class="color-picker-input">
-                      <input
-                        id="brand-primary"
-                        type="color"
-                        class="color-picker-input__swatch"
-                        value="#2563eb"
-                        data-color-preview="brand-primary-preview"
-                        aria-describedby="brand-primary-hex"
-                      >
-                      <span id="brand-primary-preview" class="color-picker-input__preview" style="background-color: #2563eb" aria-hidden="true"></span>
+                      <input id="brand-primary" type="color" class="color-picker-input__swatch" value="#2563eb">
+                      <span id="brand-primary-preview" class="color-picker-input__preview" style="background:#2563eb" aria-hidden="true"></span>
                       <span id="brand-primary-hex" class="color-picker-input__value">#2563eb</span>
                     </div>
+                    <span class="form-hint">Buttons, Badges</span>
                   </div>
 
                   <div class="color-picker-group">
                     <label for="brand-accent" class="form-label">Akzentfarbe</label>
                     <div class="color-picker-input">
-                      <input
-                        id="brand-accent"
-                        type="color"
-                        class="color-picker-input__swatch"
-                        value="#0ea5e9"
-                        data-color-preview="brand-accent-preview"
-                        aria-describedby="brand-accent-hex"
-                      >
-                      <span id="brand-accent-preview" class="color-picker-input__preview" style="background-color: #0ea5e9" aria-hidden="true"></span>
+                      <input id="brand-accent" type="color" class="color-picker-input__swatch" value="#0ea5e9">
+                      <span id="brand-accent-preview" class="color-picker-input__preview" style="background:#0ea5e9" aria-hidden="true"></span>
                       <span id="brand-accent-hex" class="color-picker-input__value">#0ea5e9</span>
                     </div>
+                    <span class="form-hint">Verlauf, Highlights</span>
                   </div>
 
                   <div class="color-picker-group">
                     <label for="brand-bg" class="form-label">Hintergrund</label>
                     <div class="color-picker-input">
-                      <input
-                        id="brand-bg"
-                        type="color"
-                        class="color-picker-input__swatch"
-                        value="#ffffff"
-                        data-color-preview="brand-bg-preview"
-                        aria-describedby="brand-bg-hex"
-                      >
-                      <span id="brand-bg-preview" class="color-picker-input__preview" style="background-color: #ffffff; border: 1px solid var(--color-border-default)" aria-hidden="true"></span>
+                      <input id="brand-bg" type="color" class="color-picker-input__swatch" value="#ffffff">
+                      <span id="brand-bg-preview" class="color-picker-input__preview" style="background:#ffffff;border:1px solid var(--color-border-default)" aria-hidden="true"></span>
                       <span id="brand-bg-hex" class="color-picker-input__value">#ffffff</span>
                     </div>
+                    <span class="form-hint">Karten-Hintergrund</span>
+                  </div>
+
+                  <div class="color-picker-group">
+                    <label for="brand-text" class="form-label">Textfarbe</label>
+                    <div class="color-picker-input">
+                      <input id="brand-text" type="color" class="color-picker-input__swatch" value="#0f172a">
+                      <span id="brand-text-preview" class="color-picker-input__preview" style="background:#0f172a" aria-hidden="true"></span>
+                      <span id="brand-text-hex" class="color-picker-input__value">#0f172a</span>
+                    </div>
+                    <span class="form-hint">Überschriften, Text</span>
                   </div>
                 </div>
               </fieldset>
 
+              <!-- ── Live Preview ── -->
               <fieldset class="settings-fieldset">
-                <legend class="settings-fieldset__legend">Logo</legend>
-                <div class="logo-upload">
-                  <div class="logo-upload__preview" aria-hidden="true">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <legend class="settings-fieldset__legend">Vorschau Widget-Karte</legend>
+                <div id="design-preview-card" style="
+                  max-width:300px;
+                  border-radius:14px;
+                  overflow:hidden;
+                  border:1px solid #e5e7eb;
+                  font-family:inherit;
+                ">
+                  <div id="dpv-stripe" style="height:5px;background:linear-gradient(90deg,#2563eb,#0ea5e9)"></div>
+                  <div id="dpv-body" style="padding:1.2rem 1.4rem 1.4rem;background:#fff">
+                    <span id="dpv-badge" style="
+                      display:inline-block;font-size:.68rem;font-weight:700;
+                      text-transform:uppercase;letter-spacing:.07em;
+                      padding:.2rem .65rem;border-radius:999px;
+                      background:#2563eb18;color:#2563eb;
+                    ">Blog</span>
+                    <div id="dpv-title" style="
+                      margin:.6rem 0 .4rem;font-size:1.05rem;font-weight:700;
+                      line-height:1.35;color:#0f172a
+                    ">Dein Board-Titel</div>
+                    <p style="margin:0;font-size:.875rem;color:#64748b;line-height:1.6">
+                      Kurze Beschreibung deines Inhalts, die Leser zum Weiterlesen animiert…
+                    </p>
+                    <button id="dpv-btn" style="
+                      display:inline-flex;align-items:center;gap:.35rem;
+                      margin-top:.9rem;padding:.48rem 1rem;
+                      background:transparent;border:1.5px solid #2563eb;
+                      border-radius:8px;font-size:.82rem;font-weight:600;
+                      color:#2563eb;cursor:default;
+                    ">Weiterlesen →</button>
                   </div>
-                  <div class="logo-upload__info">
-                    <p class="logo-upload__label">Kein Logo hochgeladen</p>
-                    <p class="logo-upload__hint">PNG oder SVG, empfohlen 200 × 50 px</p>
-                  </div>
-                  <button class="btn btn--ghost btn--sm" type="button" onclick="document.getElementById('logo-input').click()">Hochladen</button>
-                  <input id="logo-input" type="file" class="sr-only" accept="image/png,image/svg+xml" aria-label="Logo hochladen">
                 </div>
               </fieldset>
 
               <div class="settings-form__actions">
-                <button type="submit" class="btn btn--primary">Speichern</button>
-                <button type="button" class="btn btn--ghost">Zurücksetzen</button>
+                <button type="submit" id="design-save-btn" class="btn btn--primary">
+                  <span id="design-save-text">Farbschema speichern</span>
+                </button>
+                <button type="button" id="design-reset-btn" class="btn btn--ghost">Zurücksetzen</button>
               </div>
             </form>
           </section>
@@ -1033,6 +1093,258 @@ document.getElementById('delete-account-btn').addEventListener('click', () => {
 
 // ── Start ──────────────────────────────────────────────────────
 init();
+
+// ═══════════════════════════════════════════════════════════════
+//  Design & Farben
+// ═══════════════════════════════════════════════════════════════
+(() => {
+  const COLOR_FIELDS = [
+    { id: 'brand-primary', key: 'primary',    default: '#2563eb' },
+    { id: 'brand-accent',  key: 'secondary',  default: '#0ea5e9' },
+    { id: 'brand-bg',      key: 'background', default: '#ffffff' },
+    { id: 'brand-text',    key: 'text',        default: '#0f172a' },
+  ];
+
+  // ── Sync color picker ↔ hex label ↔ live preview ─────────────
+  function syncColorField(field) {
+    const input   = document.getElementById(field.id);
+    const preview = document.getElementById(field.id + '-preview');
+    const hexLbl  = document.getElementById(field.id + '-hex');
+    if (!input) return;
+    const update = () => {
+      const v = input.value;
+      if (preview) preview.style.background = v;
+      if (hexLbl)  hexLbl.textContent = v;
+      updatePreviewCard();
+    };
+    input.addEventListener('input', update);
+    input.addEventListener('change', update);
+  }
+  COLOR_FIELDS.forEach(syncColorField);
+
+  // ── Live preview card ─────────────────────────────────────────
+  function updatePreviewCard() {
+    const primary = document.getElementById('brand-primary')?.value || '#2563eb';
+    const accent  = document.getElementById('brand-accent')?.value  || '#0ea5e9';
+    const bg      = document.getElementById('brand-bg')?.value      || '#ffffff';
+    const text    = document.getElementById('brand-text')?.value    || '#0f172a';
+
+    const stripe  = document.getElementById('dpv-stripe');
+    const body    = document.getElementById('dpv-body');
+    const badge   = document.getElementById('dpv-badge');
+    const title   = document.getElementById('dpv-title');
+    const btn     = document.getElementById('dpv-btn');
+
+    if (stripe) stripe.style.background = `linear-gradient(90deg,${primary},${accent})`;
+    if (body)   body.style.background   = bg;
+    if (badge)  { badge.style.background = primary + '18'; badge.style.color = primary; }
+    if (title)  title.style.color = text;
+    if (btn)    { btn.style.borderColor = primary; btn.style.color = primary; }
+  }
+
+  // ── Load saved brand settings from API ────────────────────────
+  async function loadBrandSettings() {
+    try {
+      const res = await fetch(`${API}/settings/brand`, { headers: authHeaders() });
+      if (!res.ok) return;
+      const data = await res.json();
+
+      if (data.websiteUrl) {
+        const urlInput = document.getElementById('design-website-url');
+        if (urlInput) urlInput.value = data.websiteUrl;
+      }
+
+      const colors = data.brandColors || {};
+      COLOR_FIELDS.forEach(f => {
+        const val = colors[f.key];
+        if (!val) return;
+        const input = document.getElementById(f.id);
+        if (input) { input.value = val; }
+        const preview = document.getElementById(f.id + '-preview');
+        if (preview) preview.style.background = val;
+        const hex = document.getElementById(f.id + '-hex');
+        if (hex) hex.textContent = val;
+      });
+      updatePreviewCard();
+    } catch { /* offline */ }
+  }
+  loadBrandSettings();
+
+  // ── Color analysis ────────────────────────────────────────────
+  const analyzeBtn  = document.getElementById('design-analyze-btn');
+  const analyzeTxt  = document.getElementById('design-analyze-text');
+  const paletteWrap = document.getElementById('design-palette-wrap');
+  const paletteEl   = document.getElementById('design-palette');
+  const paletteHint = document.getElementById('design-palette-hint');
+  const urlInput    = document.getElementById('design-website-url');
+
+  // Which color field is "active" for palette click assignment
+  let activePicker = 'brand-primary';
+  COLOR_FIELDS.forEach(f => {
+    document.getElementById(f.id)?.addEventListener('focus', () => { activePicker = f.id; });
+    document.getElementById(f.id)?.addEventListener('click', () => { activePicker = f.id; });
+  });
+
+  function buildPalette(palette, semantic) {
+    paletteEl.innerHTML = '';
+
+    // Semantic quick-apply chips
+    const semanticMap = {
+      primary:    'brand-primary',
+      secondary:  'brand-accent',
+      background: 'brand-bg',
+      text:       'brand-text',
+    };
+    const semanticLabels = {
+      primary: 'Primär', secondary: 'Akzent',
+      background: 'Hintergrund', text: 'Text',
+    };
+
+    // Auto-apply semantic colors if found
+    Object.entries(semantic).forEach(([key, color]) => {
+      const fieldId = semanticMap[key];
+      if (!fieldId || !color) return;
+      const input   = document.getElementById(fieldId);
+      const preview = document.getElementById(fieldId + '-preview');
+      const hex     = document.getElementById(fieldId + '-hex');
+      if (input)   input.value = color;
+      if (preview) preview.style.background = color;
+      if (hex)     hex.textContent = color;
+    });
+    updatePreviewCard();
+
+    // Full palette chips
+    palette.forEach(color => {
+      const chip = document.createElement('button');
+      chip.type  = 'button';
+      chip.title = color;
+      chip.style.cssText = `
+        width:36px;height:36px;border-radius:8px;border:2px solid #e5e7eb;
+        background:${color};cursor:pointer;transition:transform .12s,border-color .12s;
+        flex-shrink:0;
+      `;
+      chip.setAttribute('aria-label', `Farbe ${color} übernehmen`);
+      chip.addEventListener('mouseenter', () => { chip.style.transform = 'scale(1.15)'; chip.style.borderColor = '#94a3b8'; });
+      chip.addEventListener('mouseleave', () => { chip.style.transform = ''; chip.style.borderColor = '#e5e7eb'; });
+      chip.addEventListener('click', () => {
+        const input   = document.getElementById(activePicker);
+        const preview = document.getElementById(activePicker + '-preview');
+        const hexEl   = document.getElementById(activePicker + '-hex');
+        if (input)   input.value = color;
+        if (preview) preview.style.background = color;
+        if (hexEl)   hexEl.textContent = color;
+        updatePreviewCard();
+        chip.style.borderColor = '#2563eb';
+        setTimeout(() => { chip.style.borderColor = '#e5e7eb'; }, 800);
+      });
+      paletteEl.appendChild(chip);
+    });
+
+    const autoApplied = Object.keys(semantic).map(k => semanticLabels[k]).filter(Boolean);
+    paletteHint.textContent = autoApplied.length
+      ? `Automatisch erkannt und zugewiesen: ${autoApplied.join(', ')}. Klicke eine Farbe, um sie dem aktiven Farbfeld zuzuweisen.`
+      : 'Klicke eine Farbe, um sie dem zuletzt gewählten Farbfeld zuzuweisen.';
+
+    paletteWrap.hidden = false;
+  }
+
+  if (analyzeBtn) {
+    analyzeBtn.addEventListener('click', async () => {
+      const url = urlInput?.value.trim();
+      if (!url) { urlInput?.focus(); return; }
+
+      analyzeBtn.disabled  = true;
+      analyzeTxt.textContent = 'Analysiere…';
+
+      try {
+        const res = await fetch(`${API}/settings/analyze-colors`, {
+          method:  'POST',
+          headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ url }),
+        });
+        const data = await res.json();
+
+        if (data.error && !data.palette?.length) {
+          document.getElementById('design-error-text').textContent =
+            `Analyse fehlgeschlagen: ${data.error}`;
+          document.getElementById('design-error').hidden = false;
+          setTimeout(() => { document.getElementById('design-error').hidden = true; }, 5000);
+          return;
+        }
+
+        buildPalette(data.palette || [], data.semantic || {});
+
+      } catch (e) {
+        document.getElementById('design-error-text').textContent =
+          'Verbindungsfehler bei der Analyse.';
+        document.getElementById('design-error').hidden = false;
+        setTimeout(() => { document.getElementById('design-error').hidden = true; }, 4000);
+      } finally {
+        analyzeBtn.disabled  = false;
+        analyzeTxt.textContent = 'Farben analysieren';
+      }
+    });
+  }
+
+  // ── Save ──────────────────────────────────────────────────────
+  const designForm    = document.getElementById('design-form');
+  const designSaveBtn = document.getElementById('design-save-btn');
+  const designSaveTxt = document.getElementById('design-save-text');
+  const designSuccess = document.getElementById('design-success');
+  const designError   = document.getElementById('design-error');
+  const designErrTxt  = document.getElementById('design-error-text');
+
+  if (designForm) {
+    designForm.addEventListener('submit', async e => {
+      e.preventDefault();
+      designSuccess.hidden = true;
+      designError.hidden   = true;
+
+      const websiteUrl  = urlInput?.value.trim() || '';
+      const brandColors = {};
+      COLOR_FIELDS.forEach(f => {
+        brandColors[f.key] = document.getElementById(f.id)?.value || f.default;
+      });
+
+      designSaveBtn.disabled    = true;
+      designSaveTxt.textContent = 'Speichern…';
+
+      try {
+        const res = await fetch(`${API}/settings/brand`, {
+          method:  'PUT',
+          headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ websiteUrl, brandColors }),
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        designSuccess.hidden = false;
+        setTimeout(() => { designSuccess.hidden = true; }, 5000);
+      } catch {
+        designErrTxt.textContent = 'Speichern fehlgeschlagen.';
+        designError.hidden = false;
+        setTimeout(() => { designError.hidden = true; }, 4000);
+      } finally {
+        designSaveBtn.disabled    = false;
+        designSaveTxt.textContent = 'Farbschema speichern';
+      }
+    });
+  }
+
+  // ── Reset ──────────────────────────────────────────────────────
+  document.getElementById('design-reset-btn')?.addEventListener('click', () => {
+    COLOR_FIELDS.forEach(f => {
+      const input   = document.getElementById(f.id);
+      const preview = document.getElementById(f.id + '-preview');
+      const hex     = document.getElementById(f.id + '-hex');
+      if (input)   input.value = f.default;
+      if (preview) preview.style.background = f.default;
+      if (hex)     hex.textContent = f.default;
+    });
+    updatePreviewCard();
+    paletteWrap.hidden = true;
+  });
+
+  updatePreviewCard();
+})();
 })();
 </script>
 </body>

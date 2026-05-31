@@ -617,9 +617,9 @@ if (isEditMode) {
 const state = {
   step: 1,
   type: null,
-  blogImage: null,
-  affImage:  null,
-  revImage:  null,
+  blogImage: null, blogThumb: null,
+  affImage:  null, affThumb:  null,
+  revImage:  null, revThumb:  null,
   affiliateLinks: [],
   revPros:   [],
   revCons:   [],
@@ -628,6 +628,24 @@ const state = {
   generatedEmbedId: null,
   editId: isEditMode ? editId : null,
 };
+
+/* ── Thumbnail generator ─────────────────────────────────── */
+function generateThumb(dataUrl, maxW = 640, maxH = 430) {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => {
+      const scale  = Math.min(maxW / img.width, maxH / img.height, 1);
+      const w = Math.round(img.width * scale);
+      const h = Math.round(img.height * scale);
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      resolve(canvas.toDataURL('image/jpeg', 0.72));
+    };
+    img.onerror = () => resolve('');
+    img.src = dataUrl;
+  });
+}
 
 /* ── Elements ─────────────────────────────────────────────── */
 const panels    = [1,2,3].map(n => document.getElementById(`panel-${n}`));
@@ -735,7 +753,12 @@ function setupImageUpload({ areaId, inputId, placeholderId, previewId, removeId,
     if (!file?.type.startsWith('image/')) { showToast('Nur Bilder erlaubt (JPG, PNG, WEBP).','error'); return; }
     if (file.size > 5*1024*1024) { showToast('Bild zu groß — max. 5 MB.','error'); return; }
     const r = new FileReader();
-    r.onload = e => { showPrev(e.target.result); onLoad(e.target.result); };
+    r.onload = async e => {
+      const full  = e.target.result;
+      const thumb = await generateThumb(full);
+      showPrev(full);
+      onLoad(full, thumb);
+    };
     r.readAsDataURL(file);
   }
 
@@ -748,8 +771,8 @@ function setupImageUpload({ areaId, inputId, placeholderId, previewId, removeId,
   area.addEventListener('drop', e => { e.preventDefault(); area.classList.remove('is-dragging'); if (e.dataTransfer.files[0]) loadFile(e.dataTransfer.files[0]); });
 }
 
-setupImageUpload({ areaId:'blog-image-upload-area', inputId:'blog-image-input', placeholderId:'blog-image-placeholder', previewId:'blog-image-preview', removeId:'blog-image-remove', onLoad: d=>{ state.blogImage=d; }, onRemove: ()=>{ state.blogImage=null; } });
-setupImageUpload({ areaId:'aff-image-upload-area',  inputId:'aff-image-input',  placeholderId:'aff-image-placeholder',  previewId:'aff-image-preview',  removeId:'aff-image-remove',  onLoad: d=>{ state.affImage=d; },  onRemove: ()=>{ state.affImage=null; } });
+setupImageUpload({ areaId:'blog-image-upload-area', inputId:'blog-image-input', placeholderId:'blog-image-placeholder', previewId:'blog-image-preview', removeId:'blog-image-remove', onLoad: (d,t)=>{ state.blogImage=d; state.blogThumb=t; }, onRemove: ()=>{ state.blogImage=null; state.blogThumb=null; } });
+setupImageUpload({ areaId:'aff-image-upload-area',  inputId:'aff-image-input',  placeholderId:'aff-image-placeholder',  previewId:'aff-image-preview',  removeId:'aff-image-remove',  onLoad: (d,t)=>{ state.affImage=d;  state.affThumb=t;  }, onRemove: ()=>{ state.affImage=null;  state.affThumb=null;  } });
 
 /* ── Blog affiliate links ────────────────────────────── */
 document.getElementById('blog-add-link')?.addEventListener('click', () => {
@@ -883,6 +906,7 @@ function prefillEditData(board) {
     setVal('blog-tags',       (board.tags || []).join(', '));
     if (board.image) {
       state.blogImage = board.image;
+      state.blogThumb = board.imageThumb || null;
       const prev = document.getElementById('blog-image-preview');
       const ph   = document.getElementById('blog-image-placeholder');
       const rem  = document.getElementById('blog-image-remove');
@@ -907,6 +931,7 @@ function prefillEditData(board) {
     setVal('aff-badge',         board.badge);
     if (board.image) {
       state.affImage = board.image;
+      state.affThumb = board.imageThumb || null;
       const prev = document.getElementById('aff-image-preview');
       const ph   = document.getElementById('aff-image-placeholder');
       const rem  = document.getElementById('aff-image-remove');
@@ -1143,6 +1168,7 @@ function collectData() {
     content:        v('blog-content'),
     tags:           v('blog-tags').split(',').map(t=>t.trim()).filter(Boolean),
     image:          state.blogImage,
+    imageThumb:     state.blogThumb,
     affiliateLinks: state.affiliateLinks.filter(l => l.url),
     embedId,
   };
@@ -1158,6 +1184,7 @@ function collectData() {
     rating:       v('aff-rating') ? parseFloat(v('aff-rating')) : null,
     badge:        v('aff-badge'),
     image:        state.affImage,
+    imageThumb:   state.affThumb,
     embedId,
   };
 
