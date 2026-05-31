@@ -1204,8 +1204,10 @@ async function handleSave(status) {
       : (status === 'published' ? 'Board veröffentlicht! 🚀' : 'Entwurf gespeichert.');
     showToast(msg, 'success', 3000);
     setTimeout(() => { window.location.href = 'boards.html'; }, 600);
-  } catch {
-    showToast('Speichern fehlgeschlagen. Bitte erneut versuchen.', 'error');
+  } catch (err) {
+    console.error('[boards] saveBoard failed:', err);
+    const msg = err?.message ? `Speichern fehlgeschlagen: ${err.message}` : 'Speichern fehlgeschlagen. Bitte erneut versuchen.';
+    showToast(msg, 'error', 8000);
     draftBtn.disabled   = false;
     publishBtn.disabled = false;
   }
