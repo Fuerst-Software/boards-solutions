@@ -12,21 +12,23 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  padding: var(--space-3) var(--space-6);
-  font-size: var(--font-size-base);
+  padding: 0.5625rem var(--space-5);   /* 9px 20px — tighter than before */
+  font-size: 0.9375rem;                 /* 15px */
   font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.01em;
   line-height: 1;
   border-radius: var(--radius-md);
-  border: 2px solid transparent;
+  border: 1.5px solid transparent;
   cursor: pointer;
   text-decoration: none;
   white-space: nowrap;
   transition: background var(--transition-fast), border-color var(--transition-fast),
-              color var(--transition-fast), box-shadow var(--transition-fast);
+              color var(--transition-fast), box-shadow var(--transition-fast),
+              transform var(--transition-fast);
   position: relative;
   overflow: hidden;
-  min-height: 44px; /* WCAG 2.5.8 minimum touch target */
-  min-width: 44px;
+  min-height: 40px;
+  min-width: 40px;
   -webkit-user-select: none;
   user-select: none;
 }
@@ -43,16 +45,21 @@
   background: var(--color-brand-primary);
   color: var(--color-text-inverse);
   border-color: var(--color-brand-primary);
+  box-shadow: 0 1px 3px rgba(37,99,235,0.25), 0 1px 0 rgba(255,255,255,0.07) inset;
 }
 
 .btn--primary:hover {
   background: var(--color-brand-hover);
   border-color: var(--color-brand-hover);
+  box-shadow: 0 4px 10px rgba(37,99,235,0.32), 0 1px 0 rgba(255,255,255,0.07) inset;
+  transform: translateY(-1px);
 }
 
 .btn--primary:active {
   background: var(--color-blue-900);
   border-color: var(--color-blue-900);
+  transform: translateY(0);
+  box-shadow: none;
 }
 
 /* Ghost */
@@ -64,10 +71,32 @@
 
 .btn--ghost:hover {
   background: var(--color-brand-light);
+  box-shadow: 0 2px 6px rgba(37,99,235,0.1);
+  transform: translateY(-1px);
 }
 
 .btn--ghost:active {
   background: var(--color-blue-100);
+  transform: translateY(0);
+}
+
+/* Secondary / Neutral */
+.btn--secondary {
+  background: var(--color-surface-base);
+  color: var(--color-text-primary);
+  border-color: var(--color-border-default);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+}
+
+.btn--secondary:hover {
+  border-color: var(--color-slate-400);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transform: translateY(-1px);
+}
+
+.btn--secondary:active {
+  background: var(--color-surface-subtle);
+  transform: translateY(0);
 }
 
 /* Ghost Inverse — for dark section backgrounds */
@@ -84,23 +113,23 @@
 
 /* Sizes */
 .btn--sm {
-  padding: var(--space-2) var(--space-4);
+  padding: 0.375rem var(--space-3);   /* 6px 12px */
   font-size: var(--font-size-sm);
-  min-height: 36px;
+  min-height: 32px;
   border-radius: var(--radius-md);
 }
 
 .btn--lg {
-  padding: var(--space-4) var(--space-8);
-  font-size: var(--font-size-lg);
-  min-height: 52px;
+  padding: 0.6875rem var(--space-7);  /* 11px 28px */
+  font-size: var(--font-size-base);
+  min-height: 46px;
   border-radius: var(--radius-lg);
 }
 
 .btn--xl {
-  padding: var(--space-5) var(--space-10);
-  font-size: var(--font-size-xl);
-  min-height: 60px;
+  padding: var(--space-4) var(--space-10);
+  font-size: var(--font-size-lg);
+  min-height: 54px;
   border-radius: var(--radius-lg);
 }
 
@@ -488,22 +517,32 @@
   margin-left: var(--space-1);
 }
 
+.form-label {
+  font-size: 0.8125rem;  /* 13px — crisp label above input */
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  letter-spacing: 0.01em;
+}
+
 .form-input {
   width: 100%;
-  padding: var(--space-3) var(--space-4);
-  font-size: var(--font-size-base);
+  padding: 0.5rem var(--space-3);      /* 8px 12px — more compact */
+  font-size: 0.9375rem;                 /* 15px */
   color: var(--color-text-primary);
   background: var(--color-surface-base);
   border: 1.5px solid var(--color-border-default);
   border-radius: var(--radius-md);
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
-  min-height: 44px; /* WCAG 2.5.8 */
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast),
+              background var(--transition-fast);
+  min-height: 38px;
   appearance: none;
   -webkit-appearance: none;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04) inset;
 }
 
 .form-input::placeholder {
   color: var(--color-text-muted);
+  font-size: 0.875rem;
 }
 
 .form-input:hover {
@@ -512,8 +551,9 @@
 
 .form-input:focus {
   border-color: var(--color-border-focus);
-  box-shadow: 0 0 0 3px rgb(59 130 246 / 0.15);
+  box-shadow: 0 0 0 3px rgb(37 99 235 / 0.12);
   outline: none;
+  background: var(--color-surface-base);
 }
 
 .form-input[aria-invalid="true"] {

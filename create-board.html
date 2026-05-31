@@ -560,6 +560,78 @@
           <span id="save-error-text">Bitte alle Pflichtfelder ausfüllen.</span>
         </div>
 
+        <!-- ── Widget-Farben ── -->
+        <div class="cb-colors-section">
+          <div class="cb-colors-section__header">
+            <div class="cb-colors-section__icon" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8z"/></svg>
+            </div>
+            <div>
+              <span class="cb-colors-section__title">Widget-Farben anpassen</span>
+              <span class="cb-colors-section__subtitle">Farben aus deiner Website automatisch erkennen</span>
+            </div>
+            <button id="cb-colors-toggle" class="btn btn--sm btn--ghost cb-colors-section__toggle" type="button" aria-expanded="false" aria-controls="cb-colors-body">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+          </div>
+
+          <div id="cb-colors-body" class="cb-colors-section__body" hidden>
+            <div class="cb-colors-url-row">
+              <div class="form-group" style="flex:1">
+                <label for="cb-website-url" class="form-label">Website-URL analysieren</label>
+                <input id="cb-website-url" type="url" class="form-input" placeholder="https://kunden-website.de" autocomplete="url">
+              </div>
+              <div class="form-group cb-colors-url-row__btn">
+                <button id="cb-analyze-btn" type="button" class="btn btn--ghost btn--sm">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                  <span id="cb-analyze-text">Farben erkennen</span>
+                </button>
+              </div>
+            </div>
+
+            <div id="cb-palette-wrap" hidden>
+              <p class="cb-palette-hint" id="cb-palette-hint"></p>
+              <div id="cb-palette" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;"></div>
+            </div>
+
+            <div class="cb-color-pickers">
+              <div class="cb-color-field">
+                <label class="form-label" for="cb-primary">Primärfarbe</label>
+                <div class="cb-color-input">
+                  <input type="color" id="cb-primary" value="#2563eb">
+                  <div id="cb-primary-preview" class="cb-color-preview" style="background:#2563eb"></div>
+                  <span id="cb-primary-hex" class="cb-color-hex">#2563eb</span>
+                </div>
+              </div>
+              <div class="cb-color-field">
+                <label class="form-label" for="cb-accent">Akzentfarbe</label>
+                <div class="cb-color-input">
+                  <input type="color" id="cb-accent" value="#0ea5e9">
+                  <div id="cb-accent-preview" class="cb-color-preview" style="background:#0ea5e9"></div>
+                  <span id="cb-accent-hex" class="cb-color-hex">#0ea5e9</span>
+                </div>
+              </div>
+              <div class="cb-color-field">
+                <label class="form-label" for="cb-bg">Hintergrund</label>
+                <div class="cb-color-input">
+                  <input type="color" id="cb-bg" value="#ffffff">
+                  <div id="cb-bg-preview" class="cb-color-preview" style="background:#ffffff"></div>
+                  <span id="cb-bg-hex" class="cb-color-hex">#ffffff</span>
+                </div>
+              </div>
+              <div class="cb-color-field">
+                <label class="form-label" for="cb-text">Textfarbe</label>
+                <div class="cb-color-input">
+                  <input type="color" id="cb-text" value="#0f172a">
+                  <div id="cb-text-preview" class="cb-color-preview" style="background:#0f172a"></div>
+                  <span id="cb-text-hex" class="cb-color-hex">#0f172a</span>
+                </div>
+              </div>
+            </div>
+            <p class="form-hint" style="margin-top:4px">Diese Farben werden global für dein Widget gespeichert und auf alle zukünftigen Boards angewendet.</p>
+          </div>
+        </div>
+
         <div class="wizard-nav">
           <button id="btn-prev-3" class="btn btn--ghost" type="button">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
@@ -1255,5 +1327,161 @@ function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;'
 function setText(id, txt) { const el=document.getElementById(id); if(el) el.textContent=txt; }
 })();
 </script>
+
+<script type="module">
+/* ── Create-board color section ─────────────────────────────── */
+import { authHeaders } from './js/auth.js';
+const API = 'https://web-production-83480.up.railway.app/api';
+
+const CB_FIELDS = [
+  { id: 'cb-primary', key: 'primary'    },
+  { id: 'cb-accent',  key: 'secondary'  },
+  { id: 'cb-bg',      key: 'background' },
+  { id: 'cb-text',    key: 'text'       },
+];
+
+// Toggle open/close
+const toggleBtn  = document.getElementById('cb-colors-toggle');
+const colorsBody = document.getElementById('cb-colors-body');
+const colorsHdr  = document.querySelector('.cb-colors-section__header');
+
+function setExpanded(open) {
+  toggleBtn.setAttribute('aria-expanded', open);
+  colorsBody.hidden = !open;
+}
+toggleBtn?.addEventListener('click', () => setExpanded(colorsBody.hidden));
+colorsHdr?.addEventListener('click', e => {
+  if (e.target.closest('button')) return;
+  setExpanded(colorsBody.hidden);
+});
+
+// Sync color picker → preview + hex label
+function syncColor(fieldId, value) {
+  const preview = document.getElementById(fieldId + '-preview');
+  const hex     = document.getElementById(fieldId + '-hex');
+  const input   = document.getElementById(fieldId);
+  if (preview) preview.style.background = value;
+  if (hex)     hex.textContent = value;
+  if (input)   input.value = value;
+}
+
+// Make preview div clickable to open native color picker
+CB_FIELDS.forEach(({ id }) => {
+  const input   = document.getElementById(id);
+  const preview = document.getElementById(id + '-preview');
+  if (input && preview) {
+    input.style.cssText = 'position:absolute;opacity:0;width:0;height:0;pointer-events:none';
+    preview.addEventListener('click', () => input.click());
+    input.addEventListener('input', () => syncColor(id, input.value));
+  }
+});
+
+// Load saved brand colors on init
+(async () => {
+  try {
+    const res = await fetch(`${API}/settings/brand`, { headers: authHeaders() });
+    if (!res.ok) return;
+    const data = await res.json();
+    const colors = data.brandColors || {};
+    const map = { primary: 'cb-primary', secondary: 'cb-accent', background: 'cb-bg', text: 'cb-text' };
+    Object.entries(map).forEach(([key, id]) => {
+      if (colors[key]) syncColor(id, colors[key]);
+    });
+    if (data.websiteUrl) {
+      const urlEl = document.getElementById('cb-website-url');
+      if (urlEl) urlEl.value = data.websiteUrl;
+    }
+  } catch {}
+})();
+
+// Analyze button
+const analyzeBtn = document.getElementById('cb-analyze-btn');
+const analyzeTxt = document.getElementById('cb-analyze-text');
+const urlInput   = document.getElementById('cb-website-url');
+const paletteEl  = document.getElementById('cb-palette');
+const paletteWrap= document.getElementById('cb-palette-wrap');
+const paletteHint= document.getElementById('cb-palette-hint');
+
+let activePicker = 'cb-primary';
+CB_FIELDS.forEach(({ id }) => {
+  document.getElementById(id + '-preview')?.addEventListener('click', () => { activePicker = id; });
+});
+
+analyzeBtn?.addEventListener('click', async () => {
+  const url = urlInput?.value.trim();
+  if (!url) return;
+  analyzeBtn.disabled = true;
+  analyzeTxt.textContent = 'Analysiere…';
+  try {
+    const res  = await fetch(`${API}/settings/analyze-colors`, {
+      method: 'POST',
+      headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url }),
+    });
+    const data = await res.json();
+    if (data.error) { analyzeTxt.textContent = 'Fehler'; return; }
+
+    // Auto-apply semantic colors
+    const semMap = { primary: 'cb-primary', secondary: 'cb-accent', background: 'cb-bg', text: 'cb-text' };
+    const applied = [];
+    Object.entries(data.semantic || {}).forEach(([key, color]) => {
+      const fid = semMap[key];
+      if (fid && color) { syncColor(fid, color); applied.push(key); }
+    });
+
+    // Build palette chips
+    paletteEl.innerHTML = '';
+    (data.palette || []).forEach(color => {
+      const chip = document.createElement('button');
+      chip.type  = 'button';
+      chip.title = color;
+      chip.style.cssText = `width:28px;height:28px;border-radius:6px;border:2px solid #e2e8f0;background:${color};cursor:pointer;flex-shrink:0;transition:transform .12s,border-color .12s`;
+      chip.addEventListener('mouseenter', () => { chip.style.transform='scale(1.15)'; chip.style.borderColor='#94a3b8'; });
+      chip.addEventListener('mouseleave', () => { chip.style.transform=''; chip.style.borderColor='#e2e8f0'; });
+      chip.addEventListener('click', () => { syncColor(activePicker, color); chip.style.borderColor='#2563eb'; setTimeout(()=>{ chip.style.borderColor='#e2e8f0'; }, 800); });
+      paletteEl.appendChild(chip);
+    });
+
+    paletteHint.textContent = applied.length
+      ? `Automatisch erkannt: ${applied.join(', ')}. Klicke eine Farbe, um sie zuzuweisen.`
+      : 'Klicke eine Farbe, um sie dem aktiven Farbfeld zuzuweisen.';
+    paletteWrap.hidden = !data.palette?.length;
+
+    // Persist to global brand settings
+    const brandColors = {};
+    CB_FIELDS.forEach(({ id, key }) => { brandColors[key] = document.getElementById(id)?.value || ''; });
+    await fetch(`${API}/settings/brand`, {
+      method: 'PUT',
+      headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+      body: JSON.stringify({ websiteUrl: url, brandColors }),
+    }).catch(() => {});
+  } catch {
+    analyzeTxt.textContent = 'Verbindungsfehler';
+  } finally {
+    analyzeBtn.disabled = false;
+    analyzeTxt.textContent = 'Farben erkennen';
+  }
+});
+</script>
+
+<!-- ── Mobile Bottom Navigation ── -->
+<nav class="mobile-bottom-nav" aria-label="Mobile Navigation">
+  <a href="app.html" class="mobile-bottom-nav__item" aria-label="Übersicht">
+    <svg class="mobile-bottom-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+    <span class="mobile-bottom-nav__label">Übersicht</span>
+  </a>
+  <a href="boards.html" class="mobile-bottom-nav__item mobile-bottom-nav__item--active" aria-current="page" aria-label="Meine Boards">
+    <svg class="mobile-bottom-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    <span class="mobile-bottom-nav__label">Boards</span>
+  </a>
+  <a href="media-library.html" class="mobile-bottom-nav__item" aria-label="Mediathek">
+    <svg class="mobile-bottom-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+    <span class="mobile-bottom-nav__label">Medien</span>
+  </a>
+  <a href="settings.html" class="mobile-bottom-nav__item" aria-label="Einstellungen">
+    <svg class="mobile-bottom-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+    <span class="mobile-bottom-nav__label">Einstellungen</span>
+  </a>
+</nav>
 </body>
 </html>
