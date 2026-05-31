@@ -136,20 +136,22 @@ export async function getBoards({ type, status, q } = {}) {
 
   const cached = lsGet();
 
-  // Empty cache (e.g. fresh login) → fetch directly from API, no health-check gate
-  if (cached.length === 0) {
-    const fresh = await apiFetchBoards({ type, status, q });
-    if (fresh !== null) {
-      lsSet(fresh);
-      _apiOk = true;
-      return _filter(fresh, { type, status, q });
-    }
-    return [];
+  // Always start a background refresh so the UI updates with server data
+  backgroundRefresh();
+
+  // Have cache → return immediately (stale-while-revalidate)
+  if (cached.length > 0) {
+    return _filter(cached, { type, status, q });
   }
 
-  // Have cache → return immediately, refresh in background
-  backgroundRefresh();
-  return _filter(cached, { type, status, q });
+  // Empty cache → blocking fetch from API
+  const fresh = await apiFetchBoards({ type, status, q });
+  if (fresh !== null) {
+    lsSet(fresh);
+    _apiOk = true;
+    return _filter(fresh, { type, status, q });
+  }
+  return [];
 }
 
 /**

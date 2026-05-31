@@ -100,12 +100,10 @@ export function requireAdmin() {
 }
 
 export function logout() {
-  // Clear all board caches synchronously before navigating
-  try {
-    Object.keys(localStorage)
-      .filter(k => k.startsWith('bs_boards_'))
-      .forEach(k => localStorage.removeItem(k));
-  } catch {}
+  // NOTE: We intentionally keep board caches on logout.
+  // Cache keys are per-user (bs_boards_{userId}_vX), so other users
+  // can't see this user's data. On next login the same user instantly
+  // sees their boards from cache while the API refreshes in background.
   clearAuth();
   window.location.replace('login.html');
 }

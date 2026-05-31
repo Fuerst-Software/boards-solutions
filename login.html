@@ -74,7 +74,7 @@
 
 <script type="module">
 import { isLoggedIn, setAuth } from './js/auth.js';
-import { clearBoardsCache, resetApiState } from './js/boards-data.js';
+import { resetApiState } from './js/boards-data.js';
 
 if (isLoggedIn()) {
   window.location.replace('app.html');
@@ -154,7 +154,6 @@ form.addEventListener('submit', async e => {
 
     if (res.ok) {
       const data = await res.json();
-      clearBoardsCache();
       resetApiState();
       setAuth(data.token, { ...data.user, embedKey: data.user.embedKey || `ek_${data.user.id}` });
       window.location.replace('app.html');
@@ -177,7 +176,6 @@ form.addEventListener('submit', async e => {
   // Offline demo login (only when backend is completely unreachable)
   const demo = DEMO_USERS[email];
   if (demo && demo.password === password) {
-    clearBoardsCache();
     resetApiState();
     setAuth(`demo_token_${Date.now()}`, demo.user);
     window.location.replace('app.html');
