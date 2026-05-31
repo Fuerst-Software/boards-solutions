@@ -309,9 +309,10 @@ function cardHTML(board) {
     extraMeta = `<span class="board-card__price-tag">${esc(board.price)}</span>`;
   }
 
-  // Preview image stripe
-  const imgStripe = board.image
-    ? `<img src="${esc(board.image)}" alt="" class="board-card__preview-img" aria-hidden="true">`
+  // Preview image stripe — use full image or thumbnail (thumbnail survives localStorage strip)
+  const imgSrc = board.image || board.imageThumb || '';
+  const imgStripe = imgSrc
+    ? `<img src="${esc(imgSrc)}" alt="" class="board-card__preview-img" aria-hidden="true" loading="lazy">`
     : `<div class="board-card__preview board-card__preview--${meta.color}" aria-hidden="true">
         <div class="board-card__preview-icon">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">${meta.icon}</svg>

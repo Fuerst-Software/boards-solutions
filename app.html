@@ -116,13 +116,13 @@
 
       <!-- Welcome -->
       <div class="home-welcome">
-        <div>
+        <div class="home-welcome__text">
           <h1 class="home-welcome__title" id="welcome-title">Willkommen zurück!</h1>
-          <p class="home-welcome__subtitle">Verwalte deine Boards und binde sie mit einem Snippet in beliebige Websites ein.</p>
+          <p class="home-welcome__subtitle">Verwalte deine Boards und binde sie in beliebige Websites ein.</p>
         </div>
-        <a href="create-board.html" class="btn btn--primary">
+        <a href="create-board.html" class="btn btn--primary home-welcome__cta">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Neues Board erstellen
+          Board erstellen
         </a>
       </div>
 
@@ -502,6 +502,12 @@
   // Recent boards
   const TYPE_LABELS  = { blog: 'Blog', affiliate: 'Affiliate', review: 'Review', faq: 'FAQ', comparison: 'Vergleich', newsletter: 'Newsletter' };
   const TYPE_COLORS  = { blog: 'blue', affiliate: 'green', review: 'yellow', faq: 'purple', comparison: 'orange', newsletter: 'pink' };
+  const TYPE_ICONS   = {
+    blog:      '<path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>',
+    affiliate: '<path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>',
+    review:    '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+    faq:       '<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+  };
 
   function escHtml(s) {
     return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -522,10 +528,17 @@
       const name   = b.boardName || b.title || b.productName || 'Unbenannter Board';
       const when   = relativeDate(b.updatedAt);
       const isPublished = b.status === 'published';
+      const thumb  = b.imageThumb || b.image || '';
+
+      const thumbHtml = thumb
+        ? `<img src="${escHtml(thumb)}" alt="" class="recent-board-item__thumb" aria-hidden="true" loading="lazy">`
+        : `<div class="recent-board-item__thumb recent-board-item__thumb--color recent-board-item__thumb--${color}" aria-hidden="true">
+             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" opacity=".6">${TYPE_ICONS[b.type] || ''}</svg>
+           </div>`;
 
       return `
         <div role="listitem" class="recent-board-item">
-          <div class="recent-board-item__color recent-board-item__color--${color}" aria-hidden="true"></div>
+          ${thumbHtml}
           <div class="recent-board-item__info">
             <span class="recent-board-item__name">${escHtml(name)}</span>
             <span class="recent-board-item__type">${escHtml(label)}</span>
@@ -848,6 +861,42 @@
       saveBtn2.disabled = false;
     }
   });
+
+  // Load real board data into the preview
+  (async () => {
+    try {
+      const allBoards = await getBoards();
+      const board = allBoards.find(b => b.imageThumb || b.image) || allBoards[0];
+      if (!board) return;
+
+      const name  = board.boardName || board.title || board.productName || 'Dein Board';
+      const desc  = (board.intro || board.description || board.reviewText || '').slice(0, 90) || 'Kurze Beschreibung deines Inhalts…';
+      const label = TYPE_LABELS[board.type] || board.type || 'Blog';
+      const thumb = board.imageThumb || board.image || '';
+
+      const pvCard = document.getElementById('theme-preview-card');
+      const badge  = document.getElementById('tpv-badge');
+      const title  = document.getElementById('tpv-title');
+      const descEl = document.getElementById('tpv-desc');
+
+      if (badge)  badge.textContent = label;
+      if (title)  title.textContent = name;
+      if (descEl) descEl.textContent = desc + (desc.length >= 90 ? '…' : '');
+
+      // Show thumbnail if available
+      if (thumb && pvCard) {
+        const stripe = document.getElementById('tpv-stripe');
+        if (stripe) {
+          const img = document.createElement('img');
+          img.src = thumb;
+          img.alt = '';
+          img.className = 'tpv-thumb';
+          img.setAttribute('aria-hidden', 'true');
+          stripe.replaceWith(img);
+        }
+      }
+    } catch {}
+  })();
 
   // Initial preview render
   updatePreview();
