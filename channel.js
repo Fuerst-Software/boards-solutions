@@ -259,12 +259,16 @@
     if (existing) existing.remove();
     if (!theme || typeof theme !== 'object' || !Object.keys(theme).length) return;
 
-    const primary    = theme.primary    || '#0b4fd8';
-    const secondary  = theme.secondary  || theme.primary || '#0ea5e9';
-    const bg         = theme.background || '#ffffff';
-    const text       = theme.text       || '#0f172a';
-    const btnText    = hexBrightness(primary) > 160 ? '#0f172a' : '#ffffff';
-    const badgeBg    = primary + '18';
+    // Support both old 4-field format and new granular 8-field format
+    const primary   = theme.primary    || '#0b4fd8';
+    const secondary = theme.secondary  || theme.accent || theme.primary || '#0ea5e9';
+    const cardBg    = theme.card_bg    || theme.background || '#ffffff';
+    const text      = theme.text       || '#0f172a';
+    // Granular overrides — fall back to auto-derived if not set
+    const textMuted = theme.text_muted || text + '99';
+    const border    = theme.border     || text + '18';
+    const btnText   = theme.btn_text   || (hexBrightness(primary) > 160 ? '#0f172a' : '#ffffff');
+    const badgeBg   = theme.badge_bg   || primary + '18';
 
     const style = document.createElement('style');
     style.id = 'bs-theme-styles';
@@ -272,10 +276,10 @@
       .bs-channel {
         --bs-primary:    ${primary};
         --bs-secondary:  ${secondary};
-        --bs-card-bg:    ${bg};
+        --bs-card-bg:    ${cardBg};
         --bs-text:       ${text};
-        --bs-text-muted: ${text}99;
-        --bs-border:     ${text}18;
+        --bs-text-muted: ${textMuted};
+        --bs-border:     ${border};
         --bs-btn-text:   ${btnText};
         --bs-badge-bg:   ${badgeBg};
       }

@@ -170,113 +170,206 @@
       </section>
 
       <!-- ═══════════════════════════════════════════════════════
-           Brand Identity Card
+           Widget Theme Builder
            ═══════════════════════════════════════════════════════ -->
-      <section class="brand-identity-section" aria-labelledby="brand-heading" id="brand-identity-section">
-        <div class="brand-identity-card" id="brand-identity-card">
+      <section class="theme-builder-section" aria-labelledby="theme-heading">
+        <div class="theme-builder-card" id="theme-builder-card">
 
-          <!-- Header -->
-          <div class="brand-identity-card__header">
-            <div class="brand-identity-card__header-left">
-              <div class="brand-identity-card__icon" aria-hidden="true">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>
+          <!-- Card header -->
+          <div class="theme-builder-card__header">
+            <div class="theme-builder-card__header-left">
+              <div class="theme-builder-card__icon" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
               </div>
               <div>
-                <h2 id="brand-heading" class="brand-identity-card__title">Markenfarben</h2>
-                <p class="brand-identity-card__subtitle">Passe dein Widget-Aussehen an deine Website an</p>
+                <h2 id="theme-heading" class="theme-builder-card__title">Widget-Design</h2>
+                <p class="theme-builder-card__subtitle">Passe jedes Element deines Widgets an deine Website an</p>
               </div>
             </div>
-            <!-- Status badge: changes between "Nicht eingerichtet" / "Aktiv" -->
-            <span class="badge" id="brand-status-badge">Nicht eingerichtet</span>
-          </div>
-
-          <!-- Color swatches row — shown when colors are saved -->
-          <div id="brand-swatches-row" class="brand-swatches-row" hidden>
-            <div class="brand-swatch-item">
-              <div class="brand-swatch" id="swatch-primary" title="Primärfarbe"></div>
-              <span class="brand-swatch-label">Primär</span>
-            </div>
-            <div class="brand-swatch-item">
-              <div class="brand-swatch" id="swatch-accent" title="Akzentfarbe"></div>
-              <span class="brand-swatch-label">Akzent</span>
-            </div>
-            <div class="brand-swatch-item">
-              <div class="brand-swatch brand-swatch--bordered" id="swatch-bg" title="Hintergrund"></div>
-              <span class="brand-swatch-label">Hintergrund</span>
-            </div>
-            <div class="brand-swatch-item">
-              <div class="brand-swatch" id="swatch-text" title="Textfarbe"></div>
-              <span class="brand-swatch-label">Text</span>
-            </div>
-            <div class="brand-swatches-actions">
-              <button type="button" class="btn btn--ghost btn--sm" id="brand-edit-btn">Anpassen</button>
-            </div>
-          </div>
-
-          <!-- Setup / Edit panel -->
-          <div id="brand-setup-panel" class="brand-setup-panel">
-            <!-- URL row -->
-            <div class="brand-url-row">
-              <input id="brand-url-input" type="url" class="form-input brand-url-input"
-                placeholder="https://deine-website.de" autocomplete="url" aria-label="Website-URL für Farbanalyse">
-              <button type="button" class="btn btn--primary btn--sm" id="brand-analyze-btn">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <span id="brand-analyze-text">Automatisch erkennen</span>
+            <div class="theme-builder-card__header-right">
+              <span class="badge" id="theme-status-badge">Nicht eingerichtet</span>
+              <button type="button" class="btn btn--ghost btn--sm" id="theme-collapse-btn" aria-label="Minimieren">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" id="theme-collapse-icon"><polyline points="18 15 12 9 6 15"/></svg>
               </button>
             </div>
+          </div>
 
-            <!-- Detected palette -->
-            <div id="brand-palette-wrap" hidden>
-              <p class="brand-palette-label">Erkannte Farben — klicken zum Übernehmen:</p>
-              <div id="brand-palette" class="brand-palette"></div>
-            </div>
+          <!-- Collapsed summary row -->
+          <div id="theme-collapsed-row" class="theme-collapsed-row" hidden>
+            <div id="theme-collapsed-swatches" class="theme-collapsed-swatches"></div>
+            <button type="button" class="btn btn--ghost btn--sm" id="theme-expand-btn">Bearbeiten</button>
+          </div>
 
-            <!-- Color pickers -->
-            <div class="brand-color-pickers">
-              <div class="brand-color-picker-item">
-                <label for="bc-primary" class="brand-color-label">Primärfarbe</label>
-                <div class="brand-color-input-wrap">
-                  <input id="bc-primary" type="color" class="brand-color-swatch" value="#2563eb">
-                  <span id="bc-primary-hex" class="brand-color-hex">#2563eb</span>
-                </div>
-                <span class="brand-color-hint">Buttons, Badges</span>
+          <!-- Main builder body -->
+          <div id="theme-builder-body" class="theme-builder-body">
+
+            <!-- Step 1: URL + Analyse -->
+            <div class="theme-url-row">
+              <div class="theme-url-label">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                Farben von Website erkennen
               </div>
-              <div class="brand-color-picker-item">
-                <label for="bc-accent" class="brand-color-label">Akzent</label>
-                <div class="brand-color-input-wrap">
-                  <input id="bc-accent" type="color" class="brand-color-swatch" value="#0ea5e9">
-                  <span id="bc-accent-hex" class="brand-color-hex">#0ea5e9</span>
-                </div>
-                <span class="brand-color-hint">Highlights</span>
-              </div>
-              <div class="brand-color-picker-item">
-                <label for="bc-bg" class="brand-color-label">Hintergrund</label>
-                <div class="brand-color-input-wrap">
-                  <input id="bc-bg" type="color" class="brand-color-swatch" value="#ffffff">
-                  <span id="bc-bg-hex" class="brand-color-hex">#ffffff</span>
-                </div>
-                <span class="brand-color-hint">Karten-BG</span>
-              </div>
-              <div class="brand-color-picker-item">
-                <label for="bc-text" class="brand-color-label">Textfarbe</label>
-                <div class="brand-color-input-wrap">
-                  <input id="bc-text" type="color" class="brand-color-swatch" value="#0f172a">
-                  <span id="bc-text-hex" class="brand-color-hex">#0f172a</span>
-                </div>
-                <span class="brand-color-hint">Überschriften</span>
+              <div class="theme-url-inputs">
+                <input id="theme-url-input" type="url" class="form-input theme-url-field"
+                  placeholder="https://deine-website.de" autocomplete="url">
+                <button type="button" class="btn btn--primary btn--sm" id="theme-analyze-btn">
+                  <span id="theme-analyze-txt">Analysieren</span>
+                </button>
               </div>
             </div>
 
-            <!-- Actions -->
-            <div class="brand-setup-actions">
-              <span id="brand-save-msg" class="brand-save-msg" hidden></span>
-              <button type="button" class="btn btn--ghost btn--sm" id="brand-cancel-btn" hidden>Abbrechen</button>
-              <button type="button" class="btn btn--primary btn--sm" id="brand-save-btn">
+            <!-- Detected palette — full strip -->
+            <div id="theme-palette-section" class="theme-palette-section" hidden>
+              <div class="theme-palette-header">
+                <span class="theme-palette-title">Erkannte Website-Farben</span>
+                <span class="theme-palette-hint">Klicke auf eine Farbe, dann auf einen Picker unten um sie zuzuweisen</span>
+              </div>
+              <div id="theme-palette-strip" class="theme-palette-strip"></div>
+              <div id="theme-palette-selected" class="theme-palette-selected" hidden>
+                <span id="theme-palette-sel-dot" class="theme-palette-sel-dot"></span>
+                <span id="theme-palette-sel-hex" class="theme-palette-sel-hex"></span>
+                <span class="theme-palette-sel-hint">← Klicke jetzt auf einen Picker unten</span>
+              </div>
+            </div>
+
+            <!-- Builder: pickers + live preview side by side -->
+            <div class="theme-builder-layout">
+
+              <!-- Pickers column -->
+              <div class="theme-pickers-col">
+
+                <div class="theme-picker-group">
+                  <div class="theme-picker-group-label">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                    Karte
+                  </div>
+                  <div class="theme-picker-items">
+                    <div class="theme-picker-item" data-field="card_bg">
+                      <div class="theme-picker-swatch" id="tp-card_bg" style="background:#ffffff;border:1.5px solid #e2e8f0" tabindex="0" role="button" aria-label="Kartenhintergrund auswählen" title="Kartenhintergrund"></div>
+                      <div class="theme-picker-info">
+                        <span class="theme-picker-name">Kartenhintergrund</span>
+                        <span class="theme-picker-hex" id="th-card_bg">#ffffff</span>
+                      </div>
+                      <input type="color" class="theme-picker-native" id="tn-card_bg" value="#ffffff" tabindex="-1" aria-hidden="true">
+                    </div>
+                    <div class="theme-picker-item" data-field="border">
+                      <div class="theme-picker-swatch" id="tp-border" style="background:#e5e7eb" tabindex="0" role="button" aria-label="Rahmenfarbe auswählen" title="Rahmen"></div>
+                      <div class="theme-picker-info">
+                        <span class="theme-picker-name">Rahmen</span>
+                        <span class="theme-picker-hex" id="th-border">#e5e7eb</span>
+                      </div>
+                      <input type="color" class="theme-picker-native" id="tn-border" value="#e5e7eb" tabindex="-1" aria-hidden="true">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="theme-picker-group">
+                  <div class="theme-picker-group-label">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 6h16M4 12h16M4 18h7"/></svg>
+                    Text
+                  </div>
+                  <div class="theme-picker-items">
+                    <div class="theme-picker-item" data-field="text">
+                      <div class="theme-picker-swatch" id="tp-text" style="background:#0f172a" tabindex="0" role="button" aria-label="Textfarbe Überschriften auswählen" title="Überschriften"></div>
+                      <div class="theme-picker-info">
+                        <span class="theme-picker-name">Überschriften</span>
+                        <span class="theme-picker-hex" id="th-text">#0f172a</span>
+                      </div>
+                      <input type="color" class="theme-picker-native" id="tn-text" value="#0f172a" tabindex="-1" aria-hidden="true">
+                    </div>
+                    <div class="theme-picker-item" data-field="text_muted">
+                      <div class="theme-picker-swatch" id="tp-text_muted" style="background:#64748b" tabindex="0" role="button" aria-label="Beschreibungstext auswählen" title="Beschreibungstext"></div>
+                      <div class="theme-picker-info">
+                        <span class="theme-picker-name">Beschreibung</span>
+                        <span class="theme-picker-hex" id="th-text_muted">#64748b</span>
+                      </div>
+                      <input type="color" class="theme-picker-native" id="tn-text_muted" value="#64748b" tabindex="-1" aria-hidden="true">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="theme-picker-group">
+                  <div class="theme-picker-group-label">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="8" width="18" height="10" rx="2"/><path d="M7 8V6a2 2 0 012-2h6a2 2 0 012 2v2"/></svg>
+                    Button
+                  </div>
+                  <div class="theme-picker-items">
+                    <div class="theme-picker-item" data-field="primary">
+                      <div class="theme-picker-swatch" id="tp-primary" style="background:#2563eb" tabindex="0" role="button" aria-label="Buttonfarbe auswählen" title="Button-Hintergrund"></div>
+                      <div class="theme-picker-info">
+                        <span class="theme-picker-name">Button-Hintergrund</span>
+                        <span class="theme-picker-hex" id="th-primary">#2563eb</span>
+                      </div>
+                      <input type="color" class="theme-picker-native" id="tn-primary" value="#2563eb" tabindex="-1" aria-hidden="true">
+                    </div>
+                    <div class="theme-picker-item" data-field="btn_text">
+                      <div class="theme-picker-swatch" id="tp-btn_text" style="background:#ffffff;border:1.5px solid #e2e8f0" tabindex="0" role="button" aria-label="Button-Schrift auswählen" title="Button-Schrift"></div>
+                      <div class="theme-picker-info">
+                        <span class="theme-picker-name">Button-Schrift</span>
+                        <span class="theme-picker-hex" id="th-btn_text">#ffffff</span>
+                      </div>
+                      <input type="color" class="theme-picker-native" id="tn-btn_text" value="#ffffff" tabindex="-1" aria-hidden="true">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="theme-picker-group">
+                  <div class="theme-picker-group-label">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                    Badge &amp; Akzent
+                  </div>
+                  <div class="theme-picker-items">
+                    <div class="theme-picker-item" data-field="badge_bg">
+                      <div class="theme-picker-swatch" id="tp-badge_bg" style="background:#dbeafe" tabindex="0" role="button" aria-label="Badge-Hintergrund auswählen" title="Badge-Hintergrund"></div>
+                      <div class="theme-picker-info">
+                        <span class="theme-picker-name">Badge-Hintergrund</span>
+                        <span class="theme-picker-hex" id="th-badge_bg">#dbeafe</span>
+                      </div>
+                      <input type="color" class="theme-picker-native" id="tn-badge_bg" value="#dbeafe" tabindex="-1" aria-hidden="true">
+                    </div>
+                    <div class="theme-picker-item" data-field="secondary">
+                      <div class="theme-picker-swatch" id="tp-secondary" style="background:#0ea5e9" tabindex="0" role="button" aria-label="Akzent-Gradient auswählen" title="Gradient-Akzent"></div>
+                      <div class="theme-picker-info">
+                        <span class="theme-picker-name">Gradient-Akzent</span>
+                        <span class="theme-picker-hex" id="th-secondary">#0ea5e9</span>
+                      </div>
+                      <input type="color" class="theme-picker-native" id="tn-secondary" value="#0ea5e9" tabindex="-1" aria-hidden="true">
+                    </div>
+                  </div>
+                </div>
+
+              </div><!-- /pickers col -->
+
+              <!-- Live preview -->
+              <div class="theme-preview-col">
+                <div class="theme-preview-label">Live-Vorschau</div>
+                <div class="theme-preview-card" id="theme-preview-card">
+                  <div class="tpv-stripe" id="tpv-stripe"></div>
+                  <div class="tpv-body" id="tpv-body">
+                    <span class="tpv-badge" id="tpv-badge">Blog</span>
+                    <div class="tpv-title" id="tpv-title">Dein Board-Titel</div>
+                    <p class="tpv-desc" id="tpv-desc">Kurze Beschreibung deines Inhalts, die Leser zum Weiterlesen animiert…</p>
+                    <div class="tpv-actions">
+                      <button class="tpv-btn-outline" id="tpv-btn-outline">Weiterlesen →</button>
+                      <button class="tpv-btn-solid" id="tpv-btn-solid">Kaufen</button>
+                    </div>
+                  </div>
+                </div>
+                <p class="theme-preview-note">So sieht dein Widget auf der Kundenseite aus</p>
+              </div>
+
+            </div><!-- /builder layout -->
+
+            <!-- Footer actions -->
+            <div class="theme-builder-footer">
+              <span id="theme-save-msg" class="theme-save-msg" hidden></span>
+              <button type="button" class="btn btn--primary btn--sm" id="theme-save-btn">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                Farben speichern
+                Design speichern
               </button>
             </div>
-          </div>
+
+          </div><!-- /builder body -->
 
         </div>
       </section>
@@ -450,95 +543,233 @@
 
   renderRecent();
 
-  // ── Brand Identity Card ──────────────────────────────────────
+  // ══════════════════════════════════════════════════════
+  // Widget Theme Builder
+  // ══════════════════════════════════════════════════════
   const API = 'https://web-production-83480.up.railway.app/api';
 
-  const brandCard       = document.getElementById('brand-identity-card');
-  const brandStatus     = document.getElementById('brand-status-badge');
-  const swatchesRow     = document.getElementById('brand-swatches-row');
-  const setupPanel      = document.getElementById('brand-setup-panel');
-  const urlInput        = document.getElementById('brand-url-input');
-  const analyzeBtn      = document.getElementById('brand-analyze-btn');
-  const analyzeTxt      = document.getElementById('brand-analyze-text');
-  const paletteWrap     = document.getElementById('brand-palette-wrap');
-  const paletteEl       = document.getElementById('brand-palette');
-  const saveBtn         = document.getElementById('brand-save-btn');
-  const saveMsg         = document.getElementById('brand-save-msg');
-  const cancelBtn       = document.getElementById('brand-cancel-btn');
-  const editBtn         = document.getElementById('brand-edit-btn');
-
-  const FIELDS = [
-    { id: 'bc-primary', hexId: 'bc-primary-hex', key: 'primary', swatchId: 'swatch-primary' },
-    { id: 'bc-accent',  hexId: 'bc-accent-hex',  key: 'accent',  swatchId: 'swatch-accent'  },
-    { id: 'bc-bg',      hexId: 'bc-bg-hex',      key: 'background', swatchId: 'swatch-bg'   },
-    { id: 'bc-text',    hexId: 'bc-text-hex',     key: 'text',    swatchId: 'swatch-text'    },
+  // All 8 theme fields that map to CSS variables in channel.js
+  const THEME_FIELDS = [
+    { field: 'primary',    label: 'Button-Hintergrund', default: '#2563eb' },
+    { field: 'secondary',  label: 'Gradient-Akzent',    default: '#0ea5e9' },
+    { field: 'card_bg',    label: 'Kartenhintergrund',  default: '#ffffff' },
+    { field: 'text',       label: 'Überschriften',      default: '#0f172a' },
+    { field: 'text_muted', label: 'Beschreibung',       default: '#64748b' },
+    { field: 'border',     label: 'Rahmen',             default: '#e5e7eb' },
+    { field: 'btn_text',   label: 'Button-Schrift',     default: '#ffffff' },
+    { field: 'badge_bg',   label: 'Badge-Hintergrund',  default: '#dbeafe' },
   ];
 
-  // Wire up color picker → hex label sync
-  FIELDS.forEach(f => {
-    const inp = document.getElementById(f.id);
-    const hex = document.getElementById(f.hexId);
-    inp.addEventListener('input', () => { hex.textContent = inp.value; });
-  });
+  // Detected palette from analysis (shared with all pickers)
+  let detectedPalette = [];
+  // Which color from palette is "selected" waiting to be assigned
+  let selectedPaletteColor = null;
 
-  function applyColors(colors) {
-    FIELDS.forEach(f => {
-      const v = colors[f.key];
-      if (!v) return;
-      document.getElementById(f.id).value = v;
-      document.getElementById(f.hexId).textContent = v;
-    });
+  function getFieldVal(field) {
+    const el = document.getElementById(`tn-${field}`);
+    return el ? el.value : '#000000';
   }
 
-  function showSwatches(colors) {
-    let anySet = false;
-    FIELDS.forEach(f => {
-      const v = colors[f.key];
-      const sw = document.getElementById(f.swatchId);
-      if (v && sw) { sw.style.background = v; anySet = true; }
-    });
-    if (anySet) {
-      swatchesRow.hidden = false;
-      setupPanel.hidden  = true;
-      brandStatus.textContent = 'Aktiv';
-      brandStatus.className   = 'badge badge--success';
+  function setFieldVal(field, color) {
+    const native = document.getElementById(`tn-${field}`);
+    const swatch = document.getElementById(`tp-${field}`);
+    const hexEl  = document.getElementById(`th-${field}`);
+    if (!native) return;
+    native.value = color;
+    if (swatch) {
+      swatch.style.background = color;
+      // Keep border for very light colors
+      const bright = hexBrightness(color);
+      swatch.style.border = bright > 230 ? '1.5px solid #e2e8f0' : '';
     }
+    if (hexEl) hexEl.textContent = color;
+    updatePreview();
   }
 
-  function showSetupPanel() {
-    swatchesRow.hidden = true;
-    setupPanel.hidden  = false;
-    cancelBtn.hidden   = false;
+  function hexBrightness(hex) {
+    const h = (hex || '').replace('#','');
+    if (h.length < 6) return 128;
+    const r = parseInt(h.slice(0,2),16), g = parseInt(h.slice(2,4),16), b = parseInt(h.slice(4,6),16);
+    return (r*299 + g*587 + b*114) / 1000;
   }
 
-  editBtn?.addEventListener('click', showSetupPanel);
-  cancelBtn?.addEventListener('click', () => {
-    setupPanel.hidden  = true;
-    swatchesRow.hidden = false;
-    cancelBtn.hidden   = true;
+  // ── Live preview update ───────────────────────────────
+  function updatePreview() {
+    const primary   = getFieldVal('primary');
+    const secondary = getFieldVal('secondary');
+    const cardBg    = getFieldVal('card_bg');
+    const text      = getFieldVal('text');
+    const muted     = getFieldVal('text_muted');
+    const border    = getFieldVal('border');
+    const btnTxt    = getFieldVal('btn_text');
+    const badgeBg   = getFieldVal('badge_bg');
+
+    const stripe = document.getElementById('tpv-stripe');
+    const body   = document.getElementById('tpv-body');
+    const badge  = document.getElementById('tpv-badge');
+    const title  = document.getElementById('tpv-title');
+    const desc   = document.getElementById('tpv-desc');
+    const card   = document.getElementById('theme-preview-card');
+    const btnO   = document.getElementById('tpv-btn-outline');
+    const btnS   = document.getElementById('tpv-btn-solid');
+
+    if (stripe) stripe.style.background = `linear-gradient(90deg,${primary},${secondary})`;
+    if (body)   { body.style.background = cardBg; body.style.borderTop = `1px solid ${border}`; }
+    if (badge)  { badge.style.background = badgeBg; badge.style.color = primary; }
+    if (title)  title.style.color = text;
+    if (desc)   desc.style.color  = muted;
+    if (card)   card.style.borderColor = border;
+    if (btnO)   { btnO.style.color = primary; btnO.style.borderColor = primary; }
+    if (btnS)   { btnS.style.background = primary; btnS.style.color = btnTxt; }
+  }
+
+  // ── Wire up pickers ───────────────────────────────────
+  THEME_FIELDS.forEach(({ field }) => {
+    const swatch = document.getElementById(`tp-${field}`);
+    const native = document.getElementById(`tn-${field}`);
+    if (!swatch || !native) return;
+
+    // Clicking the swatch: if a palette color is selected → assign it; else open native picker
+    swatch.addEventListener('click', () => {
+      if (selectedPaletteColor) {
+        setFieldVal(field, selectedPaletteColor);
+        clearPaletteSelection();
+      } else {
+        native.click();
+      }
+    });
+    swatch.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); swatch.click(); }
+    });
+
+    native.addEventListener('input', () => setFieldVal(field, native.value));
   });
 
-  // Load existing brand colors
+  // ── Palette selection ─────────────────────────────────
+  function clearPaletteSelection() {
+    selectedPaletteColor = null;
+    const sel = document.getElementById('theme-palette-selected');
+    if (sel) sel.hidden = true;
+    document.querySelectorAll('.tps-dot.tps-dot--active').forEach(d => d.classList.remove('tps-dot--active'));
+    // Remove "waiting" ring from all pickers
+    document.querySelectorAll('.theme-picker-swatch.is-target').forEach(s => s.classList.remove('is-target'));
+  }
+
+  function renderPaletteStrip(colors) {
+    const strip = document.getElementById('theme-palette-strip');
+    if (!strip) return;
+    strip.innerHTML = colors.map(c => `
+      <button type="button" class="tps-dot" style="background:${c}"
+        title="${c}" aria-label="Farbe ${c}" data-color="${c}">
+      </button>`).join('');
+
+    strip.querySelectorAll('.tps-dot').forEach(dot => {
+      dot.addEventListener('click', () => {
+        const color = dot.dataset.color;
+        const wasActive = dot.classList.contains('tps-dot--active');
+        clearPaletteSelection();
+        if (wasActive) return; // toggle off
+
+        selectedPaletteColor = color;
+        dot.classList.add('tps-dot--active');
+
+        const sel    = document.getElementById('theme-palette-selected');
+        const selDot = document.getElementById('theme-palette-sel-dot');
+        const selHex = document.getElementById('theme-palette-sel-hex');
+        if (sel && selDot && selHex) {
+          selDot.style.background = color;
+          selHex.textContent = color;
+          sel.hidden = false;
+        }
+        // Highlight all pickers as potential targets
+        document.querySelectorAll('.theme-picker-swatch').forEach(s => s.classList.add('is-target'));
+      });
+    });
+  }
+
+  // ── Collapse / expand ─────────────────────────────────
+  const collapseBtn  = document.getElementById('theme-collapse-btn');
+  const collapseIcon = document.getElementById('theme-collapse-icon');
+  const builderBody  = document.getElementById('theme-builder-body');
+  const collapsedRow = document.getElementById('theme-collapsed-row');
+  const expandBtn    = document.getElementById('theme-expand-btn');
+
+  function collapseBuilder(colors) {
+    const swatches = document.getElementById('theme-collapsed-swatches');
+    if (swatches && colors) {
+      swatches.innerHTML = THEME_FIELDS.slice(0,5).map(f => {
+        const c = colors[f.field] || getFieldVal(f.field);
+        const bright = hexBrightness(c);
+        return `<div class="tcs" style="background:${c};${bright>230?'border:1.5px solid #e2e8f0':''}" title="${f.label}: ${c}"></div>`;
+      }).join('');
+    }
+    builderBody.hidden  = true;
+    collapsedRow.hidden = false;
+    if (collapseIcon) collapseIcon.setAttribute('points','6 9 12 15 18 9');
+  }
+
+  function expandBuilder() {
+    builderBody.hidden  = false;
+    collapsedRow.hidden = true;
+    if (collapseIcon) collapseIcon.setAttribute('points','18 15 12 9 6 15');
+  }
+
+  collapseBtn?.addEventListener('click', () => {
+    if (!builderBody.hidden) {
+      collapseBuilder();
+    } else {
+      expandBuilder();
+    }
+  });
+  expandBtn?.addEventListener('click', expandBuilder);
+
+  // ── Load existing brand colors from API ──────────────
   try {
     const res = await fetch(`${API}/auth/me`, { headers: authHeaders() });
     if (res.ok) {
       const data = await res.json();
-      if (data.websiteUrl) urlInput.value = data.websiteUrl;
-      if (data.brandColors && typeof data.brandColors === 'object' && Object.keys(data.brandColors).length > 0) {
-        applyColors(data.brandColors);
-        showSwatches(data.brandColors);
+      const urlEl = document.getElementById('theme-url-input');
+      if (data.websiteUrl && urlEl) urlEl.value = data.websiteUrl;
+
+      const bc = data.brandColors;
+      if (bc && typeof bc === 'object' && Object.keys(bc).length > 0) {
+        // Map old 4-field format → new 8-field format
+        const mapped = {
+          primary:    bc.primary    || bc.primary,
+          secondary:  bc.secondary  || bc.accent,
+          card_bg:    bc.card_bg    || bc.background,
+          text:       bc.text,
+          text_muted: bc.text_muted,
+          border:     bc.border,
+          btn_text:   bc.btn_text,
+          badge_bg:   bc.badge_bg,
+        };
+        THEME_FIELDS.forEach(({ field, default: def }) => {
+          const v = mapped[field];
+          if (v) setFieldVal(field, v);
+        });
+        updatePreview();
+        const badge = document.getElementById('theme-status-badge');
+        if (badge) { badge.textContent = 'Aktiv'; badge.className = 'badge badge--success'; }
+        collapseBuilder(mapped);
       }
     }
   } catch(e) { /* silent */ }
 
-  // Analyze colors
-  analyzeBtn.addEventListener('click', async () => {
-    const url = urlInput.value.trim();
-    if (!url) { urlInput.focus(); return; }
-    analyzeBtn.disabled = true;
-    analyzeTxt.textContent = 'Analysiere…';
-    paletteWrap.hidden = true;
-    paletteEl.innerHTML = '';
+  // ── Analyze colors ────────────────────────────────────
+  const analyzeBtn2 = document.getElementById('theme-analyze-btn');
+  const analyzeTxt2 = document.getElementById('theme-analyze-txt');
+  const urlInput2   = document.getElementById('theme-url-input');
+  const palSection  = document.getElementById('theme-palette-section');
+  const saveMsg2    = document.getElementById('theme-save-msg');
+
+  analyzeBtn2?.addEventListener('click', async () => {
+    const url = urlInput2?.value.trim();
+    if (!url) { urlInput2?.focus(); return; }
+    analyzeBtn2.disabled = true;
+    analyzeTxt2.textContent = 'Analysiere…';
+    clearPaletteSelection();
+
     try {
       const res = await fetch(`${API}/settings/analyze-colors`, {
         method: 'POST',
@@ -548,51 +779,46 @@
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
 
-      // Apply semantic colors
       const sem = data.semantic || {};
-      const mapping = { primary: 'primary', background: 'background', text: 'text', secondary: 'accent' };
-      const picked = {};
-      Object.entries(mapping).forEach(([apiKey, fieldKey]) => {
-        if (sem[apiKey]) picked[fieldKey] = sem[apiKey];
-      });
-      if (Object.keys(picked).length) applyColors(picked);
 
-      // Show palette swatches
-      const palette = data.palette || [];
-      if (palette.length) {
-        paletteEl.innerHTML = palette.map(c => `
-          <button type="button" class="brand-palette-swatch" style="background:${c}" title="${c}"
-            aria-label="Farbe ${c} übernehmen" data-color="${c}"></button>`).join('');
-        paletteEl.querySelectorAll('.brand-palette-swatch').forEach(btn => {
-          btn.addEventListener('click', () => {
-            // assign to first empty or primary field
-            const target = FIELDS.find(f => {
-              const inp = document.getElementById(f.id);
-              return inp.value === '#2563eb' || inp.value === '#0f172a' || inp.value === '#ffffff';
-            }) || FIELDS[0];
-            document.getElementById(target.id).value = btn.dataset.color;
-            document.getElementById(target.hexId).textContent = btn.dataset.color;
-          });
-        });
-        paletteWrap.hidden = false;
+      // Auto-apply semantic colors to the right fields
+      if (sem.primary)    setFieldVal('primary',    sem.primary);
+      if (sem.secondary)  setFieldVal('secondary',  sem.secondary);
+      if (sem.background) setFieldVal('card_bg',    sem.background);
+      if (sem.text)       { setFieldVal('text', sem.text); setFieldVal('text_muted', sem.text + 'bb'); }
+      if (sem.primary)    setFieldVal('badge_bg',   sem.primary + '22');
+
+      // Render full palette for manual assignment
+      detectedPalette = data.palette || [];
+      if (detectedPalette.length) {
+        renderPaletteStrip(detectedPalette);
+        if (palSection) palSection.hidden = false;
       }
+
+      // Make sure builder is expanded
+      expandBuilder();
+
     } catch(e) {
-      saveMsg.textContent = '⚠ ' + (e.message || 'Analyse fehlgeschlagen');
-      saveMsg.className   = 'brand-save-msg brand-save-msg--error';
-      saveMsg.hidden = false;
-      setTimeout(() => { saveMsg.hidden = true; }, 4000);
+      if (saveMsg2) {
+        saveMsg2.textContent = '⚠ ' + (e.message || 'Analyse fehlgeschlagen');
+        saveMsg2.className   = 'theme-save-msg theme-save-msg--error';
+        saveMsg2.hidden = false;
+        setTimeout(() => { saveMsg2.hidden = true; }, 4000);
+      }
     } finally {
-      analyzeBtn.disabled = false;
-      analyzeTxt.textContent = 'Automatisch erkennen';
+      analyzeBtn2.disabled = false;
+      analyzeTxt2.textContent = 'Analysieren';
     }
   });
 
-  // Save brand colors
-  saveBtn.addEventListener('click', async () => {
-    saveBtn.disabled = true;
+  // ── Save theme ────────────────────────────────────────
+  document.getElementById('theme-save-btn')?.addEventListener('click', async () => {
+    const saveBtn2 = document.getElementById('theme-save-btn');
+    saveBtn2.disabled = true;
     const brandColors = {};
-    FIELDS.forEach(f => { brandColors[f.key] = document.getElementById(f.id).value; });
-    const websiteUrl = urlInput.value.trim();
+    THEME_FIELDS.forEach(({ field }) => { brandColors[field] = getFieldVal(field); });
+    const websiteUrl = urlInput2?.value.trim() || '';
+
     try {
       const res = await fetch(`${API}/settings/profile`, {
         method: 'PUT',
@@ -600,22 +826,32 @@
         body: JSON.stringify({ websiteUrl, brandColors }),
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      saveMsg.textContent = '✓ Gespeichert';
-      saveMsg.className   = 'brand-save-msg brand-save-msg--success';
-      saveMsg.hidden = false;
-      setTimeout(() => {
-        saveMsg.hidden = true;
-        showSwatches(brandColors);
-      }, 1500);
+
+      if (saveMsg2) {
+        saveMsg2.textContent = '✓ Design gespeichert';
+        saveMsg2.className   = 'theme-save-msg theme-save-msg--success';
+        saveMsg2.hidden = false;
+        setTimeout(() => {
+          saveMsg2.hidden = true;
+          collapseBuilder(brandColors);
+          const badge = document.getElementById('theme-status-badge');
+          if (badge) { badge.textContent = 'Aktiv'; badge.className = 'badge badge--success'; }
+        }, 1600);
+      }
     } catch(e) {
-      saveMsg.textContent = '⚠ Speichern fehlgeschlagen';
-      saveMsg.className   = 'brand-save-msg brand-save-msg--error';
-      saveMsg.hidden = false;
+      if (saveMsg2) {
+        saveMsg2.textContent = '⚠ Speichern fehlgeschlagen';
+        saveMsg2.className   = 'theme-save-msg theme-save-msg--error';
+        saveMsg2.hidden = false;
+      }
     } finally {
-      saveBtn.disabled = false;
+      saveBtn2.disabled = false;
     }
   });
-  // ── End Brand Identity Card ──────────────────────────────────
+
+  // Initial preview render
+  updatePreview();
+  // ══ End Widget Theme Builder ══════════════════════════
 
   // Live-update when background refresh fires
   window.addEventListener('bs:boards-updated', () => {
