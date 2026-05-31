@@ -64,10 +64,19 @@ function lsGet() {
   catch { return []; }
 }
 
+const IMAGE_KEYS = ['image', 'blogImage', 'affImage'];
+
+function stripImages(board) {
+  const b = { ...board };
+  IMAGE_KEYS.forEach(k => delete b[k]);
+  return b;
+}
+
 function lsSet(boards) {
   try {
-    localStorage.setItem(cacheKey(), JSON.stringify(boards));
-    window.dispatchEvent(new CustomEvent('bs:boards-updated', { detail: { boards } }));
+    const lean = boards.map(stripImages);
+    localStorage.setItem(cacheKey(), JSON.stringify(lean));
+    window.dispatchEvent(new CustomEvent('bs:boards-updated', { detail: { boards: lean } }));
   } catch { /* quota */ }
 }
 
@@ -234,10 +243,7 @@ export async function deleteBoard(id) {
 }
 
 export async function getBoardById(id) {
-  // Check cache first
-  const cached = lsGet().find(b => b.id === id);
-  if (cached) return cached;
-
+  // Always fetch from API — cache only holds stripped (no-image) versions
   try {
     const res = await fetch(`${API_BASE}/boards/${id}`, {
       headers: authHeaders(),
@@ -245,7 +251,8 @@ export async function getBoardById(id) {
     });
     if (res.ok) return res.json();
   } catch {}
-  return null;
+  // Fall back to cache if API is unreachable
+  return lsGet().find(b => b.id === id) ?? null;
 }
 
 export async function toggleBoardStatus(id, status) {
