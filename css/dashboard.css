@@ -15,10 +15,7 @@ body {
   padding-top: 0; /* override layout.css which adds 64px for landing page fixed header */
 }
 
-/* ── Dashboard-scope: slightly tighter scale for pro SaaS feel ── */
-.dashboard-main {
-  font-size: 0.9375rem; /* 15px instead of 16px */
-}
+/* Font size now set globally in tokens.css (87.5% base = 14px) */
 
 
 /* ============================================================

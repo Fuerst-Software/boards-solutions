@@ -3,6 +3,12 @@
    All CSS Custom Properties. Zero layout or style rules here.
    ============================================================= */
 
+/* Base scale: 14px = "comfortable SaaS density" / slightly zoomed out feel */
+html {
+  font-size: 87.5%; /* 14px instead of browser default 16px */
+  -webkit-text-size-adjust: 100%;
+}
+
 :root {
 
   /* ============================================================

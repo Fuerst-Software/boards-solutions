@@ -12,8 +12,8 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  padding: 0.5625rem var(--space-5);   /* 9px 20px — tighter than before */
-  font-size: 0.9375rem;                 /* 15px */
+  padding: 0.5625rem var(--space-5);   /* 9px 20px */
+  font-size: 1rem;                      /* 14px base × 1 = 14px */
   font-weight: var(--font-weight-semibold);
   letter-spacing: 0.01em;
   line-height: 1;
@@ -518,7 +518,7 @@
 }
 
 .form-label {
-  font-size: 0.8125rem;  /* 13px — crisp label above input */
+  font-size: 0.8125rem;  /* ~11.4px at 14px base — crisp label above input */
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-secondary);
   letter-spacing: 0.01em;
@@ -526,8 +526,8 @@
 
 .form-input {
   width: 100%;
-  padding: 0.5rem var(--space-3);      /* 8px 12px — more compact */
-  font-size: 0.9375rem;                 /* 15px */
+  padding: 0.5rem var(--space-3);      /* 8px 12px — compact */
+  font-size: 1rem;                      /* inherits 14px base */
   color: var(--color-text-primary);
   background: var(--color-surface-base);
   border: 1.5px solid var(--color-border-default);
