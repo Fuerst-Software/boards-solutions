@@ -9,8 +9,8 @@
 import { authHeaders, getToken } from './auth.js';
 
 const API_BASE         = 'https://web-production-83480.up.railway.app/api';
-const API_TIMEOUT      = 5000;   // health check
-const API_SAVE_TIMEOUT = 15000;  // save / mutate operations (Railway cold start)
+const API_TIMEOUT      = 15000;  // health check (same as save — handles Railway cold start)
+const API_SAVE_TIMEOUT = 15000;  // save / mutate operations
 const CACHE_VER        = 'v5';
 
 // ── Per-user cache key ────────────────────────────────────────────
@@ -132,16 +132,17 @@ function backgroundRefresh() {
  * Returns cached data instantly, refreshes in background.
  */
 export async function getBoards({ type, status, q } = {}) {
+  if (!getToken()) return [];
+
   const cached = lsGet();
 
-  // Empty cache → try API first (blocking)
+  // Empty cache (e.g. fresh login) → fetch directly from API, no health-check gate
   if (cached.length === 0) {
-    if (await apiOk()) {
-      const fresh = await apiFetchBoards({ type, status, q });
-      if (fresh !== null) {
-        lsSet(fresh);
-        return _filter(fresh, { type, status, q });
-      }
+    const fresh = await apiFetchBoards({ type, status, q });
+    if (fresh !== null) {
+      lsSet(fresh);
+      _apiOk = true;
+      return _filter(fresh, { type, status, q });
     }
     return [];
   }
@@ -209,8 +210,8 @@ export async function saveBoard(boardData) {
     _apiOk = true; // mark API as reachable
     return fresh[fi] ?? saved;
   } catch (err) {
-    // Rollback optimistic cache update on failure
-    lsSet(lsGet().filter(b => b.id !== saved.id));
+    // Do NOT rollback localStorage — board stays visible locally.
+    // UI will show error toast so user knows sync failed.
     throw err; // bubble up so UI shows toast error
   }
 }
