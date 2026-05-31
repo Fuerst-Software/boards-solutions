@@ -8,9 +8,10 @@
 
 import { authHeaders, getToken } from './auth.js';
 
-const API_BASE    = 'https://web-production-83480.up.railway.app/api';
-const API_TIMEOUT = 800;
-const CACHE_VER   = 'v5';
+const API_BASE         = 'https://web-production-83480.up.railway.app/api';
+const API_TIMEOUT      = 5000;   // health check
+const API_SAVE_TIMEOUT = 15000;  // save / mutate operations (Railway cold start)
+const CACHE_VER        = 'v5';
 
 // ── Per-user cache key ────────────────────────────────────────────
 function cacheKey() {
@@ -102,7 +103,7 @@ async function apiFetchBoards({ type, status, q } = {}) {
     if (q)      p.set('q',      q);
     const res = await fetch(`${API_BASE}/boards?${p}`, {
       headers: authHeaders(),
-      signal: AbortSignal.timeout(API_TIMEOUT),
+      signal: AbortSignal.timeout(API_SAVE_TIMEOUT),
     });
     if (!res.ok) return null;
     const data = await res.json();
@@ -183,31 +184,35 @@ export async function saveBoard(boardData) {
 
   lsSet(boards);
 
-  // Background API sync
-  if (await apiOk()) {
-    try {
-      const method = boardData.id ? 'PUT' : 'POST';
-      const url    = boardData.id
-        ? `${API_BASE}/boards/${boardData.id}`
-        : `${API_BASE}/boards`;
-      const res = await fetch(url, {
-        method,
-        headers: apiHeaders(),
-        body: JSON.stringify(saved),
-        signal: AbortSignal.timeout(API_TIMEOUT),
-      });
-      if (res.ok) {
-        const serverBoard = await res.json();
-        // Update cache with server-assigned fields (e.g. real DB id)
-        const fresh = lsGet();
-        const fi = fresh.findIndex(b => b.id === saved.id);
-        if (fi >= 0) { fresh[fi] = { ...fresh[fi], ...serverBoard }; lsSet(fresh); }
-        return fresh[fi] ?? saved;
-      }
-    } catch {}
+  // API sync — blocking, throws on failure so UI can show error
+  if (!getToken()) return saved; // offline / demo mode
+  try {
+    const method = boardData.id ? 'PUT' : 'POST';
+    const url    = boardData.id
+      ? `${API_BASE}/boards/${boardData.id}`
+      : `${API_BASE}/boards`;
+    const res = await fetch(url, {
+      method,
+      headers: apiHeaders(),
+      body: JSON.stringify(saved),
+      signal: AbortSignal.timeout(API_SAVE_TIMEOUT),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || `HTTP ${res.status}`);
+    }
+    const serverBoard = await res.json();
+    // Merge server response into cache (server may assign real IDs)
+    const fresh = lsGet();
+    const fi = fresh.findIndex(b => b.id === saved.id);
+    if (fi >= 0) { fresh[fi] = { ...fresh[fi], ...serverBoard }; lsSet(fresh); }
+    _apiOk = true; // mark API as reachable
+    return fresh[fi] ?? saved;
+  } catch (err) {
+    // Rollback optimistic cache update on failure
+    lsSet(lsGet().filter(b => b.id !== saved.id));
+    throw err; // bubble up so UI shows toast error
   }
-
-  return saved;
 }
 
 export async function deleteBoard(id) {
@@ -219,7 +224,7 @@ export async function deleteBoard(id) {
       await fetch(`${API_BASE}/boards/${id}`, {
         method: 'DELETE',
         headers: authHeaders(),
-        signal: AbortSignal.timeout(API_TIMEOUT),
+        signal: AbortSignal.timeout(API_SAVE_TIMEOUT),
       });
     } catch {}
   }
@@ -230,15 +235,13 @@ export async function getBoardById(id) {
   const cached = lsGet().find(b => b.id === id);
   if (cached) return cached;
 
-  if (await apiOk()) {
-    try {
-      const res = await fetch(`${API_BASE}/boards/${id}`, {
-        headers: authHeaders(),
-        signal: AbortSignal.timeout(API_TIMEOUT),
-      });
-      if (res.ok) return res.json();
-    } catch {}
-  }
+  try {
+    const res = await fetch(`${API_BASE}/boards/${id}`, {
+      headers: authHeaders(),
+      signal: AbortSignal.timeout(API_SAVE_TIMEOUT),
+    });
+    if (res.ok) return res.json();
+  } catch {}
   return null;
 }
 
@@ -258,7 +261,7 @@ export async function toggleBoardStatus(id, status) {
         method: 'PATCH',
         headers: apiHeaders(),
         body: JSON.stringify({ status }),
-        signal: AbortSignal.timeout(API_TIMEOUT),
+        signal: AbortSignal.timeout(API_SAVE_TIMEOUT),
       });
       if (res.ok) {
         const updated = await res.json();
@@ -298,7 +301,7 @@ export async function duplicateBoard(id) {
       const res = await fetch(`${API_BASE}/boards/${id}/duplicate`, {
         method: 'POST',
         headers: authHeaders(),
-        signal: AbortSignal.timeout(API_TIMEOUT),
+        signal: AbortSignal.timeout(API_SAVE_TIMEOUT),
       });
       if (res.ok) {
         const serverCopy = await res.json();
