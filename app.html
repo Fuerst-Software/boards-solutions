@@ -169,6 +169,118 @@
         </div>
       </section>
 
+      <!-- ═══════════════════════════════════════════════════════
+           Brand Identity Card
+           ═══════════════════════════════════════════════════════ -->
+      <section class="brand-identity-section" aria-labelledby="brand-heading" id="brand-identity-section">
+        <div class="brand-identity-card" id="brand-identity-card">
+
+          <!-- Header -->
+          <div class="brand-identity-card__header">
+            <div class="brand-identity-card__header-left">
+              <div class="brand-identity-card__icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>
+              </div>
+              <div>
+                <h2 id="brand-heading" class="brand-identity-card__title">Markenfarben</h2>
+                <p class="brand-identity-card__subtitle">Passe dein Widget-Aussehen an deine Website an</p>
+              </div>
+            </div>
+            <!-- Status badge: changes between "Nicht eingerichtet" / "Aktiv" -->
+            <span class="badge" id="brand-status-badge">Nicht eingerichtet</span>
+          </div>
+
+          <!-- Color swatches row — shown when colors are saved -->
+          <div id="brand-swatches-row" class="brand-swatches-row" hidden>
+            <div class="brand-swatch-item">
+              <div class="brand-swatch" id="swatch-primary" title="Primärfarbe"></div>
+              <span class="brand-swatch-label">Primär</span>
+            </div>
+            <div class="brand-swatch-item">
+              <div class="brand-swatch" id="swatch-accent" title="Akzentfarbe"></div>
+              <span class="brand-swatch-label">Akzent</span>
+            </div>
+            <div class="brand-swatch-item">
+              <div class="brand-swatch brand-swatch--bordered" id="swatch-bg" title="Hintergrund"></div>
+              <span class="brand-swatch-label">Hintergrund</span>
+            </div>
+            <div class="brand-swatch-item">
+              <div class="brand-swatch" id="swatch-text" title="Textfarbe"></div>
+              <span class="brand-swatch-label">Text</span>
+            </div>
+            <div class="brand-swatches-actions">
+              <button type="button" class="btn btn--ghost btn--sm" id="brand-edit-btn">Anpassen</button>
+            </div>
+          </div>
+
+          <!-- Setup / Edit panel -->
+          <div id="brand-setup-panel" class="brand-setup-panel">
+            <!-- URL row -->
+            <div class="brand-url-row">
+              <input id="brand-url-input" type="url" class="form-input brand-url-input"
+                placeholder="https://deine-website.de" autocomplete="url" aria-label="Website-URL für Farbanalyse">
+              <button type="button" class="btn btn--primary btn--sm" id="brand-analyze-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <span id="brand-analyze-text">Automatisch erkennen</span>
+              </button>
+            </div>
+
+            <!-- Detected palette -->
+            <div id="brand-palette-wrap" hidden>
+              <p class="brand-palette-label">Erkannte Farben — klicken zum Übernehmen:</p>
+              <div id="brand-palette" class="brand-palette"></div>
+            </div>
+
+            <!-- Color pickers -->
+            <div class="brand-color-pickers">
+              <div class="brand-color-picker-item">
+                <label for="bc-primary" class="brand-color-label">Primärfarbe</label>
+                <div class="brand-color-input-wrap">
+                  <input id="bc-primary" type="color" class="brand-color-swatch" value="#2563eb">
+                  <span id="bc-primary-hex" class="brand-color-hex">#2563eb</span>
+                </div>
+                <span class="brand-color-hint">Buttons, Badges</span>
+              </div>
+              <div class="brand-color-picker-item">
+                <label for="bc-accent" class="brand-color-label">Akzent</label>
+                <div class="brand-color-input-wrap">
+                  <input id="bc-accent" type="color" class="brand-color-swatch" value="#0ea5e9">
+                  <span id="bc-accent-hex" class="brand-color-hex">#0ea5e9</span>
+                </div>
+                <span class="brand-color-hint">Highlights</span>
+              </div>
+              <div class="brand-color-picker-item">
+                <label for="bc-bg" class="brand-color-label">Hintergrund</label>
+                <div class="brand-color-input-wrap">
+                  <input id="bc-bg" type="color" class="brand-color-swatch" value="#ffffff">
+                  <span id="bc-bg-hex" class="brand-color-hex">#ffffff</span>
+                </div>
+                <span class="brand-color-hint">Karten-BG</span>
+              </div>
+              <div class="brand-color-picker-item">
+                <label for="bc-text" class="brand-color-label">Textfarbe</label>
+                <div class="brand-color-input-wrap">
+                  <input id="bc-text" type="color" class="brand-color-swatch" value="#0f172a">
+                  <span id="bc-text-hex" class="brand-color-hex">#0f172a</span>
+                </div>
+                <span class="brand-color-hint">Überschriften</span>
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="brand-setup-actions">
+              <span id="brand-save-msg" class="brand-save-msg" hidden></span>
+              <button type="button" class="btn btn--ghost btn--sm" id="brand-cancel-btn" hidden>Abbrechen</button>
+              <button type="button" class="btn btn--primary btn--sm" id="brand-save-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                Farben speichern
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
       <!-- Quick actions -->
       <section aria-labelledby="create-heading">
         <h2 id="create-heading" class="section-title">Board erstellen</h2>
@@ -258,7 +370,7 @@
 
 <script type="module" src="js/app.js"></script>
 <script type="module">
-  import { requireAuth, updateSidebar, getUser } from './js/auth.js';
+  import { requireAuth, updateSidebar, getUser, authHeaders } from './js/auth.js';
   import { getBoards, relativeDate, getStats, seedDemoData, buildUserSnippet } from './js/boards-data.js';
 
 (async () => {
@@ -337,6 +449,173 @@
   }
 
   renderRecent();
+
+  // ── Brand Identity Card ──────────────────────────────────────
+  const API = 'https://web-production-83480.up.railway.app/api';
+
+  const brandCard       = document.getElementById('brand-identity-card');
+  const brandStatus     = document.getElementById('brand-status-badge');
+  const swatchesRow     = document.getElementById('brand-swatches-row');
+  const setupPanel      = document.getElementById('brand-setup-panel');
+  const urlInput        = document.getElementById('brand-url-input');
+  const analyzeBtn      = document.getElementById('brand-analyze-btn');
+  const analyzeTxt      = document.getElementById('brand-analyze-text');
+  const paletteWrap     = document.getElementById('brand-palette-wrap');
+  const paletteEl       = document.getElementById('brand-palette');
+  const saveBtn         = document.getElementById('brand-save-btn');
+  const saveMsg         = document.getElementById('brand-save-msg');
+  const cancelBtn       = document.getElementById('brand-cancel-btn');
+  const editBtn         = document.getElementById('brand-edit-btn');
+
+  const FIELDS = [
+    { id: 'bc-primary', hexId: 'bc-primary-hex', key: 'primary', swatchId: 'swatch-primary' },
+    { id: 'bc-accent',  hexId: 'bc-accent-hex',  key: 'accent',  swatchId: 'swatch-accent'  },
+    { id: 'bc-bg',      hexId: 'bc-bg-hex',      key: 'background', swatchId: 'swatch-bg'   },
+    { id: 'bc-text',    hexId: 'bc-text-hex',     key: 'text',    swatchId: 'swatch-text'    },
+  ];
+
+  // Wire up color picker → hex label sync
+  FIELDS.forEach(f => {
+    const inp = document.getElementById(f.id);
+    const hex = document.getElementById(f.hexId);
+    inp.addEventListener('input', () => { hex.textContent = inp.value; });
+  });
+
+  function applyColors(colors) {
+    FIELDS.forEach(f => {
+      const v = colors[f.key];
+      if (!v) return;
+      document.getElementById(f.id).value = v;
+      document.getElementById(f.hexId).textContent = v;
+    });
+  }
+
+  function showSwatches(colors) {
+    let anySet = false;
+    FIELDS.forEach(f => {
+      const v = colors[f.key];
+      const sw = document.getElementById(f.swatchId);
+      if (v && sw) { sw.style.background = v; anySet = true; }
+    });
+    if (anySet) {
+      swatchesRow.hidden = false;
+      setupPanel.hidden  = true;
+      brandStatus.textContent = 'Aktiv';
+      brandStatus.className   = 'badge badge--success';
+    }
+  }
+
+  function showSetupPanel() {
+    swatchesRow.hidden = true;
+    setupPanel.hidden  = false;
+    cancelBtn.hidden   = false;
+  }
+
+  editBtn?.addEventListener('click', showSetupPanel);
+  cancelBtn?.addEventListener('click', () => {
+    setupPanel.hidden  = true;
+    swatchesRow.hidden = false;
+    cancelBtn.hidden   = true;
+  });
+
+  // Load existing brand colors
+  try {
+    const res = await fetch(`${API}/auth/me`, { headers: authHeaders() });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.websiteUrl) urlInput.value = data.websiteUrl;
+      if (data.brandColors && typeof data.brandColors === 'object' && Object.keys(data.brandColors).length > 0) {
+        applyColors(data.brandColors);
+        showSwatches(data.brandColors);
+      }
+    }
+  } catch(e) { /* silent */ }
+
+  // Analyze colors
+  analyzeBtn.addEventListener('click', async () => {
+    const url = urlInput.value.trim();
+    if (!url) { urlInput.focus(); return; }
+    analyzeBtn.disabled = true;
+    analyzeTxt.textContent = 'Analysiere…';
+    paletteWrap.hidden = true;
+    paletteEl.innerHTML = '';
+    try {
+      const res = await fetch(`${API}/settings/analyze-colors`, {
+        method: 'POST',
+        headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+
+      // Apply semantic colors
+      const sem = data.semantic || {};
+      const mapping = { primary: 'primary', background: 'background', text: 'text', secondary: 'accent' };
+      const picked = {};
+      Object.entries(mapping).forEach(([apiKey, fieldKey]) => {
+        if (sem[apiKey]) picked[fieldKey] = sem[apiKey];
+      });
+      if (Object.keys(picked).length) applyColors(picked);
+
+      // Show palette swatches
+      const palette = data.palette || [];
+      if (palette.length) {
+        paletteEl.innerHTML = palette.map(c => `
+          <button type="button" class="brand-palette-swatch" style="background:${c}" title="${c}"
+            aria-label="Farbe ${c} übernehmen" data-color="${c}"></button>`).join('');
+        paletteEl.querySelectorAll('.brand-palette-swatch').forEach(btn => {
+          btn.addEventListener('click', () => {
+            // assign to first empty or primary field
+            const target = FIELDS.find(f => {
+              const inp = document.getElementById(f.id);
+              return inp.value === '#2563eb' || inp.value === '#0f172a' || inp.value === '#ffffff';
+            }) || FIELDS[0];
+            document.getElementById(target.id).value = btn.dataset.color;
+            document.getElementById(target.hexId).textContent = btn.dataset.color;
+          });
+        });
+        paletteWrap.hidden = false;
+      }
+    } catch(e) {
+      saveMsg.textContent = '⚠ ' + (e.message || 'Analyse fehlgeschlagen');
+      saveMsg.className   = 'brand-save-msg brand-save-msg--error';
+      saveMsg.hidden = false;
+      setTimeout(() => { saveMsg.hidden = true; }, 4000);
+    } finally {
+      analyzeBtn.disabled = false;
+      analyzeTxt.textContent = 'Automatisch erkennen';
+    }
+  });
+
+  // Save brand colors
+  saveBtn.addEventListener('click', async () => {
+    saveBtn.disabled = true;
+    const brandColors = {};
+    FIELDS.forEach(f => { brandColors[f.key] = document.getElementById(f.id).value; });
+    const websiteUrl = urlInput.value.trim();
+    try {
+      const res = await fetch(`${API}/settings/profile`, {
+        method: 'PUT',
+        headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ websiteUrl, brandColors }),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      saveMsg.textContent = '✓ Gespeichert';
+      saveMsg.className   = 'brand-save-msg brand-save-msg--success';
+      saveMsg.hidden = false;
+      setTimeout(() => {
+        saveMsg.hidden = true;
+        showSwatches(brandColors);
+      }, 1500);
+    } catch(e) {
+      saveMsg.textContent = '⚠ Speichern fehlgeschlagen';
+      saveMsg.className   = 'brand-save-msg brand-save-msg--error';
+      saveMsg.hidden = false;
+    } finally {
+      saveBtn.disabled = false;
+    }
+  });
+  // ── End Brand Identity Card ──────────────────────────────────
 
   // Live-update when background refresh fires
   window.addEventListener('bs:boards-updated', () => {
