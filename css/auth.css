@@ -1,0 +1,194 @@
+/* =============================================================
+   boards.solutions — Auth Page Styles (login.html)
+   Only loaded on the login page — not on dashboard pages.
+   ============================================================= */
+
+/* Suppress layout.css's body padding-top */
+body {
+  padding-top: 0;
+}
+
+/* ── Full-page centering ── */
+body.auth-page {
+  min-height: 100vh;
+  background: var(--color-surface-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+}
+
+/* ── Card ── */
+.auth-container {
+  width: 100%;
+  max-width: 420px;
+}
+
+.auth-card {
+  background: var(--color-surface-base);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-8) var(--space-8);
+  box-shadow: var(--shadow-xl);
+}
+
+/* ── Logo ── */
+.auth-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-7);
+  text-decoration: none;
+  color: inherit;
+}
+
+.auth-logo__icon {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.auth-logo__text {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+/* ── Heading ── */
+.auth-title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-1);
+  line-height: var(--line-height-snug);
+}
+
+.auth-subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-6);
+}
+
+/* ── Error banner ── */
+.auth-error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  border-radius: var(--radius-lg);
+  color: var(--color-error);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--space-5);
+  line-height: var(--line-height-relaxed);
+}
+.auth-error[hidden]  { display: none; }
+.auth-error svg      { flex-shrink: 0; margin-top: 1px; }
+
+/* ── Form ── */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* Password field with toggle */
+.auth-pwd-wrap {
+  position: relative;
+}
+.auth-pwd-wrap .form-input {
+  padding-right: 44px;
+}
+
+.auth-pwd-toggle {
+  position: absolute;
+  right: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  padding: 0;
+  transition: color var(--transition-fast);
+}
+.auth-pwd-toggle:hover { color: var(--color-text-primary); }
+.auth-pwd-toggle:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 1px;
+}
+
+/* Submit button */
+.auth-submit {
+  width: 100%;
+  min-height: 46px;
+  font-size: var(--font-size-base);
+  margin-top: var(--space-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+.auth-submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* Spinner inside button */
+@keyframes auth-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.auth-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: auth-spin 0.65s linear infinite;
+  flex-shrink: 0;
+}
+
+/* ── Footer ── */
+.auth-footer {
+  margin-top: var(--space-6);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--color-border-default);
+  text-align: center;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+.auth-footer a {
+  color: var(--color-blue-500);
+  text-decoration: none;
+  font-weight: var(--font-weight-medium);
+}
+.auth-footer a:hover { text-decoration: underline; }
+
+/* ── Demo hint ── */
+.auth-demo-hint {
+  margin-top: var(--space-5);
+  padding: var(--space-3) var(--space-4);
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-xs);
+  color: var(--color-blue-600, var(--color-blue-500));
+  text-align: center;
+  line-height: var(--line-height-relaxed);
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .auth-card {
+    padding: var(--space-6) var(--space-5);
+    border-radius: var(--radius-xl);
+  }
+}

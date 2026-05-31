@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kundenverwaltung — boards.solutions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+<script>
+(function(){try{var u=JSON.parse(localStorage.getItem('bs_auth_user')||'null');if(!u)return;var n=u.name||u.email||'';var i=n.split(' ').map(function(w){return w[0]||'';}).join('').slice(0,2).toUpperCase();var pl={'free':'Free Plan','pro':'Pro Plan','business':'Business Plan'};document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('.sidebar__user-name,.topbar__user-name').forEach(function(el){el.textContent=n;});document.querySelectorAll('.sidebar__avatar,.topbar__avatar').forEach(function(el){el.textContent=i;});document.querySelectorAll('.sidebar__user-plan').forEach(function(el){el.textContent=pl[u.plan]||'Free Plan';});});}catch(e){}})();
+</script>
+
+<a href="#main-content" class="skip-link">Zum Hauptinhalt springen</a>
+<div id="sidebar-overlay" class="sidebar-overlay" hidden aria-hidden="true"></div>
+
+<!-- ── Sidebar ── -->
+<nav id="sidebar" class="sidebar" aria-label="Hauptnavigation">
+  <div class="sidebar__header">
+    <a href="app.html" class="sidebar__logo" aria-label="boards.solutions Dashboard">
+      <svg class="sidebar__logo-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="3" y="3" width="8" height="8" rx="1.5" fill="var(--color-blue-500)"/>
+        <rect x="13" y="3" width="8" height="8" rx="1.5" fill="var(--color-blue-400)" opacity="0.7"/>
+        <rect x="3" y="13" width="8" height="8" rx="1.5" fill="var(--color-blue-400)" opacity="0.7"/>
+        <rect x="13" y="13" width="8" height="8" rx="1.5" fill="var(--color-blue-300)" opacity="0.5"/>
+      </svg>
+      <span class="sidebar__logo-text">boards.solutions</span>
+    </a>
+    <button id="sidebar-close" class="sidebar__close-btn" aria-label="Seitenleiste schließen" type="button">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="1" y1="1" x2="17" y2="17"/><line x1="17" y1="1" x2="1" y2="17"/></svg>
+    </button>
+  </div>
+  <div class="sidebar__body">
+    <ul class="sidebar__nav" role="list">
+      <li><a href="app.html" class="sidebar__nav-link">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Übersicht
+      </a></li>
+      <li><a href="boards.html" class="sidebar__nav-link">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        Meine Boards
+      </a></li>
+      <li><a href="media-library.html" class="sidebar__nav-link">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        Mediathek
+      </a></li>
+      <li data-admin-only hidden><a href="admin.html" class="sidebar__nav-link" aria-current="page">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        Kundenverwaltung
+      </a></li>
+    </ul>
+    <div class="sidebar__section-label" aria-hidden="true">Demnächst</div>
+    <ul class="sidebar__nav" role="list">
+      <li><span class="sidebar__nav-link sidebar__nav-link--soon" aria-disabled="true">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        Team <span class="badge badge--neutral">Soon</span>
+      </span></li>
+      <li><span class="sidebar__nav-link sidebar__nav-link--soon" aria-disabled="true">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Analytics <span class="badge badge--neutral">Soon</span>
+      </span></li>
+    </ul>
+  </div>
+  <div class="sidebar__footer">
+    <a href="settings.html" class="sidebar__nav-link">
+      <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      Einstellungen
+    </a>
+    <div class="sidebar__user">
+      <div class="sidebar__avatar" aria-hidden="true"></div>
+      <div class="sidebar__user-info">
+        <span class="sidebar__user-name"></span>
+        <span class="sidebar__user-plan"></span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="dashboard-layout">
+  <div class="dashboard-main">
+
+    <header class="topbar" role="banner">
+      <div class="topbar__left">
+        <button id="sidebar-open" class="topbar__menu-btn" aria-label="Menü öffnen" aria-expanded="false" aria-controls="sidebar" type="button">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <nav aria-label="Breadcrumb">
+          <ol class="breadcrumb" role="list">
+            <li class="breadcrumb__item"><a href="app.html" class="breadcrumb__link">Übersicht</a></li>
+            <li class="breadcrumb__item breadcrumb__item--current" aria-current="page">Kundenverwaltung</li>
+          </ol>
+        </nav>
+      </div>
+      <div class="topbar__right">
+        <div class="topbar__user-menu">
+          <button id="user-menu-toggle" class="topbar__user-btn" aria-expanded="false" aria-controls="user-menu-dropdown" type="button">
+            <div class="topbar__avatar" aria-hidden="true"></div>
+            <span class="topbar__user-name"></span>
+            <svg class="topbar__chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div id="user-menu-dropdown" class="user-menu__dropdown" hidden role="menu">
+            <a href="settings.html" class="user-menu__item" role="menuitem">Einstellungen</a>
+            <a href="#" class="user-menu__item" role="menuitem" data-logout>Abmelden</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content" class="dashboard-content" tabindex="-1">
+
+      <!-- Page header -->
+      <div class="page-header">
+        <div class="page-header__text">
+          <h1 class="page-header__title">Kundenverwaltung</h1>
+          <p class="page-header__subtitle">Nutzer anlegen, Pläne zuweisen und Zugänge verwalten.</p>
+        </div>
+        <div class="page-header__actions">
+          <button id="btn-add-customer" type="button" class="btn btn--primary btn--sm">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Neuer Kunde
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats row -->
+      <div class="admin-stats" id="admin-stats" role="list" aria-label="Übersicht">
+        <div class="admin-stat-card" role="listitem">
+          <span class="admin-stat-card__value" id="stat-total">—</span>
+          <span class="admin-stat-card__label">Kunden gesamt</span>
+        </div>
+        <div class="admin-stat-card" role="listitem">
+          <span class="admin-stat-card__value" id="stat-active">—</span>
+          <span class="admin-stat-card__label">Aktiv</span>
+        </div>
+        <div class="admin-stat-card" role="listitem">
+          <span class="admin-stat-card__value" id="stat-pro">—</span>
+          <span class="admin-stat-card__label">Pro Plan</span>
+        </div>
+        <div class="admin-stat-card" role="listitem">
+          <span class="admin-stat-card__value" id="stat-business">—</span>
+          <span class="admin-stat-card__label">Business Plan</span>
+        </div>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="list-toolbar">
+        <div class="search-wrapper" data-search-wrapper>
+          <label for="customer-search" class="sr-only">Kunden suchen</label>
+          <svg class="search-wrapper__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input
+            id="customer-search"
+            type="search"
+            class="search-wrapper__input"
+            placeholder="Name, E-Mail oder Unternehmen…"
+            autocomplete="off"
+            aria-label="Kunden suchen"
+          >
+          <button id="customer-search-clear" class="search-wrapper__clear" aria-label="Suche leeren" type="button" hidden>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Filter tabs -->
+      <div class="filter-tabs" role="tablist" aria-label="Nach Status filtern">
+        <button role="tab" aria-selected="true" tabindex="0" class="filter-tab" data-filter-status="all">
+          Alle <span class="filter-tab__count" id="tab-count-all">0</span>
+        </button>
+        <button role="tab" aria-selected="false" tabindex="-1" class="filter-tab" data-filter-status="active">
+          Aktiv <span class="filter-tab__count" id="tab-count-active">0</span>
+        </button>
+        <button role="tab" aria-selected="false" tabindex="-1" class="filter-tab" data-filter-status="inactive">
+          Inaktiv <span class="filter-tab__count" id="tab-count-inactive">0</span>
+        </button>
+      </div>
+
+      <!-- Loading -->
+      <div id="customers-loading" class="boards-loading" aria-live="polite">
+        <div class="boards-loading__spinner" aria-hidden="true"></div>
+        Kunden werden geladen…
+      </div>
+
+      <!-- Customer table -->
+      <div id="customers-table-wrap" hidden>
+        <table class="admin-table" aria-label="Kundenliste">
+          <thead>
+            <tr>
+              <th scope="col" class="admin-table__th">Kunde</th>
+              <th scope="col" class="admin-table__th">Unternehmen</th>
+              <th scope="col" class="admin-table__th admin-table__th--center">Plan</th>
+              <th scope="col" class="admin-table__th admin-table__th--center">Status</th>
+              <th scope="col" class="admin-table__th admin-table__th--center">Boards</th>
+              <th scope="col" class="admin-table__th">Erstellt</th>
+              <th scope="col" class="admin-table__th admin-table__th--actions"><span class="sr-only">Aktionen</span></th>
+            </tr>
+          </thead>
+          <tbody id="customers-tbody">
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Empty state -->
+      <div id="customers-empty" class="list-empty" hidden role="status">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        <p>Keine Kunden gefunden.</p>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ── Customer modal ── -->
+<div id="customer-modal" class="modal" hidden aria-modal="true" role="dialog" aria-labelledby="modal-title">
+  <div class="modal__backdrop" id="modal-backdrop"></div>
+  <div class="modal__panel">
+    <div class="modal__header">
+      <h2 id="modal-title" class="modal__title">Neuer Kunde</h2>
+      <button id="modal-close" type="button" class="modal__close" aria-label="Modal schließen">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="1" y1="1" x2="17" y2="17"/><line x1="17" y1="1" x2="1" y2="17"/></svg>
+      </button>
+    </div>
+
+    <div class="modal__body">
+      <!-- Error banner -->
+      <div id="modal-error" class="modal__error" hidden role="alert">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span id="modal-error-text"></span>
+      </div>
+
+      <form id="customer-form" novalidate>
+        <input type="hidden" id="field-id">
+
+        <div class="modal__row">
+          <div class="form-group">
+            <label for="field-name" class="form-label">Name <span class="form-label__req" aria-hidden="true">*</span></label>
+            <input id="field-name" type="text" class="form-input" placeholder="Max Mustermann" required autocomplete="name">
+          </div>
+          <div class="form-group">
+            <label for="field-email" class="form-label">E-Mail <span class="form-label__req" aria-hidden="true">*</span></label>
+            <input id="field-email" type="email" class="form-input" placeholder="max@beispiel.de" required autocomplete="email">
+          </div>
+        </div>
+
+        <div class="modal__row">
+          <div class="form-group">
+            <label for="field-company" class="form-label">Unternehmen</label>
+            <input id="field-company" type="text" class="form-input" placeholder="Muster GmbH" autocomplete="organization">
+          </div>
+          <div class="form-group">
+            <label for="field-plan" class="form-label">Plan</label>
+            <select id="field-plan" class="form-input">
+              <option value="free">Free</option>
+              <option value="pro">Pro</option>
+              <option value="business">Business</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="modal__row">
+          <div class="form-group">
+            <label for="field-role" class="form-label">Rolle</label>
+            <select id="field-role" class="form-input">
+              <option value="user">Nutzer</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="field-status" class="form-label">Status</label>
+            <select id="field-status" class="form-input">
+              <option value="active">Aktiv</option>
+              <option value="inactive">Inaktiv</option>
+              <option value="suspended">Gesperrt</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group" id="password-group">
+          <label for="field-password" class="form-label">
+            Passwort <span id="password-hint" class="form-label__hint">(leer lassen = unverändert)</span>
+          </label>
+          <input id="field-password" type="password" class="form-input" placeholder="Mindestens 8 Zeichen" autocomplete="new-password">
+        </div>
+
+        <div class="form-group">
+          <label for="field-notes" class="form-label">Notizen</label>
+          <textarea id="field-notes" class="form-input form-textarea" rows="3" placeholder="Interne Notizen zum Kunden…"></textarea>
+        </div>
+      </form>
+    </div>
+
+    <div class="modal__footer">
+      <button type="button" id="modal-cancel" class="btn btn--ghost">Abbrechen</button>
+      <button type="button" id="modal-save" class="btn btn--primary">
+        <span id="modal-save-text">Speichern</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="js/app.js"></script>
+<script type="module">
+import { requireAdmin, updateSidebar, authHeaders } from './js/auth.js';
+
+(async () => {
+if (!requireAdmin()) return;
+updateSidebar();
+
+const API = 'https://web-production-83480.up.railway.app/api';
+
+// ── State ──────────────────────────────────────────────────────
+let allCustomers  = [];
+let activeFilter  = 'all';
+let searchQuery   = '';
+let editingId     = null;   // null = create mode, string = edit mode
+
+// ── Elements ───────────────────────────────────────────────────
+const tbody        = document.getElementById('customers-tbody');
+const tableWrap    = document.getElementById('customers-table-wrap');
+const loadingEl    = document.getElementById('customers-loading');
+const emptyEl      = document.getElementById('customers-empty');
+const searchInput  = document.getElementById('customer-search');
+const searchClear  = document.getElementById('customer-search-clear');
+const filterTabs   = document.querySelectorAll('.filter-tab[data-filter-status]');
+
+// Modal elements
+const modal        = document.getElementById('customer-modal');
+const modalTitle   = document.getElementById('modal-title');
+const modalErr     = document.getElementById('modal-error');
+const modalErrText = document.getElementById('modal-error-text');
+const modalSave    = document.getElementById('modal-save');
+const modalSaveTxt = document.getElementById('modal-save-text');
+const pwdHint      = document.getElementById('password-hint');
+
+// Form fields
+const fId       = document.getElementById('field-id');
+const fName     = document.getElementById('field-name');
+const fEmail    = document.getElementById('field-email');
+const fCompany  = document.getElementById('field-company');
+const fPlan     = document.getElementById('field-plan');
+const fRole     = document.getElementById('field-role');
+const fStatus   = document.getElementById('field-status');
+const fPassword = document.getElementById('field-password');
+const fNotes    = document.getElementById('field-notes');
+
+// ── Init ───────────────────────────────────────────────────────
+async function init() {
+  await Promise.all([loadStats(), loadCustomers()]);
+}
+
+// ── Stats ──────────────────────────────────────────────────────
+async function loadStats() {
+  try {
+    const res  = await fetch(`${API}/admin/stats`, { headers: authHeaders() });
+    const data = await res.json();
+    document.getElementById('stat-total').textContent    = data.totalCustomers    ?? '—';
+    document.getElementById('stat-active').textContent   = data.activeCustomers   ?? '—';
+    document.getElementById('stat-pro').textContent      = data.proCustomers      ?? '—';
+    document.getElementById('stat-business').textContent = data.businessCustomers ?? '—';
+  } catch {
+    /* stats are non-critical — leave as dashes */
+  }
+}
+
+// ── Customers list ─────────────────────────────────────────────
+async function loadCustomers() {
+  showLoading(true);
+  try {
+    const res   = await fetch(`${API}/admin/customers`, { headers: authHeaders() });
+    allCustomers = await res.json();
+  } catch {
+    allCustomers = [];
+  }
+  showLoading(false);
+  render();
+}
+
+function showLoading(on) {
+  loadingEl.hidden    =  !on;
+  tableWrap.hidden    =   on;
+  emptyEl.hidden      =   true;
+}
+
+function getFiltered() {
+  let list = [...allCustomers];
+  if (activeFilter !== 'all') list = list.filter(c => c.status === activeFilter);
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    list = list.filter(c =>
+      (c.name    || '').toLowerCase().includes(q) ||
+      (c.email   || '').toLowerCase().includes(q) ||
+      (c.company || '').toLowerCase().includes(q)
+    );
+  }
+  return list;
+}
+
+function render() {
+  // Tab counts
+  document.getElementById('tab-count-all').textContent      = allCustomers.length;
+  document.getElementById('tab-count-active').textContent   = allCustomers.filter(c => c.status === 'active').length;
+  document.getElementById('tab-count-inactive').textContent = allCustomers.filter(c => c.status === 'inactive').length;
+
+  const filtered = getFiltered();
+
+  if (filtered.length === 0) {
+    tableWrap.hidden = true;
+    emptyEl.hidden   = false;
+    return;
+  }
+
+  emptyEl.hidden   = false; // keep hidden
+  emptyEl.hidden   = true;
+  tableWrap.hidden = false;
+  tbody.innerHTML  = filtered.map(rowHTML).join('');
+}
+
+// ── Row template ───────────────────────────────────────────────
+const PLAN_LABELS  = { free: 'Free', pro: 'Pro', business: 'Business' };
+const PLAN_CLASSES = { free: 'badge--neutral', pro: 'badge--info', business: 'badge--success' };
+const STATUS_LABELS  = { active: 'Aktiv', inactive: 'Inaktiv', suspended: 'Gesperrt' };
+const STATUS_CLASSES = { active: 'badge--success', inactive: 'badge--neutral', suspended: 'badge--danger' };
+
+function rowHTML(c) {
+  const initials = (c.name || c.email || '?')
+    .split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+  const planBadge   = `<span class="badge ${PLAN_CLASSES[c.plan]   || 'badge--neutral'}">${esc(PLAN_LABELS[c.plan]   || c.plan)}</span>`;
+  const statusBadge = `<span class="badge ${STATUS_CLASSES[c.status] || 'badge--neutral'}">${esc(STATUS_LABELS[c.status] || c.status)}</span>`;
+  const created     = c.createdAt
+    ? new Date(c.createdAt).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })
+    : '—';
+
+  return `
+    <tr class="admin-table__row" data-customer-id="${esc(c.id)}">
+      <td class="admin-table__td">
+        <div class="admin-customer-cell">
+          <div class="admin-avatar" aria-hidden="true">${esc(initials)}</div>
+          <div class="admin-customer-cell__info">
+            <span class="admin-customer-cell__name">${esc(c.name || '—')}</span>
+            <span class="admin-customer-cell__email">${esc(c.email)}</span>
+          </div>
+        </div>
+      </td>
+      <td class="admin-table__td admin-table__td--muted">${esc(c.company || '—')}</td>
+      <td class="admin-table__td admin-table__td--center">${planBadge}</td>
+      <td class="admin-table__td admin-table__td--center">${statusBadge}</td>
+      <td class="admin-table__td admin-table__td--center admin-table__td--muted">${c.boardCount ?? 0}</td>
+      <td class="admin-table__td admin-table__td--muted">${esc(created)}</td>
+      <td class="admin-table__td admin-table__td--actions">
+        <button
+          class="admin-row-btn"
+          data-action="edit"
+          data-id="${esc(c.id)}"
+          aria-label="${esc(c.name || c.email)} bearbeiten"
+          type="button"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+        <button
+          class="admin-row-btn admin-row-btn--danger"
+          data-action="delete"
+          data-id="${esc(c.id)}"
+          data-name="${esc(c.name || c.email)}"
+          aria-label="${esc(c.name || c.email)} löschen"
+          type="button"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+        </button>
+      </td>
+    </tr>
+  `;
+}
+
+// ── Event handlers ─────────────────────────────────────────────
+
+// Filter tabs
+filterTabs.forEach((tab, i) => {
+  tab.addEventListener('click', () => {
+    filterTabs.forEach(t => { t.setAttribute('aria-selected', 'false'); t.tabIndex = -1; });
+    tab.setAttribute('aria-selected', 'true');
+    tab.tabIndex = 0;
+    activeFilter = tab.dataset.filterStatus;
+    render();
+  });
+  tab.addEventListener('keydown', e => {
+    let target;
+    if (e.key === 'ArrowRight') target = filterTabs[(i + 1) % filterTabs.length];
+    if (e.key === 'ArrowLeft')  target = filterTabs[(i - 1 + filterTabs.length) % filterTabs.length];
+    if (target) { target.focus(); target.click(); }
+  });
+});
+
+// Search
+let searchTimer;
+searchInput.addEventListener('input', () => {
+  clearTimeout(searchTimer);
+  const val = searchInput.value.trim();
+  searchClear.hidden = !val;
+  searchTimer = setTimeout(() => { searchQuery = val; render(); }, 250);
+});
+searchClear.addEventListener('click', () => {
+  searchInput.value  = '';
+  searchClear.hidden = true;
+  searchQuery        = '';
+  render();
+  searchInput.focus();
+});
+
+// Table action delegation
+tbody.addEventListener('click', async e => {
+  const btn = e.target.closest('[data-action]');
+  if (!btn) return;
+  const action = btn.dataset.action;
+  const id     = btn.dataset.id;
+
+  if (action === 'edit') {
+    const customer = allCustomers.find(c => c.id === id);
+    if (customer) openModal(customer);
+  }
+
+  if (action === 'delete') {
+    const name = btn.dataset.name || 'Kunde';
+    if (!confirm(`„${name}" wirklich löschen?\n\nAlle Boards dieses Nutzers bleiben erhalten.`)) return;
+    try {
+      const res = await fetch(`${API}/admin/customers/${id}`, {
+        method: 'DELETE', headers: authHeaders(),
+      });
+      if (!res.ok) throw new Error();
+      allCustomers = allCustomers.filter(c => c.id !== id);
+      render();
+      await loadStats();
+      showToast('Kunde gelöscht.', 'success', 2500);
+    } catch {
+      showToast('Fehler beim Löschen.', 'error');
+    }
+  }
+});
+
+// ── Modal ──────────────────────────────────────────────────────
+
+document.getElementById('btn-add-customer').addEventListener('click', () => openModal(null));
+document.getElementById('modal-close').addEventListener('click', closeModal);
+document.getElementById('modal-cancel').addEventListener('click', closeModal);
+document.getElementById('modal-backdrop').addEventListener('click', closeModal);
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hidden) closeModal(); });
+
+function openModal(customer) {
+  editingId = customer?.id ?? null;
+  clearModalError();
+
+  if (customer) {
+    modalTitle.textContent  = 'Kunde bearbeiten';
+    modalSaveTxt.textContent = 'Speichern';
+    pwdHint.hidden = false;
+    fId.value       = customer.id    || '';
+    fName.value     = customer.name    || '';
+    fEmail.value    = customer.email   || '';
+    fCompany.value  = customer.company || '';
+    fPlan.value     = customer.plan    || 'free';
+    fRole.value     = customer.role    || 'user';
+    fStatus.value   = customer.status  || 'active';
+    fNotes.value    = customer.notes   || '';
+    fPassword.value = '';
+    fEmail.readOnly = false;
+  } else {
+    modalTitle.textContent   = 'Neuer Kunde';
+    modalSaveTxt.textContent = 'Erstellen';
+    pwdHint.hidden = true;
+    fId.value       = '';
+    fName.value     = '';
+    fEmail.value    = '';
+    fCompany.value  = '';
+    fPlan.value     = 'free';
+    fRole.value     = 'user';
+    fStatus.value   = 'active';
+    fNotes.value    = '';
+    fPassword.value = '';
+    fEmail.readOnly = false;
+  }
+
+  modal.hidden = false;
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => fName.focus(), 50);
+}
+
+function closeModal() {
+  modal.hidden = true;
+  document.body.style.overflow = '';
+  editingId = null;
+}
+
+function showModalError(msg) {
+  modalErrText.textContent = msg;
+  modalErr.hidden = false;
+}
+function clearModalError() { modalErr.hidden = true; }
+
+document.getElementById('modal-save').addEventListener('click', async () => {
+  clearModalError();
+
+  const name     = fName.value.trim();
+  const email    = fEmail.value.trim();
+  const password = fPassword.value;
+
+  if (!name)  { showModalError('Name ist erforderlich.'); fName.focus(); return; }
+  if (!email) { showModalError('E-Mail ist erforderlich.'); fEmail.focus(); return; }
+  if (!editingId && !password) { showModalError('Passwort ist erforderlich.'); fPassword.focus(); return; }
+  if (password && password.length < 8) { showModalError('Passwort muss mindestens 8 Zeichen haben.'); fPassword.focus(); return; }
+
+  const payload = {
+    name,
+    email,
+    company: fCompany.value.trim(),
+    plan:    fPlan.value,
+    role:    fRole.value,
+    status:  fStatus.value,
+    notes:   fNotes.value.trim(),
+  };
+  if (password) payload.password = password;
+
+  setSaving(true);
+
+  try {
+    let res;
+    if (editingId) {
+      res = await fetch(`${API}/admin/customers/${editingId}`, {
+        method:  'PUT',
+        headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+        body:    JSON.stringify(payload),
+      });
+    } else {
+      res = await fetch(`${API}/admin/customers`, {
+        method:  'POST',
+        headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+        body:    JSON.stringify(payload),
+      });
+    }
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      showModalError(data.error || 'Speichern fehlgeschlagen.');
+      return;
+    }
+
+    if (editingId) {
+      const idx = allCustomers.findIndex(c => c.id === editingId);
+      if (idx >= 0) allCustomers[idx] = { ...allCustomers[idx], ...data };
+    } else {
+      allCustomers.unshift(data);
+    }
+
+    closeModal();
+    render();
+    await loadStats();
+    showToast(editingId ? 'Kunde aktualisiert.' : 'Kunde erstellt.', 'success', 3000);
+
+  } catch {
+    showModalError('Verbindungsfehler. Läuft das Backend?');
+  } finally {
+    setSaving(false);
+  }
+});
+
+function setSaving(on) {
+  modalSave.disabled = on;
+  modalSaveTxt.textContent = on ? 'Speichern…' : (editingId ? 'Speichern' : 'Erstellen');
+}
+
+// ── Utility ────────────────────────────────────────────────────
+function esc(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function showToast(msg, type = 'success', duration = 3500) {
+  /* Reuse app.js toast if available, otherwise fallback */
+  const existing = document.getElementById('bs-toast-container');
+  const container = existing || (() => {
+    const el = document.createElement('div');
+    el.id = 'bs-toast-container';
+    el.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px;';
+    document.body.appendChild(el);
+    return el;
+  })();
+
+  const toast = document.createElement('div');
+  const bg = type === 'error' ? '#EF4444' : '#10B981';
+  toast.style.cssText = `background:${bg};color:#fff;padding:10px 16px;border-radius:8px;font-size:14px;font-weight:500;box-shadow:0 4px 12px rgba(0,0,0,.15);transition:opacity .3s;max-width:320px;`;
+  toast.textContent = msg;
+  container.appendChild(toast);
+  setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, duration);
+}
+
+// ── Start ──────────────────────────────────────────────────────
+init();
+})();
+</script>
+</body>
+</html>

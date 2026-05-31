@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="boards.solutions — Produktverwaltung für alle Boards.">
+  <title>Produkte — boards.solutions</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+<script>
+(function(){try{var u=JSON.parse(localStorage.getItem('bs_auth_user')||'null');if(!u)return;var n=u.name||u.email||'';var i=n.split(' ').map(function(w){return w[0]||'';}).join('').slice(0,2).toUpperCase();var pl={'free':'Free Plan','pro':'Pro Plan','business':'Business Plan'};document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('.sidebar__user-name,.topbar__user-name').forEach(function(el){el.textContent=n;});document.querySelectorAll('.sidebar__avatar,.topbar__avatar').forEach(function(el){el.textContent=i;});document.querySelectorAll('.sidebar__user-plan').forEach(function(el){el.textContent=pl[u.plan]||'Free Plan';});});}catch(e){}})();
+</script>
+
+<a href="#main-content" class="skip-link">Zum Hauptinhalt springen</a>
+<div id="sidebar-overlay" class="sidebar-overlay" hidden aria-hidden="true"></div>
+
+<!-- ── Sidebar ── -->
+<nav id="sidebar" class="sidebar" aria-label="Hauptnavigation">
+  <div class="sidebar__header">
+    <a href="app.html" class="sidebar__logo" aria-label="boards.solutions Dashboard">
+      <svg class="sidebar__logo-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="3" y="3" width="8" height="8" rx="1.5" fill="var(--color-blue-500)"/>
+        <rect x="13" y="3" width="8" height="8" rx="1.5" fill="var(--color-blue-400)" opacity="0.7"/>
+        <rect x="3" y="13" width="8" height="8" rx="1.5" fill="var(--color-blue-400)" opacity="0.7"/>
+        <rect x="13" y="13" width="8" height="8" rx="1.5" fill="var(--color-blue-300)" opacity="0.5"/>
+      </svg>
+      <span class="sidebar__logo-text">boards.solutions</span>
+    </a>
+    <button id="sidebar-close" class="sidebar__close-btn" aria-label="Seitenleiste schließen" type="button">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="1" y1="1" x2="17" y2="17"/><line x1="17" y1="1" x2="1" y2="17"/></svg>
+    </button>
+  </div>
+  <div class="sidebar__body">
+    <ul class="sidebar__nav" role="list">
+      <li><a href="app.html" class="sidebar__nav-link">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Übersicht
+      </a></li>
+      <li><a href="boards.html" class="sidebar__nav-link">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        Boards
+      </a></li>
+      <li><a href="products.html" class="sidebar__nav-link" aria-current="page">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        Produkte
+      </a></li>
+      <li><a href="media-library.html" class="sidebar__nav-link">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        Mediathek
+      </a></li>
+    </ul>
+    <div class="sidebar__section-label" aria-hidden="true">Demnächst</div>
+    <ul class="sidebar__nav" role="list">
+      <li><span class="sidebar__nav-link sidebar__nav-link--soon" aria-disabled="true">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        Team <span class="badge badge--neutral">Soon</span>
+      </span></li>
+      <li><span class="sidebar__nav-link sidebar__nav-link--soon" aria-disabled="true">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Analytics <span class="badge badge--neutral">Soon</span>
+      </span></li>
+    </ul>
+  </div>
+  <div class="sidebar__footer">
+    <a href="settings.html" class="sidebar__nav-link">
+      <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      Einstellungen
+    </a>
+    <div class="sidebar__user">
+      <div class="sidebar__avatar" aria-hidden="true"></div>
+      <div class="sidebar__user-info">
+        <span class="sidebar__user-name"></span>
+        <span class="sidebar__user-plan"></span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Main wrapper ── -->
+<div class="dashboard-layout">
+  <div class="dashboard-main">
+
+    <!-- Topbar -->
+    <header class="topbar" role="banner">
+      <div class="topbar__left">
+        <button id="sidebar-open" class="topbar__menu-btn" aria-label="Menü öffnen" aria-expanded="false" aria-controls="sidebar" type="button">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <nav aria-label="Breadcrumb">
+          <ol class="breadcrumb" role="list">
+            <li class="breadcrumb__item"><a href="app.html" class="breadcrumb__link">Dashboard</a></li>
+            <li class="breadcrumb__item breadcrumb__item--current" aria-current="page">Produkte</li>
+          </ol>
+        </nav>
+      </div>
+      <div class="topbar__right">
+        <div class="topbar__notifications">
+          <button id="notifications-toggle" class="topbar__icon-btn" aria-label="Benachrichtigungen" aria-expanded="false" aria-controls="notifications-dropdown" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          </button>
+          <div id="notifications-dropdown" class="notifications__dropdown" hidden role="dialog" aria-label="Benachrichtigungen" aria-modal="false">
+            <div class="notifications__header"><span class="notifications__title">Benachrichtigungen</span></div>
+            <div class="notifications__empty"><p>Keine neuen Benachrichtigungen</p></div>
+          </div>
+        </div>
+        <div class="topbar__user-menu">
+          <button id="user-menu-toggle" class="topbar__user-btn" aria-expanded="false" aria-controls="user-menu-dropdown" type="button">
+            <div class="topbar__avatar" aria-hidden="true"></div>
+            <span class="topbar__user-name"></span>
+            <svg class="topbar__chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div id="user-menu-dropdown" class="user-menu__dropdown" hidden role="menu">
+            <a href="settings.html" class="user-menu__item" role="menuitem">Einstellungen</a>
+            <a href="#" class="user-menu__item" role="menuitem">Abmelden</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page content -->
+    <main id="main-content" class="dashboard-content" tabindex="-1">
+      <div class="page-header">
+        <div class="page-header__text">
+          <h1 class="page-header__title">Produkte</h1>
+          <p class="page-header__subtitle">Verwalte Produkte, Preise und Affiliate-Links für alle Boards.</p>
+        </div>
+        <div class="page-header__actions">
+          <button class="btn btn--primary btn--sm" type="button">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Produkt anlegen
+          </button>
+        </div>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="list-toolbar">
+        <div data-search-wrapper class="search-wrapper">
+          <label for="products-search" class="sr-only">Produkte durchsuchen</label>
+          <svg class="search-wrapper__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input
+            id="products-search"
+            type="search"
+            class="search-wrapper__input"
+            placeholder="Produkt suchen…"
+            data-search-input
+            data-search-target="#products-grid"
+            autocomplete="off"
+            aria-label="Produkte durchsuchen"
+          >
+          <button data-search-clear class="search-wrapper__clear" aria-label="Suche leeren" type="button" hidden>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
+          </button>
+        </div>
+        <div class="list-toolbar__right">
+          <label for="products-sort" class="sr-only">Sortierung</label>
+          <select id="products-sort" class="sort-select" data-sort-select data-sort-target="#products-grid">
+            <option value="date-desc">Neueste zuerst</option>
+            <option value="name-asc">Name A–Z</option>
+            <option value="name-desc">Name Z–A</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div role="tablist" data-filter-list aria-label="Nach Status filtern" class="filter-tabs" data-filter-container="#products-grid-wrap">
+        <button role="tab" aria-selected="true" tabindex="0" data-filter="all" class="filter-tab">
+          Alle <span class="filter-tab__count">6</span>
+        </button>
+        <button role="tab" aria-selected="false" tabindex="-1" data-filter="active" class="filter-tab">
+          Aktiv <span class="filter-tab__count">4</span>
+        </button>
+        <button role="tab" aria-selected="false" tabindex="-1" data-filter="draft" class="filter-tab">
+          Entwurf <span class="filter-tab__count">1</span>
+        </button>
+        <button role="tab" aria-selected="false" tabindex="-1" data-filter="archived" class="filter-tab">
+          Archiviert <span class="filter-tab__count">1</span>
+        </button>
+      </div>
+
+      <!-- Products Grid -->
+      <div id="products-grid-wrap" data-search-container>
+        <div id="products-grid" class="products-grid" data-sort-container>
+
+          <!-- Product 1 -->
+          <article
+            class="product-card"
+            data-status="active"
+            data-search-item
+            data-search-text="Ergonomischer Bürostuhl Pro aktiv"
+            data-sort-key="Ergonomischer Bürostuhl Pro"
+            data-sort-date="2026-05-27"
+          >
+            <div class="product-card__image" aria-hidden="true">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+            </div>
+            <div class="product-card__body">
+              <div class="product-card__header">
+                <div>
+                  <h2 class="product-card__title">Ergonomischer Bürostuhl Pro</h2>
+                  <p class="product-card__board">Board: Produktkatalog — Mayer &amp; Co. GmbH</p>
+                </div>
+                <span class="badge badge--success">Aktiv</span>
+              </div>
+              <div class="product-card__pricing">
+                <span class="product-card__price">249,00 €</span>
+                <span class="product-card__price-label">Verkaufspreis</span>
+              </div>
+              <div class="product-card__affiliate">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+                <a href="#" class="product-card__affiliate-link" aria-label="Affiliate-Link für Ergonomischer Bürostuhl Pro öffnen">amazon.de/dp/B08XZ7…</a>
+              </div>
+              <div class="product-card__actions">
+                <button class="btn btn--ghost btn--sm" type="button">Bearbeiten</button>
+                <button class="btn btn--ghost btn--sm" type="button" data-confirm="Produkt wirklich archivieren?">Archivieren</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Product 2 -->
+          <article
+            class="product-card"
+            data-status="active"
+            data-search-item
+            data-search-text="Standing Desk Flex 140 aktiv"
+            data-sort-key="Standing Desk Flex 140"
+            data-sort-date="2026-05-26"
+          >
+            <div class="product-card__image" aria-hidden="true">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+            <div class="product-card__body">
+              <div class="product-card__header">
+                <div>
+                  <h2 class="product-card__title">Standing Desk Flex 140</h2>
+                  <p class="product-card__board">Board: Produktkatalog — Mayer &amp; Co. GmbH</p>
+                </div>
+                <span class="badge badge--success">Aktiv</span>
+              </div>
+              <div class="product-card__pricing">
+                <span class="product-card__price">599,00 €</span>
+                <span class="product-card__price-label">Verkaufspreis</span>
+              </div>
+              <div class="product-card__affiliate">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+                <a href="#" class="product-card__affiliate-link" aria-label="Affiliate-Link für Standing Desk Flex 140 öffnen">ergodesk.de/stehpult…</a>
+              </div>
+              <div class="product-card__actions">
+                <button class="btn btn--ghost btn--sm" type="button">Bearbeiten</button>
+                <button class="btn btn--ghost btn--sm" type="button" data-confirm="Produkt wirklich archivieren?">Archivieren</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Product 3 -->
+          <article
+            class="product-card"
+            data-status="active"
+            data-search-item
+            data-search-text="Beratungspaket Starter aktiv"
+            data-sort-key="Beratungspaket Starter"
+            data-sort-date="2026-05-24"
+          >
+            <div class="product-card__image" aria-hidden="true">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+            </div>
+            <div class="product-card__body">
+              <div class="product-card__header">
+                <div>
+                  <h2 class="product-card__title">Beratungspaket Starter</h2>
+                  <p class="product-card__board">Board: Leistungsseite — Schmidt Immobilien</p>
+                </div>
+                <span class="badge badge--success">Aktiv</span>
+              </div>
+              <div class="product-card__pricing">
+                <span class="product-card__price">890,00 €</span>
+                <span class="product-card__price-label">Pro Projekt</span>
+              </div>
+              <div class="product-card__affiliate">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+                <a href="#" class="product-card__affiliate-link" aria-label="Buchungslink für Beratungspaket Starter öffnen">calendly.com/schmidt-immo…</a>
+              </div>
+              <div class="product-card__actions">
+                <button class="btn btn--ghost btn--sm" type="button">Bearbeiten</button>
+                <button class="btn btn--ghost btn--sm" type="button" data-confirm="Produkt wirklich archivieren?">Archivieren</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Product 4 -->
+          <article
+            class="product-card"
+            data-status="active"
+            data-search-item
+            data-search-text="Immobilienbewertung Premium aktiv"
+            data-sort-key="Immobilienbewertung Premium"
+            data-sort-date="2026-05-22"
+          >
+            <div class="product-card__image" aria-hidden="true">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <div class="product-card__body">
+              <div class="product-card__header">
+                <div>
+                  <h2 class="product-card__title">Immobilienbewertung Premium</h2>
+                  <p class="product-card__board">Board: Leistungsseite — Schmidt Immobilien</p>
+                </div>
+                <span class="badge badge--success">Aktiv</span>
+              </div>
+              <div class="product-card__pricing">
+                <span class="product-card__price">1.490,00 €</span>
+                <span class="product-card__price-label">Pro Objekt</span>
+              </div>
+              <div class="product-card__affiliate">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+                <a href="#" class="product-card__affiliate-link" aria-label="Anfrage-Link für Immobilienbewertung Premium öffnen">schmidt-immobilien.de/anfrage…</a>
+              </div>
+              <div class="product-card__actions">
+                <button class="btn btn--ghost btn--sm" type="button">Bearbeiten</button>
+                <button class="btn btn--ghost btn--sm" type="button" data-confirm="Produkt wirklich archivieren?">Archivieren</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Product 5 — Draft -->
+          <article
+            class="product-card product-card--draft"
+            data-status="draft"
+            data-search-item
+            data-search-text="Workshop-Tag On-Site Entwurf"
+            data-sort-key="Workshop-Tag On-Site"
+            data-sort-date="2026-05-25"
+          >
+            <div class="product-card__image" aria-hidden="true">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </div>
+            <div class="product-card__body">
+              <div class="product-card__header">
+                <div>
+                  <h2 class="product-card__title">Workshop-Tag On-Site</h2>
+                  <p class="product-card__board">Board: Angebotsliste — Fischer &amp; Partner</p>
+                </div>
+                <span class="badge badge--neutral">Entwurf</span>
+              </div>
+              <div class="product-card__pricing">
+                <span class="product-card__price">—</span>
+                <span class="product-card__price-label">Preis noch nicht gesetzt</span>
+              </div>
+              <div class="product-card__actions">
+                <button class="btn btn--primary btn--sm" type="button">Fertigstellen</button>
+                <button class="btn btn--ghost btn--sm" type="button" data-confirm="Entwurf wirklich löschen?">Löschen</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Product 6 — Archived -->
+          <article
+            class="product-card product-card--archived"
+            data-status="archived"
+            data-search-item
+            data-search-text="Winterkollektion 2025 archiviert"
+            data-sort-key="Winterkollektion 2025"
+            data-sort-date="2026-01-10"
+          >
+            <div class="product-card__image" aria-hidden="true">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+            </div>
+            <div class="product-card__body">
+              <div class="product-card__header">
+                <div>
+                  <h2 class="product-card__title">Winterkollektion 2025</h2>
+                  <p class="product-card__board">Board: Winterkampagne — Hofmann GmbH</p>
+                </div>
+                <span class="badge badge--warning">Archiviert</span>
+              </div>
+              <div class="product-card__pricing">
+                <span class="product-card__price">79,00 €</span>
+                <span class="product-card__price-label">Archivierter Preis</span>
+              </div>
+              <div class="product-card__actions">
+                <button class="btn btn--ghost btn--sm" type="button">Wiederherstellen</button>
+                <button class="btn btn--ghost btn--sm" type="button" data-confirm="Produkt endgültig löschen?">Löschen</button>
+              </div>
+            </div>
+          </article>
+
+        </div><!-- /#products-grid -->
+
+        <div data-empty-state class="list-empty" hidden role="status" aria-live="polite">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <p>Keine Produkte gefunden.</p>
+        </div>
+      </div><!-- /#products-grid-wrap -->
+
+    </main>
+  </div>
+</div>
+
+<script type="module" src="js/app.js"></script>
+<script type="module">
+  import { requireAuth, updateSidebar } from './js/auth.js';
+  (() => { if (!requireAuth()) return; updateSidebar(); })();
+</script>
+</body>
+</html>

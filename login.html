@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anmelden — boards.solutions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/auth.css">
+</head>
+<body class="auth-page">
+
+<div class="auth-container">
+  <div class="auth-card">
+
+    <a href="index.html" class="auth-logo" aria-label="boards.solutions – zur Startseite">
+      <svg class="auth-logo__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="3" y="3" width="8" height="8" rx="1.5" fill="var(--color-blue-500)"/>
+        <rect x="13" y="3" width="8" height="8" rx="1.5" fill="var(--color-blue-400)" opacity="0.7"/>
+        <rect x="3" y="13" width="8" height="8" rx="1.5" fill="var(--color-blue-400)" opacity="0.7"/>
+        <rect x="13" y="13" width="8" height="8" rx="1.5" fill="var(--color-blue-300)" opacity="0.5"/>
+      </svg>
+      <span class="auth-logo__text">boards.solutions</span>
+    </a>
+
+    <h1 class="auth-title">Willkommen zurück</h1>
+    <p class="auth-subtitle">Melde dich an, um deine Boards zu verwalten.</p>
+
+    <div id="auth-error" class="auth-error" hidden role="alert" aria-live="assertive">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span id="auth-error-text">E-Mail oder Passwort falsch.</span>
+    </div>
+
+    <form id="login-form" class="auth-form" novalidate>
+      <div class="form-group">
+        <label for="login-email" class="form-label">E-Mail-Adresse</label>
+        <input id="login-email" type="email" class="form-input" placeholder="deine@email.de" required autocomplete="email" aria-required="true">
+      </div>
+
+      <div class="form-group">
+        <label for="login-password" class="form-label">Passwort</label>
+        <div class="auth-pwd-wrap">
+          <input id="login-password" type="password" class="form-input" placeholder="••••••••" required autocomplete="current-password" aria-required="true">
+          <button id="pwd-toggle" type="button" class="auth-pwd-toggle" aria-label="Passwort anzeigen">
+            <svg id="pwd-eye-show" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg id="pwd-eye-hide" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" hidden><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <button id="login-btn" type="submit" class="btn btn--primary auth-submit">
+        <span id="login-btn-text">Einloggen</span>
+      </button>
+    </form>
+
+    <div class="auth-demo-hint" id="demo-hint">
+      <strong>Demo-Zugangsdaten</strong><br>
+      <button type="button" class="auth-demo-fill" data-email="admin@boards.solutions" data-password="Admin1234">
+        admin@boards.solutions · Admin1234
+        <span class="auth-demo-fill__tag">Admin</span>
+      </button>
+      <button type="button" class="auth-demo-fill" data-email="user@boards.solutions" data-password="User1234">
+        user@boards.solutions · User1234
+        <span class="auth-demo-fill__tag">Pro</span>
+      </button>
+    </div>
+
+    <p class="auth-footer">
+      Noch kein Konto? <a href="mailto:hello@boards.solutions">Kontakt aufnehmen</a>
+    </p>
+
+  </div>
+</div>
+
+<script type="module">
+import { isLoggedIn, setAuth } from './js/auth.js';
+import { clearBoardsCache, resetApiState } from './js/boards-data.js';
+
+if (isLoggedIn()) {
+  window.location.replace('app.html');
+}
+
+// ── Demo Users (offline fallback) ──────────────────────────────
+const DEMO_USERS = {
+  'admin@boards.solutions': {
+    password: 'Admin1234',
+    user: {
+      id: 'u_admin',
+      name: 'Admin User',
+      email: 'admin@boards.solutions',
+      role: 'admin',
+      plan: 'business',
+      embedKey: 'ek_admin_abc123xyz',
+      createdAt: '2024-01-15T10:00:00.000Z',
+    },
+  },
+  'user@boards.solutions': {
+    password: 'User1234',
+    user: {
+      id: 'u_demo',
+      name: 'Demo Nutzer',
+      email: 'user@boards.solutions',
+      role: 'user',
+      plan: 'pro',
+      embedKey: 'ek_user_def456uvw',
+      createdAt: '2024-03-01T09:00:00.000Z',
+    },
+  },
+};
+
+const form     = document.getElementById('login-form');
+const errEl    = document.getElementById('auth-error');
+const errText  = document.getElementById('auth-error-text');
+const btn      = document.getElementById('login-btn');
+const pwdInput = document.getElementById('login-password');
+const toggle   = document.getElementById('pwd-toggle');
+const eyeShow  = document.getElementById('pwd-eye-show');
+const eyeHide  = document.getElementById('pwd-eye-hide');
+
+// Password toggle
+toggle.addEventListener('click', () => {
+  const visible = pwdInput.type === 'text';
+  pwdInput.type  = visible ? 'password' : 'text';
+  eyeShow.hidden = !visible;
+  eyeHide.hidden =  visible;
+  toggle.setAttribute('aria-label', visible ? 'Passwort anzeigen' : 'Passwort verbergen');
+  pwdInput.focus();
+});
+
+// Demo fill buttons
+document.querySelectorAll('.auth-demo-fill').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.getElementById('login-email').value = btn.dataset.email;
+    pwdInput.value = btn.dataset.password;
+    hideError();
+  });
+});
+
+// Form submit
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+
+  const email    = document.getElementById('login-email').value.trim().toLowerCase();
+  const password = pwdInput.value;
+
+  if (!email || !password) {
+    showError('Bitte E-Mail und Passwort eingeben.');
+    return;
+  }
+
+  setLoading(true);
+  hideError();
+
+  // Try backend first
+  try {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 2000);
+
+    const res = await fetch('https://web-production-83480.up.railway.app/api/auth/login', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ email, password }),
+      signal:  ctrl.signal,
+    });
+    clearTimeout(timer);
+
+    if (res.ok) {
+      const data = await res.json();
+      clearBoardsCache(); // clear previous user's boards
+      resetApiState();
+      setAuth(data.token, { ...data.user, embedKey: data.user.embedKey || `ek_${data.user.id}` });
+      window.location.replace('app.html');
+      return;
+    }
+  } catch { /* backend not available — fall through to demo */ }
+
+  // Offline demo login
+  const demo = DEMO_USERS[email];
+  if (demo && demo.password === password) {
+    clearBoardsCache(); // clear previous user's boards
+    resetApiState();
+    setAuth(`demo_token_${Date.now()}`, demo.user);
+    window.location.replace('app.html');
+    return;
+  }
+
+  showError('E-Mail oder Passwort falsch.');
+  setLoading(false);
+});
+
+function setLoading(loading) {
+  btn.disabled = loading;
+  btn.innerHTML = loading
+    ? '<div class="auth-spinner" aria-hidden="true"></div> Anmelden…'
+    : '<span id="login-btn-text">Einloggen</span>';
+}
+
+function showError(msg) {
+  errText.textContent = msg;
+  errEl.hidden = false;
+}
+function hideError() { errEl.hidden = true; }
+
+[document.getElementById('login-email'), pwdInput].forEach(el => {
+  el.addEventListener('input', hideError);
+});
+</script>
+</body>
+</html>

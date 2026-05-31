@@ -1,0 +1,302 @@
+/* =============================================================
+   boards.solutions — Responsive (All Media Queries)
+   Mobile-first: breakpoints at 480, 768, 1024, 1280px.
+   All @media rules live here (except base.css reduced-motion).
+   ============================================================= */
+
+
+/* ============================================================
+   480px — Slightly larger mobile
+   ============================================================ */
+@media (min-width: 480px) {
+
+  /* Hero CTAs side by side on small phones landscape */
+  .hero__cta-group {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* Problem grid: still 1-col but wider */
+  .problem-card__list {
+    gap: var(--space-3);
+  }
+
+  /* Widget demo product cards: 2-col once there's enough horizontal room */
+  .board-widget-demo__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+}
+
+
+/* ============================================================
+   768px — Tablet
+   ============================================================ */
+@media (min-width: 768px) {
+
+  /* Typography scale-up */
+  h2 {
+    font-size: var(--font-size-3xl);
+  }
+
+  /* Container padding */
+  .container {
+    padding-inline: var(--space-8);
+  }
+
+  /* Section spacing */
+  .section {
+    padding-block: var(--space-20);
+  }
+
+  .section--lg {
+    padding-block: var(--space-32);
+  }
+
+  /* ── Header ── */
+  .site-header__inner {
+    padding-inline: var(--space-8);
+  }
+
+  .nav__links {
+    display: flex;
+  }
+
+  .header__actions {
+    display: flex;
+  }
+
+  .nav-toggle {
+    display: none;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    padding-block: var(--space-20) var(--space-16);
+  }
+
+  .hero__cta-group {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  /* ── Problem grid: 2 cols ── */
+  .problem-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* The highlight card spans full width on tablet 2-col */
+  .problem-card--highlight {
+    grid-column: 1 / -1;
+  }
+
+  /* ── Dashboard mockup: show more detail on tablet ── */
+  .dm-body {
+    height: 300px;
+  }
+
+  .dm-sidebar {
+    width: 160px;
+  }
+
+  /* ── Widget demo: show fake nav ── */
+  .fake-website__nav {
+    display: flex;
+  }
+
+  /* ── A11y grid: 2x2 ── */
+  .a11y-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* ── Footer: brand + 2-col nav ── */
+  .site-footer__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .footer__nav-cols {
+    grid-template-columns: repeat(3, 1fr);
+    grid-column: 1 / -1;
+  }
+
+  .site-footer__bottom {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* ── Grid utilities ── */
+  .grid-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .grid-3 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* ── CTA section ── */
+  .cta-section__actions {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  /* ── Browser chrome URL bar wider ── */
+  .browser-chrome__url-bar {
+    max-width: 460px;
+  }
+
+}
+
+
+/* ============================================================
+   1024px — Desktop
+   ============================================================ */
+@media (min-width: 1024px) {
+
+  /* Container */
+  .container {
+    padding-inline: var(--space-10);
+  }
+
+  /* Section */
+  .section {
+    padding-block: var(--space-24);
+  }
+
+  /* ── Hero ── */
+  .hero {
+    padding-block: var(--space-24) var(--space-20);
+  }
+
+  /* ── Problem grid: 3 columns ── */
+  .problem-grid {
+    grid-template-columns: repeat(3, 1fr);
+    align-items: start;
+  }
+
+  /* Remove full-span override on desktop */
+  .problem-card--highlight {
+    grid-column: auto;
+    transform: scale(1.03);
+  }
+
+  /* ── Features grid: auto 3 columns ── */
+  /* Already handled by auto-fit minmax(280px, 1fr) — no override needed */
+
+  /* ── Dashboard mockup: full detail ── */
+  .dm-body {
+    height: 360px;
+  }
+
+  .dm-sidebar {
+    width: 180px;
+  }
+
+  /* ── Grid utilities ── */
+  .grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* ── Footer ── */
+  .site-footer__grid {
+    grid-template-columns: 280px 1fr;
+    gap: var(--space-16);
+  }
+
+  .footer__nav-cols {
+    grid-column: auto;
+  }
+
+  /* ── Comparison table full width ── */
+  .comparison-table {
+    min-width: auto;
+  }
+
+}
+
+
+/* ============================================================
+   1280px — Large Desktop
+   ============================================================ */
+@media (min-width: 1280px) {
+
+  /* Container */
+  .container {
+    padding-inline: var(--space-12);
+  }
+
+  /* Section */
+  .section {
+    padding-block: var(--space-32);
+  }
+
+  /* ── Hero ── */
+  .hero {
+    padding-block: var(--space-32) var(--space-24);
+  }
+
+  .hero__content {
+    gap: var(--space-8);
+  }
+
+  /* Wider section header */
+  .section-header--centered {
+    max-width: 64ch;
+  }
+
+  /* ── Footer: wider brand column ── */
+  .site-footer__grid {
+    grid-template-columns: 320px 1fr;
+  }
+
+}
+
+
+/* ============================================================
+   Prefers-reduced-motion — disable hero entrance animations
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .hero__badge,
+  .hero__heading,
+  .hero__subline,
+  .hero__cta-group,
+  .hero__proof,
+  .hero-visual {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .live-dot {
+    animation: none;
+  }
+
+  .problem-card--highlight {
+    transform: none;
+  }
+}
+
+
+/* ============================================================
+   Print Styles
+   ============================================================ */
+@media print {
+  .site-header,
+  .mobile-menu,
+  .nav-toggle,
+  .hero-visual,
+  .demo-controls,
+  .cta-section,
+  .site-footer {
+    display: none !important;
+  }
+
+  body {
+    padding-top: 0;
+  }
+
+  .section {
+    padding-block: var(--space-8);
+  }
+}

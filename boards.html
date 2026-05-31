@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meine Boards — boards.solutions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+<script>
+(function(){try{var u=JSON.parse(localStorage.getItem('bs_auth_user')||'null');if(!u)return;var n=u.name||u.email||'';var i=n.split(' ').map(function(w){return w[0]||'';}).join('').slice(0,2).toUpperCase();document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('.sidebar__user-name,.topbar__user-name').forEach(function(el){el.textContent=n;});document.querySelectorAll('.sidebar__avatar,.topbar__avatar').forEach(function(el){el.textContent=i;});var pl={'free':'Free Plan','pro':'Pro Plan','business':'Business Plan'};document.querySelectorAll('.sidebar__user-plan').forEach(function(el){el.textContent=pl[u.plan]||'Free Plan';});});}catch(e){}})();
+</script>
+
+<a href="#main-content" class="skip-link">Zum Hauptinhalt springen</a>
+<div id="sidebar-overlay" class="sidebar-overlay" hidden aria-hidden="true"></div>
+
+<nav id="sidebar" class="sidebar" aria-label="Hauptnavigation">
+  <div class="sidebar__header">
+    <a href="app.html" class="sidebar__logo" aria-label="boards.solutions Dashboard">
+      <svg class="sidebar__logo-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="3" y="3" width="8" height="8" rx="1.5" fill="var(--color-blue-500)"/>
+        <rect x="13" y="3" width="8" height="8" rx="1.5" fill="var(--color-blue-400)" opacity="0.7"/>
+        <rect x="3" y="13" width="8" height="8" rx="1.5" fill="var(--color-blue-400)" opacity="0.7"/>
+        <rect x="13" y="13" width="8" height="8" rx="1.5" fill="var(--color-blue-300)" opacity="0.5"/>
+      </svg>
+      <span class="sidebar__logo-text">boards.solutions</span>
+    </a>
+    <button id="sidebar-close" class="sidebar__close-btn" aria-label="Seitenleiste schließen" type="button">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><line x1="1" y1="1" x2="17" y2="17"/><line x1="17" y1="1" x2="1" y2="17"/></svg>
+    </button>
+  </div>
+  <div class="sidebar__body">
+    <ul class="sidebar__nav" role="list">
+      <li><a href="app.html" class="sidebar__nav-link">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Übersicht
+      </a></li>
+      <li><a href="boards.html" class="sidebar__nav-link" aria-current="page">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        Meine Boards
+      </a></li>
+      <li><a href="media-library.html" class="sidebar__nav-link">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        Mediathek
+      </a></li>
+      <li data-admin-only hidden><a href="admin.html" class="sidebar__nav-link">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        Kundenverwaltung
+      </a></li>
+    </ul>
+    <div class="sidebar__section-label" aria-hidden="true">Demnächst</div>
+    <ul class="sidebar__nav" role="list">
+      <li><span class="sidebar__nav-link sidebar__nav-link--soon" aria-disabled="true">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        Team <span class="badge badge--neutral">Soon</span>
+      </span></li>
+      <li><span class="sidebar__nav-link sidebar__nav-link--soon" aria-disabled="true">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Analytics <span class="badge badge--neutral">Soon</span>
+      </span></li>
+    </ul>
+  </div>
+  <div class="sidebar__footer">
+    <a href="settings.html" class="sidebar__nav-link">
+      <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      Einstellungen
+    </a>
+    <div class="sidebar__user">
+      <div class="sidebar__avatar" aria-hidden="true"></div>
+      <div class="sidebar__user-info">
+        <span class="sidebar__user-name"></span>
+        <span class="sidebar__user-plan"></span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="dashboard-layout">
+  <div class="dashboard-main">
+    <header class="topbar" role="banner">
+      <div class="topbar__left">
+        <button id="sidebar-open" class="topbar__menu-btn" aria-label="Menü öffnen" aria-expanded="false" aria-controls="sidebar" type="button">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <nav aria-label="Breadcrumb">
+          <ol class="breadcrumb" role="list">
+            <li class="breadcrumb__item"><a href="app.html" class="breadcrumb__link">Übersicht</a></li>
+            <li class="breadcrumb__item breadcrumb__item--current" aria-current="page">Meine Boards</li>
+          </ol>
+        </nav>
+      </div>
+      <div class="topbar__right">
+        <div class="topbar__user-menu">
+          <button id="user-menu-toggle" class="topbar__user-btn" aria-expanded="false" aria-controls="user-menu-dropdown" type="button">
+            <div class="topbar__avatar" aria-hidden="true"></div>
+            <span class="topbar__user-name"></span>
+            <svg class="topbar__chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div id="user-menu-dropdown" class="user-menu__dropdown" hidden role="menu">
+            <a href="settings.html" class="user-menu__item" role="menuitem">Einstellungen</a>
+            <a href="#" class="user-menu__item" role="menuitem" data-logout>Abmelden</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content" class="dashboard-content" tabindex="-1">
+
+      <div class="page-header">
+        <div class="page-header__text">
+          <h1 class="page-header__title">Meine Boards</h1>
+          <p class="page-header__subtitle">Alle deine Boards auf einen Blick — erstelle, bearbeite und veröffentliche sie.</p>
+        </div>
+        <div class="page-header__actions">
+          <a href="create-board.html" class="btn btn--primary btn--sm">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Neues Board
+          </a>
+        </div>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="list-toolbar">
+        <div class="search-wrapper" data-search-wrapper>
+          <label for="boards-search" class="sr-only">Boards durchsuchen</label>
+          <svg class="search-wrapper__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input id="boards-search" type="search" class="search-wrapper__input" placeholder="Board suchen…" autocomplete="off">
+          <button id="boards-search-clear" class="search-wrapper__clear" aria-label="Suche leeren" type="button" hidden>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
+          </button>
+        </div>
+        <div class="list-toolbar__right">
+          <label for="boards-sort" class="sr-only">Sortierung</label>
+          <select id="boards-sort" class="sort-select">
+            <option value="date-desc">Neueste zuerst</option>
+            <option value="date-asc">Älteste zuerst</option>
+            <option value="name-asc">Name A–Z</option>
+            <option value="name-desc">Name Z–A</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Filter tabs -->
+      <div class="filter-tabs" role="tablist" aria-label="Nach Typ filtern">
+        <button role="tab" aria-selected="true"  tabindex="0"  class="filter-tab" data-filter-type="all">Alle <span class="filter-tab__count" id="count-all">0</span></button>
+        <button role="tab" aria-selected="false" tabindex="-1" class="filter-tab" data-filter-type="blog">Blog <span class="filter-tab__count" id="count-blog">0</span></button>
+        <button role="tab" aria-selected="false" tabindex="-1" class="filter-tab" data-filter-type="affiliate">Affiliate <span class="filter-tab__count" id="count-affiliate">0</span></button>
+        <button role="tab" aria-selected="false" tabindex="-1" class="filter-tab" data-filter-type="review">Review <span class="filter-tab__count" id="count-review">0</span></button>
+        <button role="tab" aria-selected="false" tabindex="-1" class="filter-tab" data-filter-type="faq">FAQ <span class="filter-tab__count" id="count-faq">0</span></button>
+      </div>
+
+      <div id="boards-loading" class="boards-loading" aria-live="polite">
+        <div class="boards-loading__spinner" aria-hidden="true"></div>
+        Boards werden geladen…
+      </div>
+
+      <div id="boards-grid" class="boards-grid" aria-live="polite" hidden></div>
+
+      <div id="empty-no-boards" class="list-empty" hidden role="status">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        <p>Du hast noch keine Boards erstellt.</p>
+        <p style="font-size:var(--font-size-sm);color:var(--color-text-muted)">Starte mit einem Blog-Beitrag, Affiliate-Produkt, Review oder FAQ.</p>
+        <a href="create-board.html" class="btn btn--primary btn--sm">Ersten Board erstellen</a>
+      </div>
+
+      <div id="empty-no-match" class="list-empty" hidden role="status" aria-live="polite">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <p>Keine Boards gefunden.</p>
+        <button type="button" class="btn btn--ghost btn--sm" id="reset-filters">Filter zurücksetzen</button>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script type="module" src="js/app.js"></script>
+<script type="module">
+import { requireAuth, updateSidebar } from './js/auth.js';
+import { getBoards, deleteBoard, duplicateBoard, toggleBoardStatus, relativeDate, seedDemoData } from './js/boards-data.js';
+import { showToast } from './js/app.js';
+
+(async () => {
+if (!requireAuth()) return;
+seedDemoData();
+updateSidebar();
+
+// ── State ──────────────────────────────────────────────────────
+let allBoards    = [];
+let activeFilter = 'all';
+let searchQuery  = '';
+let sortOrder    = 'date-desc';
+
+const grid        = document.getElementById('boards-grid');
+const loading     = document.getElementById('boards-loading');
+const emptyNone   = document.getElementById('empty-no-boards');
+const emptySearch = document.getElementById('empty-no-match');
+const searchInput = document.getElementById('boards-search');
+const searchClear = document.getElementById('boards-search-clear');
+const sortSelect  = document.getElementById('boards-sort');
+const filterTabs  = document.querySelectorAll('.filter-tab[data-filter-type]');
+
+async function init() {
+  showLoading(true);
+  try { allBoards = await getBoards(); }
+  catch { allBoards = []; showToast('Boards konnten nicht geladen werden.', 'error'); }
+  showLoading(false);
+  render();
+}
+
+function showLoading(v) {
+  loading.hidden = !v;
+  grid.hidden    = v;
+  if (v) { emptyNone.hidden = true; emptySearch.hidden = true; }
+}
+
+function getFiltered() {
+  let b = [...allBoards];
+  if (activeFilter !== 'all') b = b.filter(x => x.type === activeFilter);
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    b = b.filter(x =>
+      (x.boardName||'').toLowerCase().includes(q) ||
+      (x.title||'').toLowerCase().includes(q) ||
+      (x.productName||'').toLowerCase().includes(q)
+    );
+  }
+  b.sort((a,z) => {
+    switch(sortOrder) {
+      case 'date-asc':  return new Date(a.updatedAt) - new Date(z.updatedAt);
+      case 'name-asc':  return (a.boardName||'').localeCompare(z.boardName||'','de');
+      case 'name-desc': return (z.boardName||'').localeCompare(a.boardName||'','de');
+      default:          return new Date(z.updatedAt) - new Date(a.updatedAt);
+    }
+  });
+  return b;
+}
+
+function render() {
+  // Tab counts
+  document.getElementById('count-all').textContent       = allBoards.length;
+  document.getElementById('count-blog').textContent      = allBoards.filter(b => b.type==='blog').length;
+  document.getElementById('count-affiliate').textContent = allBoards.filter(b => b.type==='affiliate').length;
+  document.getElementById('count-review').textContent    = allBoards.filter(b => b.type==='review').length;
+  document.getElementById('count-faq').textContent       = allBoards.filter(b => b.type==='faq').length;
+
+  if (allBoards.length === 0) {
+    grid.hidden = true; emptyNone.hidden = false; emptySearch.hidden = true; return;
+  }
+  const filtered = getFiltered();
+  if (filtered.length === 0) {
+    grid.hidden = true; emptyNone.hidden = true; emptySearch.hidden = false; return;
+  }
+  emptyNone.hidden = true; emptySearch.hidden = true;
+  grid.hidden = false;
+  grid.innerHTML = filtered.map(cardHTML).join('');
+}
+
+// ── Type metadata ──────────────────────────────────────────────
+const TYPE_META = {
+  blog:       { label: 'Blog-Beitrag',      color: 'blue',   icon: '<path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>' },
+  affiliate:  { label: 'Affiliate-Produkt', color: 'green',  icon: '<path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>' },
+  review:     { label: 'Produkt-Review',    color: 'yellow', icon: '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>' },
+  faq:        { label: 'FAQ-Board',         color: 'purple', icon: '<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>' },
+  comparison: { label: 'Vergleichstabelle', color: 'orange', icon: '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/>' },
+  newsletter: { label: 'Newsletter CTA',   color: 'pink',   icon: '<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>' },
+};
+
+function cardHTML(board) {
+  const meta       = TYPE_META[board.type] || TYPE_META.blog;
+  const isPublished= board.status === 'published';
+  const name       = board.boardName || board.title || board.productName || 'Unbenannter Board';
+  const desc       = board.intro || board.description || board.reviewText || '';
+  const menuId     = `menu-${board.id}`;
+  const when       = relativeDate(board.updatedAt);
+  const views      = (board.views || 0).toLocaleString('de-DE');
+  const clicks     = (board.clicks || 0).toLocaleString('de-DE');
+
+  // Tags / category
+  const tags = Array.isArray(board.tags) ? board.tags.slice(0,3) : [];
+  const tagsHTML = tags.length
+    ? `<div class="board-card__tags">${tags.map(t=>`<span class="board-card__tag">${esc(t)}</span>`).join('')}</div>`
+    : '';
+
+  // Rating stars for review/affiliate
+  let ratingHTML = '';
+  if (board.rating && (board.type === 'review' || board.type === 'affiliate')) {
+    const full = Math.floor(board.rating);
+    const stars = Array.from({length:5},(_,i) => i < full ? '★' : '☆').join('');
+    ratingHTML = `<span class="board-card__rating" aria-label="${board.rating} von 5 Sternen">${stars} ${board.rating}</span>`;
+  }
+
+  // FAQ item count
+  let extraMeta = '';
+  if (board.type === 'faq' && Array.isArray(board.items)) {
+    extraMeta = `<span class="board-card__meta-item">${board.items.length} Fragen</span>`;
+  }
+  if (board.type === 'blog' && board.readingTime) {
+    extraMeta = `<span class="board-card__meta-item">${board.readingTime} Min. Lesezeit</span>`;
+  }
+  if ((board.type === 'affiliate' || board.type === 'review') && board.price) {
+    extraMeta = `<span class="board-card__price-tag">${esc(board.price)}</span>`;
+  }
+
+  // Preview image stripe
+  const imgStripe = board.image
+    ? `<img src="${esc(board.image)}" alt="" class="board-card__preview-img" aria-hidden="true">`
+    : `<div class="board-card__preview board-card__preview--${meta.color}" aria-hidden="true">
+        <div class="board-card__preview-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">${meta.icon}</svg>
+        </div>
+        <div class="board-card__preview-lines">
+          <div class="board-card__preview-line"></div>
+          <div class="board-card__preview-line board-card__preview-line--short"></div>
+          <div class="board-card__preview-line"></div>
+        </div>
+      </div>`;
+
+  return `
+    <article class="board-card" data-board-id="${esc(board.id)}">
+      <div class="board-card__visual">
+        ${imgStripe}
+        <span class="badge ${isPublished ? 'badge--success' : 'badge--neutral'} board-card__status-badge">
+          ${isPublished ? '● Live' : '○ Entwurf'}
+        </span>
+      </div>
+
+      <div class="board-card__body">
+        <div class="board-card__header-row">
+          <div class="board-card__title-group">
+            <span class="board-card__type-label board-card__type-label--${meta.color}">${esc(meta.label)}</span>
+            <h2 class="board-card__title">${esc(name)}</h2>
+          </div>
+          <div style="position:relative;flex-shrink:0">
+            <button class="board-card__menu-btn" data-board-menu-toggle="${menuId}"
+              aria-expanded="false" aria-controls="${menuId}"
+              aria-label="Optionen für ${esc(name)}" type="button">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+            </button>
+            <ul id="${menuId}" class="board-card__dropdown" data-board-menu hidden role="menu">
+              <li><a href="create-board.html?edit=${esc(board.id)}" class="board-card__dropdown-item" role="menuitem">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                Bearbeiten
+              </a></li>
+              <li><button class="board-card__dropdown-item" role="menuitem"
+                data-action="toggle-status" data-id="${esc(board.id)}"
+                data-new-status="${isPublished ? 'draft' : 'published'}" type="button">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  ${isPublished
+                    ? '<path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>'
+                    : '<path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>'}
+                </svg>
+                ${isPublished ? 'Als Entwurf speichern' : 'Veröffentlichen'}
+              </button></li>
+              <li><button class="board-card__dropdown-item" role="menuitem"
+                data-action="duplicate" data-id="${esc(board.id)}" type="button">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                Duplizieren
+              </button></li>
+              <li><hr class="board-card__dropdown-divider"></li>
+              <li><button class="board-card__dropdown-item board-card__dropdown-item--danger" role="menuitem"
+                data-action="delete" data-id="${esc(board.id)}" data-name="${esc(name)}" type="button">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                Löschen
+              </button></li>
+            </ul>
+          </div>
+        </div>
+
+        ${ratingHTML}
+        ${desc ? `<p class="board-card__excerpt">${esc(desc.slice(0,120))}${desc.length>120?'…':''}</p>` : ''}
+        ${tagsHTML}
+
+        <div class="board-card__meta">
+          <span class="board-card__meta-item">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            ${esc(when)}
+          </span>
+          <span class="board-card__meta-item">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            ${views} Views
+          </span>
+          ${extraMeta}
+        </div>
+      </div>
+
+      <div class="board-card__footer">
+        <a href="create-board.html?edit=${esc(board.id)}" class="btn btn--ghost btn--sm board-card__footer-btn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Bearbeiten
+        </a>
+        <button class="btn btn--sm board-card__footer-btn ${isPublished ? 'btn--ghost' : 'btn--primary'}"
+          data-action="toggle-status" data-id="${esc(board.id)}"
+          data-new-status="${isPublished ? 'draft' : 'published'}" type="button">
+          ${isPublished
+            ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> Entwurf'
+            : '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Veröffentlichen'}
+        </button>
+      </div>
+    </article>`;
+}
+
+// ── Events ─────────────────────────────────────────────────────
+filterTabs.forEach((tab, i) => {
+  tab.addEventListener('click', () => {
+    filterTabs.forEach(t => { t.setAttribute('aria-selected','false'); t.tabIndex=-1; });
+    tab.setAttribute('aria-selected','true'); tab.tabIndex=0;
+    activeFilter = tab.dataset.filterType;
+    render();
+  });
+  tab.addEventListener('keydown', e => {
+    let t;
+    if (e.key==='ArrowRight') t = filterTabs[(i+1)%filterTabs.length];
+    if (e.key==='ArrowLeft')  t = filterTabs[(i-1+filterTabs.length)%filterTabs.length];
+    if (t) { t.focus(); t.click(); }
+  });
+});
+
+let searchTimer;
+searchInput.addEventListener('input', () => {
+  clearTimeout(searchTimer);
+  const val = searchInput.value.trim();
+  searchClear.hidden = !val;
+  searchTimer = setTimeout(() => { searchQuery = val; render(); }, 250);
+});
+searchClear.addEventListener('click', () => {
+  searchInput.value = ''; searchClear.hidden = true; searchQuery = ''; render(); searchInput.focus();
+});
+sortSelect.addEventListener('change', () => { sortOrder = sortSelect.value; render(); });
+
+document.getElementById('reset-filters').addEventListener('click', () => {
+  searchInput.value=''; searchClear.hidden=true; searchQuery='';
+  sortSelect.value='date-desc'; sortOrder='date-desc'; activeFilter='all';
+  filterTabs.forEach((t,i) => { t.setAttribute('aria-selected', i===0?'true':'false'); t.tabIndex=i===0?0:-1; });
+  render();
+});
+
+// Dropdown toggle
+grid.addEventListener('click', e => {
+  const toggle = e.target.closest('[data-board-menu-toggle]');
+  if (toggle) {
+    e.stopPropagation();
+    const menuId = toggle.dataset.boardMenuToggle;
+    const menu   = document.getElementById(menuId);
+    const isOpen = !menu.hidden;
+    // Close all
+    document.querySelectorAll('.board-card__dropdown').forEach(d => { d.hidden=true; });
+    document.querySelectorAll('[data-board-menu-toggle]').forEach(b => b.setAttribute('aria-expanded','false'));
+    if (!isOpen) { menu.hidden=false; toggle.setAttribute('aria-expanded','true'); }
+    return;
+  }
+});
+document.addEventListener('click', () => {
+  document.querySelectorAll('.board-card__dropdown').forEach(d => { d.hidden=true; });
+  document.querySelectorAll('[data-board-menu-toggle]').forEach(b => b.setAttribute('aria-expanded','false'));
+});
+
+// Board actions
+grid.addEventListener('click', async e => {
+  const btn = e.target.closest('[data-action]');
+  if (!btn) return;
+  document.querySelectorAll('.board-card__dropdown').forEach(d => { d.hidden=true; });
+
+  const action = btn.dataset.action;
+  const id     = btn.dataset.id;
+
+  if (action === 'toggle-status') {
+    const newStatus = btn.dataset.newStatus;
+    try {
+      await toggleBoardStatus(id, newStatus);
+      const idx = allBoards.findIndex(b => b.id===id);
+      if (idx >= 0) { allBoards[idx].status=newStatus; allBoards[idx].updatedAt=new Date().toISOString(); }
+      render();
+      showToast(newStatus==='published' ? 'Board veröffentlicht! 🚀' : 'Als Entwurf gespeichert.', 'success', 3000);
+    } catch { showToast('Statusänderung fehlgeschlagen.', 'error'); }
+  }
+
+  else if (action === 'duplicate') {
+    try {
+      const copy = await duplicateBoard(id);
+      if (copy) { allBoards.unshift(copy); render(); showToast('Board dupliziert.', 'success', 3000); }
+    } catch { showToast('Fehler beim Duplizieren.', 'error'); }
+  }
+
+  else if (action === 'delete') {
+    const name = btn.dataset.name || 'Board';
+    if (!confirm(`„${name}" wirklich löschen?\n\nDiese Aktion kann nicht rückgängig gemacht werden.`)) return;
+    try {
+      await deleteBoard(id);
+      allBoards = allBoards.filter(b => b.id!==id);
+      render();
+      showToast('Board gelöscht.', 'success', 2500);
+    } catch { showToast('Fehler beim Löschen.', 'error'); }
+  }
+});
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Live update from background refresh (stale-while-revalidate)
+window.addEventListener('bs:boards-updated', e => {
+  if (!e.detail?.boards) return;
+  allBoards = e.detail.boards;
+  render();
+});
+
+init();
+})();
+</script>
+</body>
+</html>

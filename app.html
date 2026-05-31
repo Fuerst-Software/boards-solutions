@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Übersicht — boards.solutions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+<!-- Sofortige Sidebar-Befüllung aus localStorage – verhindert "Max Mustermann" Flash -->
+<script>
+(function(){try{var u=JSON.parse(localStorage.getItem('bs_auth_user')||'null');if(!u)return;var n=u.name||u.email||'';var i=n.split(' ').map(function(w){return w[0]||'';}).join('').slice(0,2).toUpperCase();var pl={'free':'Free Plan','pro':'Pro Plan','business':'Business Plan'};document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('.sidebar__user-name,.topbar__user-name').forEach(function(el){el.textContent=n;});document.querySelectorAll('.sidebar__avatar,.topbar__avatar').forEach(function(el){el.textContent=i;});document.querySelectorAll('.sidebar__user-plan').forEach(function(el){el.textContent=pl[u.plan]||'Free Plan';});});}catch(e){}})();
+</script>
+
+<a href="#main-content" class="skip-link">Zum Hauptinhalt springen</a>
+<div id="sidebar-overlay" class="sidebar-overlay" hidden aria-hidden="true"></div>
+
+<nav id="sidebar" class="sidebar" aria-label="Hauptnavigation">
+  <div class="sidebar__header">
+    <a href="app.html" class="sidebar__logo" aria-label="boards.solutions Dashboard">
+      <svg class="sidebar__logo-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="3" y="3" width="8" height="8" rx="1.5" fill="var(--color-blue-500)"/>
+        <rect x="13" y="3" width="8" height="8" rx="1.5" fill="var(--color-blue-400)" opacity="0.7"/>
+        <rect x="3" y="13" width="8" height="8" rx="1.5" fill="var(--color-blue-400)" opacity="0.7"/>
+        <rect x="13" y="13" width="8" height="8" rx="1.5" fill="var(--color-blue-300)" opacity="0.5"/>
+      </svg>
+      <span class="sidebar__logo-text">boards.solutions</span>
+    </a>
+    <button id="sidebar-close" class="sidebar__close-btn" aria-label="Seitenleiste schließen" type="button">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="1" y1="1" x2="17" y2="17"/><line x1="17" y1="1" x2="1" y2="17"/></svg>
+    </button>
+  </div>
+  <div class="sidebar__body">
+    <ul class="sidebar__nav" role="list">
+      <li><a href="app.html" class="sidebar__nav-link" aria-current="page">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Übersicht
+      </a></li>
+      <li><a href="boards.html" class="sidebar__nav-link">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        Meine Boards
+      </a></li>
+      <li><a href="media-library.html" class="sidebar__nav-link">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        Mediathek
+      </a></li>
+      <li data-admin-only hidden><a href="admin.html" class="sidebar__nav-link">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        Kundenverwaltung
+      </a></li>
+    </ul>
+    <div class="sidebar__section-label" aria-hidden="true">Demnächst</div>
+    <ul class="sidebar__nav" role="list">
+      <li><span class="sidebar__nav-link sidebar__nav-link--soon" aria-disabled="true">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        Team <span class="badge badge--neutral">Soon</span>
+      </span></li>
+      <li><span class="sidebar__nav-link sidebar__nav-link--soon" aria-disabled="true">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Analytics <span class="badge badge--neutral">Soon</span>
+      </span></li>
+    </ul>
+  </div>
+  <div class="sidebar__footer">
+    <a href="settings.html" class="sidebar__nav-link">
+      <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      Einstellungen
+    </a>
+    <div class="sidebar__user">
+      <div class="sidebar__avatar" aria-hidden="true"></div>
+      <div class="sidebar__user-info">
+        <span class="sidebar__user-name"></span>
+        <span class="sidebar__user-plan"></span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="dashboard-layout">
+  <div class="dashboard-main">
+    <header class="topbar" role="banner">
+      <div class="topbar__left">
+        <button id="sidebar-open" class="topbar__menu-btn" aria-label="Menü öffnen" aria-expanded="false" aria-controls="sidebar" type="button">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <nav aria-label="Breadcrumb">
+          <ol class="breadcrumb" role="list">
+            <li class="breadcrumb__item breadcrumb__item--current" aria-current="page">Übersicht</li>
+          </ol>
+        </nav>
+      </div>
+      <div class="topbar__right">
+        <div class="topbar__user-menu">
+          <button id="user-menu-toggle" class="topbar__user-btn" aria-expanded="false" aria-controls="user-menu-dropdown" type="button">
+            <div class="topbar__avatar" aria-hidden="true"></div>
+            <span class="topbar__user-name"></span>
+            <svg class="topbar__chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div id="user-menu-dropdown" class="user-menu__dropdown" hidden role="menu">
+            <a href="settings.html" class="user-menu__item" role="menuitem">Einstellungen</a>
+            <a href="#" class="user-menu__item" role="menuitem" data-logout>Abmelden</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content" class="dashboard-content" tabindex="-1">
+
+      <!-- Welcome -->
+      <div class="home-welcome">
+        <div>
+          <h1 class="home-welcome__title" id="welcome-title">Willkommen zurück!</h1>
+          <p class="home-welcome__subtitle">Verwalte deine Boards und binde sie mit einem Snippet in beliebige Websites ein.</p>
+        </div>
+        <a href="create-board.html" class="btn btn--primary">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Neues Board erstellen
+        </a>
+      </div>
+
+      <!-- Stats -->
+      <section aria-labelledby="stats-heading" class="home-stats-section">
+        <h2 id="stats-heading" class="sr-only">Statistiken</h2>
+        <div class="stats-grid" id="stats-grid">
+          <div class="stat-card">
+            <div class="stat-card__icon stat-card__icon--blue" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            </div>
+            <div class="stat-card__body">
+              <span class="stat-card__value" id="stat-total">—</span>
+              <span class="stat-card__label">Boards gesamt</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card__icon stat-card__icon--green" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <div class="stat-card__body">
+              <span class="stat-card__value" id="stat-published">—</span>
+              <span class="stat-card__label">Veröffentlicht</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card__icon stat-card__icon--purple" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </div>
+            <div class="stat-card__body">
+              <span class="stat-card__value" id="stat-views">—</span>
+              <span class="stat-card__label">Views (Demo)</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card__icon stat-card__icon--orange" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div class="stat-card__body">
+              <span class="stat-card__value" id="stat-clicks">—</span>
+              <span class="stat-card__label">Klicks (Demo)</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quick actions -->
+      <section aria-labelledby="create-heading">
+        <h2 id="create-heading" class="section-title">Board erstellen</h2>
+        <div class="action-cards">
+
+          <a href="create-board.html?type=blog" class="action-card action-card--blog">
+            <div class="action-card__icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </div>
+            <div class="action-card__body">
+              <h3 class="action-card__title">Blog-Beitrag</h3>
+              <p class="action-card__desc">Artikel schreiben, Titelbild hochladen, Affiliate-Links einbetten — direkt auf der Kundenseite anzeigen.</p>
+              <span class="action-card__cta">Blog erstellen <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+            </div>
+          </a>
+
+          <a href="create-board.html?type=affiliate" class="action-card action-card--affiliate">
+            <div class="action-card__icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+            </div>
+            <div class="action-card__body">
+              <h3 class="action-card__title">Affiliate-Produkt</h3>
+              <p class="action-card__desc">Einzelnes Produkt mit Bild, Beschreibung, Preis und Kauflink präsentieren.</p>
+              <span class="action-card__cta">Produkt einbinden <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+            </div>
+          </a>
+
+          <a href="create-board.html?type=review" class="action-card action-card--review">
+            <div class="action-card__icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <div class="action-card__body">
+              <h3 class="action-card__title">Produkt-Review</h3>
+              <p class="action-card__desc">Sternebewertung, Pros &amp; Cons, Fazit — professionelle Produktrezension einbettbar.</p>
+              <span class="action-card__cta">Review erstellen <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+            </div>
+          </a>
+
+          <a href="create-board.html?type=faq" class="action-card action-card--faq">
+            <div class="action-card__icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <div class="action-card__body">
+              <h3 class="action-card__title">FAQ-Board</h3>
+              <p class="action-card__desc">Häufige Fragen und Antworten als aufklappbares FAQ-Akkordeon in jede Website integrieren.</p>
+              <span class="action-card__cta">FAQ erstellen <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+            </div>
+          </a>
+
+        </div>
+      </section>
+
+      <!-- Channel Snippet -->
+      <section class="home-snippet-section" aria-labelledby="snippet-heading">
+        <div class="home-snippet-card">
+          <div class="home-snippet-card__header">
+            <div>
+              <h2 id="snippet-heading" class="home-snippet-card__title">Dein Channel-Snippet</h2>
+              <p class="home-snippet-card__desc">Diesen Code einmalig in den <code>&lt;head&gt;</code> der Kundenseite einfügen — alle veröffentlichten Boards erscheinen automatisch.</p>
+            </div>
+            <span class="badge badge--success">Bereit</span>
+          </div>
+          <div class="snippet-block">
+            <code id="channel-snippet" class="snippet-block__code"></code>
+            <button class="snippet-block__copy btn btn--ghost btn--sm" id="copy-channel-snippet" type="button" aria-label="Snippet kopieren">Kopieren</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Recent boards -->
+      <section aria-labelledby="recent-heading" class="home-recent">
+        <div class="home-recent__header">
+          <h2 id="recent-heading" class="home-recent__title">Zuletzt bearbeitet</h2>
+          <a href="boards.html" class="home-recent__all">Alle anzeigen →</a>
+        </div>
+        <div id="recent-boards-list" role="list" aria-label="Zuletzt erstellte Boards"></div>
+        <div id="recent-empty" class="home-empty" hidden>
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          <p>Noch keine Boards erstellt.</p>
+          <a href="create-board.html" class="btn btn--primary btn--sm">Ersten Board erstellen</a>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<script type="module" src="js/app.js"></script>
+<script type="module">
+  import { requireAuth, updateSidebar, getUser } from './js/auth.js';
+  import { getBoards, relativeDate, getStats, seedDemoData, buildUserSnippet } from './js/boards-data.js';
+
+(async () => {
+  if (!requireAuth()) return;
+
+  // Seed demo data if fresh install
+  seedDemoData();
+  updateSidebar();
+
+  // Welcome message
+  const user = getUser();
+  const firstName = (user?.name || '').split(' ')[0] || 'zurück';
+  document.getElementById('welcome-title').textContent = `Willkommen zurück, ${firstName}!`;
+
+  // Channel snippet
+  const embedKey = user?.embedKey;
+  if (embedKey) {
+    document.getElementById('channel-snippet').textContent = buildUserSnippet(embedKey);
+  }
+  document.getElementById('copy-channel-snippet')?.addEventListener('click', () => {
+    const txt = document.getElementById('channel-snippet').textContent;
+    navigator.clipboard.writeText(txt).then(() => {
+      const btn = document.getElementById('copy-channel-snippet');
+      btn.textContent = '✓ Kopiert';
+      setTimeout(() => { btn.textContent = 'Kopieren'; }, 2000);
+    });
+  });
+
+  // Stats
+  const stats = getStats();
+  document.getElementById('stat-total').textContent     = stats.total;
+  document.getElementById('stat-published').textContent = stats.published;
+  document.getElementById('stat-views').textContent     = stats.views.toLocaleString('de-DE');
+  document.getElementById('stat-clicks').textContent    = stats.clicks.toLocaleString('de-DE');
+
+  // Recent boards
+  const TYPE_LABELS  = { blog: 'Blog', affiliate: 'Affiliate', review: 'Review', faq: 'FAQ', comparison: 'Vergleich', newsletter: 'Newsletter' };
+  const TYPE_COLORS  = { blog: 'blue', affiliate: 'green', review: 'yellow', faq: 'purple', comparison: 'orange', newsletter: 'pink' };
+
+  function escHtml(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  async function renderRecent() {
+    const boards = (await getBoards()).slice(0, 5);
+    const list  = document.getElementById('recent-boards-list');
+    const empty = document.getElementById('recent-empty');
+
+    if (boards.length === 0) { list.hidden = true; empty.hidden = false; return; }
+
+    list.hidden  = false;
+    empty.hidden = true;
+    list.innerHTML = boards.map(b => {
+      const color  = TYPE_COLORS[b.type] || 'blue';
+      const label  = TYPE_LABELS[b.type] || b.type;
+      const name   = b.boardName || b.title || b.productName || 'Unbenannter Board';
+      const when   = relativeDate(b.updatedAt);
+      const isPublished = b.status === 'published';
+
+      return `
+        <div role="listitem" class="recent-board-item">
+          <div class="recent-board-item__color recent-board-item__color--${color}" aria-hidden="true"></div>
+          <div class="recent-board-item__info">
+            <span class="recent-board-item__name">${escHtml(name)}</span>
+            <span class="recent-board-item__type">${escHtml(label)}</span>
+          </div>
+          <div class="recent-board-item__meta">
+            <span class="badge ${isPublished ? 'badge--success' : 'badge--neutral'}">${isPublished ? 'Live' : 'Entwurf'}</span>
+            <span class="recent-board-item__time">${when}</span>
+          </div>
+          <a href="boards.html" class="recent-board-item__link" aria-label="${escHtml(name)} öffnen">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>`;
+    }).join('');
+  }
+
+  renderRecent();
+
+  // Live-update when background refresh fires
+  window.addEventListener('bs:boards-updated', () => {
+    const s = getStats();
+    document.getElementById('stat-total').textContent     = s.total;
+    document.getElementById('stat-published').textContent = s.published;
+    document.getElementById('stat-views').textContent     = s.views.toLocaleString('de-DE');
+    document.getElementById('stat-clicks').textContent    = s.clicks.toLocaleString('de-DE');
+    renderRecent();
+  });
+})();
+</script>
+</body>
+</html>

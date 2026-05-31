@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="boards.solutions — Einstellungen für Konto, Team, Design und Benachrichtigungen.">
+  <title>Einstellungen — boards.solutions</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+<script>
+(function(){try{var u=JSON.parse(localStorage.getItem('bs_auth_user')||'null');if(!u)return;var n=u.name||u.email||'';var i=n.split(' ').map(function(w){return w[0]||'';}).join('').slice(0,2).toUpperCase();var pl={'free':'Free Plan','pro':'Pro Plan','business':'Business Plan'};document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('.sidebar__user-name,.topbar__user-name').forEach(function(el){el.textContent=n;});document.querySelectorAll('.sidebar__avatar,.topbar__avatar').forEach(function(el){el.textContent=i;});document.querySelectorAll('.sidebar__user-plan').forEach(function(el){el.textContent=pl[u.plan]||'Free Plan';});});}catch(e){}})();
+</script>
+
+<a href="#main-content" class="skip-link">Zum Hauptinhalt springen</a>
+<div id="sidebar-overlay" class="sidebar-overlay" hidden aria-hidden="true"></div>
+
+<!-- ── Sidebar ── -->
+<nav id="sidebar" class="sidebar" aria-label="Hauptnavigation">
+  <div class="sidebar__header">
+    <a href="app.html" class="sidebar__logo" aria-label="boards.solutions Dashboard">
+      <svg class="sidebar__logo-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="3" y="3" width="8" height="8" rx="1.5" fill="var(--color-blue-500)"/>
+        <rect x="13" y="3" width="8" height="8" rx="1.5" fill="var(--color-blue-400)" opacity="0.7"/>
+        <rect x="3" y="13" width="8" height="8" rx="1.5" fill="var(--color-blue-400)" opacity="0.7"/>
+        <rect x="13" y="13" width="8" height="8" rx="1.5" fill="var(--color-blue-300)" opacity="0.5"/>
+      </svg>
+      <span class="sidebar__logo-text">boards.solutions</span>
+    </a>
+    <button id="sidebar-close" class="sidebar__close-btn" aria-label="Seitenleiste schließen" type="button">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="1" y1="1" x2="17" y2="17"/><line x1="17" y1="1" x2="1" y2="17"/></svg>
+    </button>
+  </div>
+  <div class="sidebar__body">
+    <ul class="sidebar__nav" role="list">
+      <li><a href="app.html" class="sidebar__nav-link">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Übersicht
+      </a></li>
+      <li><a href="boards.html" class="sidebar__nav-link">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        Meine Boards
+      </a></li>
+      <li><a href="media-library.html" class="sidebar__nav-link">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        Mediathek
+      </a></li>
+      <li data-admin-only hidden><a href="admin.html" class="sidebar__nav-link">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        Kundenverwaltung
+      </a></li>
+    </ul>
+    <div class="sidebar__section-label" aria-hidden="true">Demnächst</div>
+    <ul class="sidebar__nav" role="list">
+      <li><span class="sidebar__nav-link sidebar__nav-link--soon" aria-disabled="true">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        Team <span class="badge badge--neutral">Soon</span>
+      </span></li>
+      <li><span class="sidebar__nav-link sidebar__nav-link--soon" aria-disabled="true">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Analytics <span class="badge badge--neutral">Soon</span>
+      </span></li>
+    </ul>
+  </div>
+  <div class="sidebar__footer">
+    <a href="settings.html" class="sidebar__nav-link" aria-current="page">
+      <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      Einstellungen
+    </a>
+    <div class="sidebar__user">
+      <div class="sidebar__avatar" aria-hidden="true"></div>
+      <div class="sidebar__user-info">
+        <span class="sidebar__user-name"></span>
+        <span class="sidebar__user-plan"></span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Main wrapper ── -->
+<div class="dashboard-layout">
+  <div class="dashboard-main">
+
+    <!-- Topbar -->
+    <header class="topbar" role="banner">
+      <div class="topbar__left">
+        <button id="sidebar-open" class="topbar__menu-btn" aria-label="Menü öffnen" aria-expanded="false" aria-controls="sidebar" type="button">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <nav aria-label="Breadcrumb">
+          <ol class="breadcrumb" role="list">
+            <li class="breadcrumb__item"><a href="app.html" class="breadcrumb__link">Dashboard</a></li>
+            <li class="breadcrumb__item breadcrumb__item--current" aria-current="page">Einstellungen</li>
+          </ol>
+        </nav>
+      </div>
+      <div class="topbar__right">
+        <div class="topbar__notifications">
+          <button id="notifications-toggle" class="topbar__icon-btn" aria-label="Benachrichtigungen" aria-expanded="false" aria-controls="notifications-dropdown" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          </button>
+          <div id="notifications-dropdown" class="notifications__dropdown" hidden role="dialog" aria-label="Benachrichtigungen" aria-modal="false">
+            <div class="notifications__header"><span class="notifications__title">Benachrichtigungen</span></div>
+            <div class="notifications__empty"><p>Keine neuen Benachrichtigungen</p></div>
+          </div>
+        </div>
+        <div class="topbar__user-menu">
+          <button id="user-menu-toggle" class="topbar__user-btn" aria-expanded="false" aria-controls="user-menu-dropdown" type="button">
+            <div class="topbar__avatar" aria-hidden="true"></div>
+            <span class="topbar__user-name"></span>
+            <svg class="topbar__chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div id="user-menu-dropdown" class="user-menu__dropdown" hidden role="menu">
+            <a href="settings.html" class="user-menu__item" role="menuitem">Einstellungen</a>
+            <a href="#" class="user-menu__item" role="menuitem" data-logout>Abmelden</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page content -->
+    <main id="main-content" class="dashboard-content" tabindex="-1">
+      <div class="page-header">
+        <div class="page-header__text">
+          <h1 class="page-header__title">Einstellungen</h1>
+          <p class="page-header__subtitle">Verwalte Konto, Team, Design und Benachrichtigungen.</p>
+        </div>
+      </div>
+
+      <!-- Settings Tabs -->
+      <div class="settings-layout">
+
+        <!-- Tab navigation -->
+        <div
+          role="tablist"
+          data-settings-tabs
+          aria-label="Einstellungs-Bereiche"
+          class="settings-tabs"
+          aria-orientation="vertical"
+        >
+          <button
+            role="tab"
+            id="tab-konto"
+            aria-selected="true"
+            aria-controls="panel-konto"
+            tabindex="0"
+            class="settings-tab"
+            type="button"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Konto
+          </button>
+          <button
+            role="tab"
+            id="tab-einbettung"
+            aria-selected="false"
+            aria-controls="panel-einbettung"
+            tabindex="-1"
+            class="settings-tab"
+            type="button"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            Einbettung
+          </button>
+          <button
+            role="tab"
+            id="tab-team"
+            aria-selected="false"
+            aria-controls="panel-team"
+            tabindex="-1"
+            class="settings-tab"
+            type="button"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+            Team
+          </button>
+          <button
+            role="tab"
+            id="tab-design"
+            aria-selected="false"
+            aria-controls="panel-design"
+            tabindex="-1"
+            class="settings-tab"
+            type="button"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/></svg>
+            Design
+          </button>
+          <button
+            role="tab"
+            id="tab-notifications"
+            aria-selected="false"
+            aria-controls="panel-notifications"
+            tabindex="-1"
+            class="settings-tab"
+            type="button"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+            Benachrichtigungen
+          </button>
+        </div>
+
+        <!-- Tab panels -->
+        <div class="settings-panels">
+
+          <!-- Panel: Konto -->
+          <section
+            id="panel-konto"
+            role="tabpanel"
+            aria-labelledby="tab-konto"
+            class="settings-panel"
+          >
+            <h2 class="settings-panel__heading">Konto</h2>
+
+            <!-- ── Profil-Karte ── -->
+            <div class="settings-profile-card">
+              <div class="settings-profile-card__avatar" id="profile-avatar" aria-hidden="true">MM</div>
+              <div class="settings-profile-card__info">
+                <span class="settings-profile-card__name" id="profile-display-name">Max Mustermann</span>
+                <span class="settings-profile-card__email" id="profile-display-email">max@mustermann.de</span>
+              </div>
+              <span class="badge settings-profile-card__plan" id="profile-display-plan">Free Plan</span>
+            </div>
+
+            <!-- ── Profil-Formular ── -->
+            <form id="profile-form" class="settings-form" novalidate>
+              <!-- Status banner -->
+              <div id="profile-success" class="settings-banner settings-banner--success" hidden role="status" aria-live="polite">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Profil gespeichert.
+              </div>
+              <div id="profile-error" class="settings-banner settings-banner--error" hidden role="alert" aria-live="assertive">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <span id="profile-error-text">Fehler.</span>
+              </div>
+
+              <fieldset class="settings-fieldset">
+                <legend class="settings-fieldset__legend">Persönliche Daten</legend>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="profile-name" class="form-label">Vollständiger Name <span class="form-label__req" aria-hidden="true">*</span></label>
+                    <input id="profile-name" type="text" class="form-input" placeholder="Max Mustermann" required autocomplete="name">
+                  </div>
+                  <div class="form-group">
+                    <label for="profile-company" class="form-label">Unternehmen <span class="form-label__optional">Optional</span></label>
+                    <input id="profile-company" type="text" class="form-input" placeholder="Muster GmbH" autocomplete="organization">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="profile-email" class="form-label">E-Mail-Adresse</label>
+                  <input id="profile-email" type="email" class="form-input" readonly aria-readonly="true"
+                    aria-describedby="profile-email-hint">
+                  <span id="profile-email-hint" class="form-hint">E-Mail kann nur durch einen Admin geändert werden.</span>
+                </div>
+              </fieldset>
+
+              <fieldset class="settings-fieldset">
+                <legend class="settings-fieldset__legend">Plan &amp; Nutzung</legend>
+                <div class="settings-plan-row">
+                  <div class="settings-plan-row__info">
+                    <span class="settings-plan-row__label" id="plan-label-text">Free Plan</span>
+                    <span class="settings-plan-row__desc" id="plan-boards-count">Lädt…</span>
+                  </div>
+                  <a href="mailto:hello@boards.solutions?subject=Plan%20Upgrade" class="btn btn--ghost btn--sm" id="plan-upgrade-btn">
+                    Plan upgraden
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  </a>
+                </div>
+              </fieldset>
+
+              <div class="settings-form__actions">
+                <button type="submit" id="profile-save-btn" class="btn btn--primary">
+                  <span id="profile-save-text">Speichern</span>
+                </button>
+              </div>
+            </form>
+
+            <!-- ── Passwort-Formular ── -->
+            <form id="password-form" class="settings-form" novalidate>
+              <!-- Status banner -->
+              <div id="pwd-success" class="settings-banner settings-banner--success" hidden role="status" aria-live="polite">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Passwort erfolgreich geändert.
+              </div>
+              <div id="pwd-error" class="settings-banner settings-banner--error" hidden role="alert" aria-live="assertive">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <span id="pwd-error-text">Fehler.</span>
+              </div>
+
+              <fieldset class="settings-fieldset">
+                <legend class="settings-fieldset__legend">Passwort ändern</legend>
+
+                <div class="form-group">
+                  <label for="current-password" class="form-label">Aktuelles Passwort</label>
+                  <input id="current-password" type="password" class="form-input" autocomplete="current-password" placeholder="••••••••">
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="new-password" class="form-label">Neues Passwort</label>
+                    <input id="new-password" type="password" class="form-input" autocomplete="new-password" placeholder="Min. 8 Zeichen"
+                      aria-describedby="pwd-strength-label">
+                    <!-- Strength bar -->
+                    <div class="pwd-strength" id="pwd-strength" aria-hidden="true">
+                      <div class="pwd-strength__bar">
+                        <div class="pwd-strength__fill" id="pwd-strength-fill"></div>
+                      </div>
+                      <span class="pwd-strength__label" id="pwd-strength-label"></span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="confirm-password" class="form-label">Passwort bestätigen</label>
+                    <input id="confirm-password" type="password" class="form-input" autocomplete="new-password" placeholder="Wiederholen">
+                  </div>
+                </div>
+              </fieldset>
+
+              <div class="settings-form__actions">
+                <button type="submit" id="pwd-save-btn" class="btn btn--primary">
+                  <span id="pwd-save-text">Passwort ändern</span>
+                </button>
+              </div>
+            </form>
+
+            <!-- ── Gefahrenzone ── -->
+            <div class="settings-danger-zone">
+              <h3 class="settings-danger-zone__title">Gefahrenzone</h3>
+              <p class="settings-danger-zone__text">Das Löschen deines Kontos ist endgültig. Alle Boards und Medien werden permanent entfernt.</p>
+              <button class="btn btn--ghost settings-danger-zone__btn" type="button" id="delete-account-btn">Konto löschen</button>
+            </div>
+          </section>
+
+          <!-- Panel: Einbettung -->
+          <section
+            id="panel-einbettung"
+            role="tabpanel"
+            aria-labelledby="tab-einbettung"
+            class="settings-panel"
+            hidden
+          >
+            <h2 class="settings-panel__heading">Website-Integration</h2>
+            <p class="settings-panel__description">Binde deine Boards <strong>einmalig</strong> auf deiner Website ein — danach erscheinen alle veröffentlichten Inhalte automatisch, ohne erneutes Einpflegen.</p>
+
+            <!-- ── Snippet-Box ── -->
+            <div class="settings-fieldset">
+              <legend class="settings-fieldset__legend">Dein Universal-Snippet</legend>
+
+              <div id="embed-success" class="settings-banner settings-banner--success" hidden role="status" aria-live="polite">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Snippet in Zwischenablage kopiert!
+              </div>
+
+              <p class="form-hint" id="embed-intro-hint">
+                Kopiere diesen Code und füge ihn <strong>einmalig</strong> in den <code>&lt;head&gt;</code> oder vor <code>&lt;/body&gt;</code> deiner Website ein.
+              </p>
+
+              <div class="embed-snippet-box">
+                <code class="embed-snippet-box__code" id="embed-snippet-code" aria-label="Dein Einbettungs-Snippet">Wird geladen…</code>
+                <button class="btn btn--ghost btn--sm embed-snippet-box__copy" id="embed-copy-btn" type="button" aria-label="Snippet kopieren">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                  Kopieren
+                </button>
+              </div>
+
+              <p class="form-hint">
+                Dein persönlicher Kanal-Schlüssel: <code id="embed-key-display">—</code>
+              </p>
+            </div>
+
+            <!-- ── How it works ── -->
+            <div class="settings-fieldset">
+              <legend class="settings-fieldset__legend">So funktioniert es</legend>
+              <div class="embed-steps">
+                <div class="embed-step">
+                  <div class="embed-step__number" aria-hidden="true">1</div>
+                  <div class="embed-step__content">
+                    <div class="embed-step__title">Snippet einmalig einfügen</div>
+                    <div class="embed-step__desc">Kopiere den Code oben und füge ihn einmalig in deine Website ein — in den <code>&lt;head&gt;</code> oder direkt vor <code>&lt;/body&gt;</code>. Das war's.</div>
+                  </div>
+                </div>
+                <div class="embed-step">
+                  <div class="embed-step__number" aria-hidden="true">2</div>
+                  <div class="embed-step__content">
+                    <div class="embed-step__title">Boards erstellen &amp; veröffentlichen</div>
+                    <div class="embed-step__desc">Erstelle in <a href="create-board.html" class="link">boards.solutions</a> beliebig viele Blog-Beiträge oder Affiliate-Produkt-Boards und veröffentliche sie mit einem Klick.</div>
+                  </div>
+                </div>
+                <div class="embed-step">
+                  <div class="embed-step__number" aria-hidden="true">3</div>
+                  <div class="embed-step__content">
+                    <div class="embed-step__title">Automatisch sichtbar — sofort</div>
+                    <div class="embed-step__desc">Alle veröffentlichten Boards erscheinen automatisch auf deiner Website. Kein erneutes Einpflegen, kein Code anfassen — einfach entspannt weiterarbeiten.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ── Platform hints ── -->
+            <div class="settings-fieldset">
+              <legend class="settings-fieldset__legend">Plattform-Integration</legend>
+              <div class="embed-platforms">
+                <div class="embed-platform">
+                  <div class="embed-platform__name">WordPress</div>
+                  <div class="embed-platform__hint">Appearance → Customize → Additional CSS/JS oder Plugin „Insert Headers and Footers"</div>
+                </div>
+                <div class="embed-platform">
+                  <div class="embed-platform__name">Webflow</div>
+                  <div class="embed-platform__hint">Site Settings → Custom Code → Footer Code</div>
+                </div>
+                <div class="embed-platform">
+                  <div class="embed-platform__name">Wix</div>
+                  <div class="embed-platform__hint">Settings → Custom Code → Body – End of Tag</div>
+                </div>
+                <div class="embed-platform">
+                  <div class="embed-platform__name">Squarespace</div>
+                  <div class="embed-platform__hint">Settings → Advanced → Code Injection → Footer</div>
+                </div>
+                <div class="embed-platform">
+                  <div class="embed-platform__name">Shopify</div>
+                  <div class="embed-platform__hint">Online Store → Themes → Edit Code → theme.liquid vor &lt;/body&gt;</div>
+                </div>
+                <div class="embed-platform">
+                  <div class="embed-platform__name">Eigene Website</div>
+                  <div class="embed-platform__hint">Den Code direkt vor <code>&lt;/body&gt;</code> in deine HTML-Datei einfügen</div>
+                </div>
+              </div>
+            </div>
+
+          </section>
+
+          <!-- Panel: Team -->
+          <section
+            id="panel-team"
+            role="tabpanel"
+            aria-labelledby="tab-team"
+            class="settings-panel"
+            hidden
+          >
+            <h2 class="settings-panel__heading">Team</h2>
+            <p class="settings-panel__description">Lade Mitglieder ein, die auf dein Dashboard zugreifen können.</p>
+
+            <form data-settings-form class="settings-form" novalidate>
+              <fieldset class="settings-fieldset">
+                <legend class="settings-fieldset__legend">Mitglied einladen</legend>
+                <div class="form-row form-row--invite">
+                  <div class="form-group form-group--grow">
+                    <label for="invite-email" class="form-label">E-Mail-Adresse</label>
+                    <input id="invite-email" type="email" class="form-input" placeholder="kollege@domain.de" autocomplete="off">
+                  </div>
+                  <div class="form-group">
+                    <label for="invite-role" class="form-label">Rolle</label>
+                    <select id="invite-role" class="form-input form-select">
+                      <option value="admin">Admin</option>
+                      <option value="editor" selected>Editor</option>
+                      <option value="viewer">Leser</option>
+                    </select>
+                  </div>
+                  <div class="form-group form-group--action">
+                    <label class="form-label form-label--invisible" aria-hidden="true">Aktion</label>
+                    <button type="submit" class="btn btn--primary">Einladen</button>
+                  </div>
+                </div>
+              </fieldset>
+            </form>
+
+            <div class="team-list">
+              <h3 class="team-list__heading">Aktuelle Mitglieder</h3>
+              <ul class="team-members" role="list">
+                <li class="team-member">
+                  <div class="team-member__avatar" aria-hidden="true">MM</div>
+                  <div class="team-member__info">
+                    <span class="team-member__name">Max Mustermann <span class="team-member__you">(Du)</span></span>
+                    <span class="team-member__email">max@mustermann.de</span>
+                  </div>
+                  <span class="badge badge--primary">Admin</span>
+                </li>
+                <li class="team-member">
+                  <div class="team-member__avatar" aria-hidden="true">AL</div>
+                  <div class="team-member__info">
+                    <span class="team-member__name">Anna Lange</span>
+                    <span class="team-member__email">anna@mustermann.de</span>
+                  </div>
+                  <span class="badge badge--neutral">Editor</span>
+                  <button class="team-member__remove btn btn--ghost btn--sm" type="button" aria-label="Anna Lange aus dem Team entfernen" data-confirm="Anna Lange wirklich entfernen?">Entfernen</button>
+                </li>
+                <li class="team-member">
+                  <div class="team-member__avatar" aria-hidden="true">TK</div>
+                  <div class="team-member__info">
+                    <span class="team-member__name">Tom Klein</span>
+                    <span class="team-member__email">tom@agentur.de</span>
+                  </div>
+                  <span class="badge badge--neutral">Leser</span>
+                  <button class="team-member__remove btn btn--ghost btn--sm" type="button" aria-label="Tom Klein aus dem Team entfernen" data-confirm="Tom Klein wirklich entfernen?">Entfernen</button>
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          <!-- Panel: Design -->
+          <section
+            id="panel-design"
+            role="tabpanel"
+            aria-labelledby="tab-design"
+            class="settings-panel"
+            hidden
+          >
+            <h2 class="settings-panel__heading">Design</h2>
+            <p class="settings-panel__description">Passe Farben und Branding für das Board-Editor-Interface deiner Kunden an.</p>
+
+            <form data-settings-form class="settings-form" novalidate>
+              <fieldset class="settings-fieldset">
+                <legend class="settings-fieldset__legend">Markenfarben</legend>
+
+                <div class="color-picker-row">
+                  <div class="color-picker-group">
+                    <label for="brand-primary" class="form-label">Primärfarbe</label>
+                    <div class="color-picker-input">
+                      <input
+                        id="brand-primary"
+                        type="color"
+                        class="color-picker-input__swatch"
+                        value="#2563eb"
+                        data-color-preview="brand-primary-preview"
+                        aria-describedby="brand-primary-hex"
+                      >
+                      <span id="brand-primary-preview" class="color-picker-input__preview" style="background-color: #2563eb" aria-hidden="true"></span>
+                      <span id="brand-primary-hex" class="color-picker-input__value">#2563eb</span>
+                    </div>
+                  </div>
+
+                  <div class="color-picker-group">
+                    <label for="brand-accent" class="form-label">Akzentfarbe</label>
+                    <div class="color-picker-input">
+                      <input
+                        id="brand-accent"
+                        type="color"
+                        class="color-picker-input__swatch"
+                        value="#0ea5e9"
+                        data-color-preview="brand-accent-preview"
+                        aria-describedby="brand-accent-hex"
+                      >
+                      <span id="brand-accent-preview" class="color-picker-input__preview" style="background-color: #0ea5e9" aria-hidden="true"></span>
+                      <span id="brand-accent-hex" class="color-picker-input__value">#0ea5e9</span>
+                    </div>
+                  </div>
+
+                  <div class="color-picker-group">
+                    <label for="brand-bg" class="form-label">Hintergrund</label>
+                    <div class="color-picker-input">
+                      <input
+                        id="brand-bg"
+                        type="color"
+                        class="color-picker-input__swatch"
+                        value="#ffffff"
+                        data-color-preview="brand-bg-preview"
+                        aria-describedby="brand-bg-hex"
+                      >
+                      <span id="brand-bg-preview" class="color-picker-input__preview" style="background-color: #ffffff; border: 1px solid var(--color-border-default)" aria-hidden="true"></span>
+                      <span id="brand-bg-hex" class="color-picker-input__value">#ffffff</span>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+
+              <fieldset class="settings-fieldset">
+                <legend class="settings-fieldset__legend">Logo</legend>
+                <div class="logo-upload">
+                  <div class="logo-upload__preview" aria-hidden="true">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  </div>
+                  <div class="logo-upload__info">
+                    <p class="logo-upload__label">Kein Logo hochgeladen</p>
+                    <p class="logo-upload__hint">PNG oder SVG, empfohlen 200 × 50 px</p>
+                  </div>
+                  <button class="btn btn--ghost btn--sm" type="button" onclick="document.getElementById('logo-input').click()">Hochladen</button>
+                  <input id="logo-input" type="file" class="sr-only" accept="image/png,image/svg+xml" aria-label="Logo hochladen">
+                </div>
+              </fieldset>
+
+              <div class="settings-form__actions">
+                <button type="submit" class="btn btn--primary">Speichern</button>
+                <button type="button" class="btn btn--ghost">Zurücksetzen</button>
+              </div>
+            </form>
+          </section>
+
+          <!-- Panel: Benachrichtigungen -->
+          <section
+            id="panel-notifications"
+            role="tabpanel"
+            aria-labelledby="tab-notifications"
+            class="settings-panel"
+            hidden
+          >
+            <h2 class="settings-panel__heading">Benachrichtigungen</h2>
+            <p class="settings-panel__description">Wähle, worüber du informiert werden möchtest.</p>
+
+            <form data-settings-form class="settings-form" novalidate>
+              <fieldset class="settings-fieldset">
+                <legend class="settings-fieldset__legend">E-Mail-Benachrichtigungen</legend>
+
+                <div class="toggle-list">
+
+                  <div class="toggle-row">
+                    <div class="toggle-row__info">
+                      <span class="toggle-row__label">Board-Bearbeitungen</span>
+                      <span class="toggle-row__description">Wenn ein Kunde Inhalte auf einem Board ändert</span>
+                    </div>
+                    <label class="toggle" aria-label="Board-Bearbeitungen per E-Mail">
+                      <input
+                        type="checkbox"
+                        class="toggle__input"
+                        checked
+                        data-toggle-announce="toggle-announce-edits"
+                        data-on-label="Aktiviert"
+                        data-off-label="Deaktiviert"
+                      >
+                      <span class="toggle__track" aria-hidden="true">
+                        <span class="toggle__thumb"></span>
+                      </span>
+                    </label>
+                    <span id="toggle-announce-edits" class="sr-only" aria-live="polite">Aktiviert</span>
+                  </div>
+
+                  <div class="toggle-row">
+                    <div class="toggle-row__info">
+                      <span class="toggle-row__label">Neue Kunden</span>
+                      <span class="toggle-row__description">Wenn ein neues Client-Konto angelegt wird</span>
+                    </div>
+                    <label class="toggle" aria-label="Neue Kunden per E-Mail">
+                      <input
+                        type="checkbox"
+                        class="toggle__input"
+                        checked
+                        data-toggle-announce="toggle-announce-clients"
+                        data-on-label="Aktiviert"
+                        data-off-label="Deaktiviert"
+                      >
+                      <span class="toggle__track" aria-hidden="true">
+                        <span class="toggle__thumb"></span>
+                      </span>
+                    </label>
+                    <span id="toggle-announce-clients" class="sr-only" aria-live="polite">Aktiviert</span>
+                  </div>
+
+                  <div class="toggle-row">
+                    <div class="toggle-row__info">
+                      <span class="toggle-row__label">Plan-Upgrades</span>
+                      <span class="toggle-row__description">Wenn ein Kunde seinen Plan upgradet</span>
+                    </div>
+                    <label class="toggle" aria-label="Plan-Upgrades per E-Mail">
+                      <input
+                        type="checkbox"
+                        class="toggle__input"
+                        checked
+                        data-toggle-announce="toggle-announce-upgrades"
+                        data-on-label="Aktiviert"
+                        data-off-label="Deaktiviert"
+                      >
+                      <span class="toggle__track" aria-hidden="true">
+                        <span class="toggle__thumb"></span>
+                      </span>
+                    </label>
+                    <span id="toggle-announce-upgrades" class="sr-only" aria-live="polite">Aktiviert</span>
+                  </div>
+
+                  <div class="toggle-row">
+                    <div class="toggle-row__info">
+                      <span class="toggle-row__label">Fehler-Reports</span>
+                      <span class="toggle-row__description">Bei technischen Fehlern auf einem Board</span>
+                    </div>
+                    <label class="toggle" aria-label="Fehler-Reports per E-Mail">
+                      <input
+                        type="checkbox"
+                        class="toggle__input"
+                        data-toggle-announce="toggle-announce-errors"
+                        data-on-label="Aktiviert"
+                        data-off-label="Deaktiviert"
+                      >
+                      <span class="toggle__track" aria-hidden="true">
+                        <span class="toggle__thumb"></span>
+                      </span>
+                    </label>
+                    <span id="toggle-announce-errors" class="sr-only" aria-live="polite">Deaktiviert</span>
+                  </div>
+
+                  <div class="toggle-row">
+                    <div class="toggle-row__info">
+                      <span class="toggle-row__label">Produkt-Updates</span>
+                      <span class="toggle-row__description">Neue Features und Ankündigungen von boards.solutions</span>
+                    </div>
+                    <label class="toggle" aria-label="Produkt-Updates per E-Mail">
+                      <input
+                        type="checkbox"
+                        class="toggle__input"
+                        checked
+                        data-toggle-announce="toggle-announce-updates"
+                        data-on-label="Aktiviert"
+                        data-off-label="Deaktiviert"
+                      >
+                      <span class="toggle__track" aria-hidden="true">
+                        <span class="toggle__thumb"></span>
+                      </span>
+                    </label>
+                    <span id="toggle-announce-updates" class="sr-only" aria-live="polite">Aktiviert</span>
+                  </div>
+
+                </div>
+              </fieldset>
+
+              <fieldset class="settings-fieldset">
+                <legend class="settings-fieldset__legend">Zusammenfassungen</legend>
+
+                <div class="form-group">
+                  <label for="digest-frequency" class="form-label">Häufigkeit</label>
+                  <select id="digest-frequency" class="form-input form-select">
+                    <option value="none">Keine Zusammenfassung</option>
+                    <option value="daily" selected>Täglich</option>
+                    <option value="weekly">Wöchentlich</option>
+                  </select>
+                </div>
+              </fieldset>
+
+              <div class="settings-form__actions">
+                <button type="submit" class="btn btn--primary">Speichern</button>
+              </div>
+            </form>
+          </section>
+
+        </div><!-- /.settings-panels -->
+      </div><!-- /.settings-layout -->
+
+    </main>
+  </div>
+</div>
+
+<script type="module" src="js/app.js"></script>
+<script type="module">
+import { requireAuth, updateSidebar, updateUserLocally, getUser, authHeaders, getEmbedKey } from './js/auth.js';
+import { getBoards, buildUserSnippet } from './js/boards-data.js';
+
+(async () => {
+if (!requireAuth()) return;
+updateSidebar();
+
+const API = 'https://web-production-83480.up.railway.app/api';
+
+// ── Elements ───────────────────────────────────────────────────
+const profileAvatar      = document.getElementById('profile-avatar');
+const profileDisplayName = document.getElementById('profile-display-name');
+const profileDisplayEmail= document.getElementById('profile-display-email');
+const profileDisplayPlan = document.getElementById('profile-display-plan');
+
+const profileForm    = document.getElementById('profile-form');
+const fName          = document.getElementById('profile-name');
+const fCompany       = document.getElementById('profile-company');
+const fEmail         = document.getElementById('profile-email');
+const profileSaveBtn = document.getElementById('profile-save-btn');
+const profileSaveTxt = document.getElementById('profile-save-text');
+const profileSuccess = document.getElementById('profile-success');
+const profileError   = document.getElementById('profile-error');
+const profileErrText = document.getElementById('profile-error-text');
+
+const planLabelText  = document.getElementById('plan-label-text');
+const planBoardsCount= document.getElementById('plan-boards-count');
+const planUpgradeBtn = document.getElementById('plan-upgrade-btn');
+
+const passwordForm = document.getElementById('password-form');
+const fCurrentPwd  = document.getElementById('current-password');
+const fNewPwd      = document.getElementById('new-password');
+const fConfirmPwd  = document.getElementById('confirm-password');
+const pwdSaveBtn   = document.getElementById('pwd-save-btn');
+const pwdSaveTxt   = document.getElementById('pwd-save-text');
+const pwdSuccess   = document.getElementById('pwd-success');
+const pwdError     = document.getElementById('pwd-error');
+const pwdErrText   = document.getElementById('pwd-error-text');
+const pwdStrength  = document.getElementById('pwd-strength');
+const pwdStrFill   = document.getElementById('pwd-strength-fill');
+const pwdStrLabel  = document.getElementById('pwd-strength-label');
+
+const PLAN_LABELS  = { free: 'Free Plan', pro: 'Pro Plan', business: 'Business Plan' };
+const PLAN_CLASSES = { free: 'badge--neutral', pro: 'badge--info', business: 'badge--success' };
+
+// ── Populate UI from user object ───────────────────────────────
+function hydrateProfile(user) {
+  if (!user) return;
+  const name     = user.name    || '';
+  const email    = user.email   || '';
+  const company  = user.company || '';
+  const plan     = user.plan    || 'free';
+  const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() || '?';
+
+  fName.value    = name;
+  fCompany.value = company;
+  fEmail.value   = email;
+
+  profileAvatar.textContent       = initials;
+  profileDisplayName.textContent  = name    || '—';
+  profileDisplayEmail.textContent = email;
+  profileDisplayPlan.textContent  = PLAN_LABELS[plan] || plan;
+  profileDisplayPlan.className    = `badge settings-profile-card__plan ${PLAN_CLASSES[plan] || 'badge--neutral'}`;
+
+  planLabelText.textContent = PLAN_LABELS[plan] || plan;
+
+  // Show "Plan upgraden" only for non-business plans
+  if (planUpgradeBtn) planUpgradeBtn.hidden = (plan === 'business');
+}
+
+// ── Embed key / snippet ────────────────────────────────────────
+const embedSnippetCode = document.getElementById('embed-snippet-code');
+const embedKeyDisplay  = document.getElementById('embed-key-display');
+const embedCopyBtn     = document.getElementById('embed-copy-btn');
+const embedSuccess     = document.getElementById('embed-success');
+
+function setEmbedSnippet(key) {
+  if (!key) return;
+  const snippet = buildUserSnippet(key);
+  if (embedSnippetCode) embedSnippetCode.textContent = snippet;
+  if (embedKeyDisplay)  embedKeyDisplay.textContent  = key;
+}
+
+if (embedCopyBtn) {
+  embedCopyBtn.addEventListener('click', () => {
+    const text = embedSnippetCode?.textContent;
+    if (!text || text === 'Wird geladen…') return;
+    navigator.clipboard.writeText(text).then(() => {
+      if (embedSuccess) {
+        embedSuccess.hidden = false;
+        setTimeout(() => { embedSuccess.hidden = true; }, 3000);
+      }
+      embedCopyBtn.textContent = 'Kopiert!';
+      setTimeout(() => { embedCopyBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Kopieren'; }, 2000);
+    }).catch(() => {
+      alert('Kopieren fehlgeschlagen — bitte manuell kopieren.');
+    });
+  });
+}
+
+// Paint immediately from localStorage
+setEmbedSnippet(getEmbedKey());
+
+// ── Load user + board count ────────────────────────────────────
+async function init() {
+  // Instant paint from localStorage
+  hydrateProfile(getUser());
+
+  // Refresh from API (may have been updated elsewhere)
+  try {
+    const res  = await fetch(`${API}/auth/me`, { headers: authHeaders() });
+    if (res.ok) {
+      const data = await res.json();
+      hydrateProfile(data);
+      updateUserLocally({ name: data.name, company: data.company, plan: data.plan, embedKey: data.embedKey });
+      setEmbedSnippet(data.embedKey);
+    }
+  } catch { /* offline — localStorage snapshot is fine */ }
+
+  // Board count
+  try {
+    const boards = await getBoards();
+    planBoardsCount.textContent = `${boards.length} Board${boards.length !== 1 ? 's' : ''} erstellt`;
+  } catch {
+    planBoardsCount.textContent = '';
+  }
+}
+
+// ── Profile form ───────────────────────────────────────────────
+profileForm.addEventListener('submit', async e => {
+  e.preventDefault();
+  profileSuccess.hidden = true;
+  profileError.hidden   = true;
+
+  const name    = fName.value.trim();
+  const company = fCompany.value.trim();
+
+  if (!name) {
+    profileErrText.textContent = 'Name ist erforderlich.';
+    profileError.hidden = false;
+    fName.focus();
+    return;
+  }
+
+  setProfileSaving(true);
+  try {
+    const res  = await fetch(`${API}/auth/profile`, {
+      method:  'PUT',
+      headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ name, company }),
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      profileErrText.textContent = data.error || 'Speichern fehlgeschlagen.';
+      profileError.hidden = false;
+      return;
+    }
+
+    // Update localStorage + sidebar everywhere
+    updateUserLocally({ name: data.name, company: data.company, plan: data.plan });
+    hydrateProfile(data);
+
+    profileSuccess.hidden = false;
+    setTimeout(() => { profileSuccess.hidden = true; }, 4000);
+
+  } catch {
+    profileErrText.textContent = 'Verbindungsfehler. Backend erreichbar?';
+    profileError.hidden = false;
+  } finally {
+    setProfileSaving(false);
+  }
+});
+
+function setProfileSaving(on) {
+  profileSaveBtn.disabled  = on;
+  profileSaveTxt.textContent = on ? 'Speichern…' : 'Speichern';
+}
+
+// ── Password form ──────────────────────────────────────────────
+
+// Strength indicator
+const STRENGTH_LEVELS = [
+  { label: '',         color: 'transparent', width: '0%'   },
+  { label: 'Schwach',  color: '#EF4444',     width: '25%'  },
+  { label: 'Schwach',  color: '#F97316',     width: '40%'  },
+  { label: 'Mittel',   color: '#EAB308',     width: '65%'  },
+  { label: 'Stark',    color: '#22C55E',     width: '85%'  },
+  { label: 'Sehr stark',color:'#16A34A',     width: '100%' },
+];
+
+function passwordScore(pwd) {
+  if (!pwd) return 0;
+  let score = 1;
+  if (pwd.length >= 8)              score++;
+  if (pwd.length >= 12)             score++;
+  if (/[A-Z]/.test(pwd) && /[a-z]/.test(pwd)) score++;
+  if (/[0-9]/.test(pwd))            score++;
+  if (/[^A-Za-z0-9]/.test(pwd))    score++;
+  return Math.min(score, 5);
+}
+
+fNewPwd.addEventListener('input', () => {
+  const score = passwordScore(fNewPwd.value);
+  const level = STRENGTH_LEVELS[score];
+  pwdStrength.hidden     = !fNewPwd.value;
+  pwdStrFill.style.width = level.width;
+  pwdStrFill.style.backgroundColor = level.color;
+  pwdStrLabel.textContent = level.label;
+});
+
+passwordForm.addEventListener('submit', async e => {
+  e.preventDefault();
+  pwdSuccess.hidden = true;
+  pwdError.hidden   = true;
+
+  const oldPwd     = fCurrentPwd.value;
+  const newPwd     = fNewPwd.value;
+  const confirmPwd = fConfirmPwd.value;
+
+  if (!oldPwd) {
+    pwdErrText.textContent = 'Bitte aktuelles Passwort eingeben.';
+    pwdError.hidden = false;
+    fCurrentPwd.focus();
+    return;
+  }
+  if (!newPwd || newPwd.length < 8) {
+    pwdErrText.textContent = 'Neues Passwort muss mindestens 8 Zeichen haben.';
+    pwdError.hidden = false;
+    fNewPwd.focus();
+    return;
+  }
+  if (newPwd !== confirmPwd) {
+    pwdErrText.textContent = 'Passwörter stimmen nicht überein.';
+    pwdError.hidden = false;
+    fConfirmPwd.focus();
+    return;
+  }
+
+  setPwdSaving(true);
+  try {
+    const res  = await fetch(`${API}/auth/change-password`, {
+      method:  'POST',
+      headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ oldPassword: oldPwd, newPassword: newPwd }),
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      pwdErrText.textContent = data.error || 'Änderung fehlgeschlagen.';
+      pwdError.hidden = false;
+      return;
+    }
+
+    // Clear fields on success
+    fCurrentPwd.value = '';
+    fNewPwd.value     = '';
+    fConfirmPwd.value = '';
+    pwdStrength.hidden = true;
+
+    pwdSuccess.hidden = false;
+    setTimeout(() => { pwdSuccess.hidden = true; }, 5000);
+
+  } catch {
+    pwdErrText.textContent = 'Verbindungsfehler. Backend erreichbar?';
+    pwdError.hidden = false;
+  } finally {
+    setPwdSaving(false);
+  }
+});
+
+function setPwdSaving(on) {
+  pwdSaveBtn.disabled    = on;
+  pwdSaveTxt.textContent = on ? 'Ändern…' : 'Passwort ändern';
+}
+
+// ── Danger zone ────────────────────────────────────────────────
+document.getElementById('delete-account-btn').addEventListener('click', () => {
+  if (confirm('Konto wirklich löschen?\n\nDiese Aktion kann nicht rückgängig gemacht werden. Alle deine Boards bleiben erhalten.')) {
+    alert('Bitte kontaktiere hello@boards.solutions um dein Konto zu löschen.');
+  }
+});
+
+// ── Start ──────────────────────────────────────────────────────
+init();
+})();
+</script>
+</body>
+</html>

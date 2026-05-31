@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Board erstellen — boards.solutions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+<script>
+(function(){try{var u=JSON.parse(localStorage.getItem('bs_auth_user')||'null');if(!u)return;var n=u.name||u.email||'';var i=n.split(' ').map(function(w){return w[0]||'';}).join('').slice(0,2).toUpperCase();document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('.sidebar__user-name,.topbar__user-name').forEach(function(el){el.textContent=n;});document.querySelectorAll('.sidebar__avatar,.topbar__avatar').forEach(function(el){el.textContent=i;});var pl={'free':'Free Plan','pro':'Pro Plan','business':'Business Plan'};document.querySelectorAll('.sidebar__user-plan').forEach(function(el){el.textContent=pl[u.plan]||'Free Plan';});});}catch(e){}})();
+</script>
+
+<a href="#main-content" class="skip-link">Zum Hauptinhalt springen</a>
+<div id="sidebar-overlay" class="sidebar-overlay" hidden aria-hidden="true"></div>
+
+<nav id="sidebar" class="sidebar" aria-label="Hauptnavigation">
+  <div class="sidebar__header">
+    <a href="app.html" class="sidebar__logo" aria-label="boards.solutions Dashboard">
+      <svg class="sidebar__logo-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="3" y="3" width="8" height="8" rx="1.5" fill="var(--color-blue-500)"/>
+        <rect x="13" y="3" width="8" height="8" rx="1.5" fill="var(--color-blue-400)" opacity="0.7"/>
+        <rect x="3" y="13" width="8" height="8" rx="1.5" fill="var(--color-blue-400)" opacity="0.7"/>
+        <rect x="13" y="13" width="8" height="8" rx="1.5" fill="var(--color-blue-300)" opacity="0.5"/>
+      </svg>
+      <span class="sidebar__logo-text">boards.solutions</span>
+    </a>
+    <button id="sidebar-close" class="sidebar__close-btn" aria-label="Seitenleiste schließen" type="button">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><line x1="1" y1="1" x2="17" y2="17"/><line x1="17" y1="1" x2="1" y2="17"/></svg>
+    </button>
+  </div>
+  <div class="sidebar__body">
+    <ul class="sidebar__nav" role="list">
+      <li><a href="app.html" class="sidebar__nav-link">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Übersicht
+      </a></li>
+      <li><a href="boards.html" class="sidebar__nav-link" aria-current="page">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        Meine Boards
+      </a></li>
+      <li><a href="media-library.html" class="sidebar__nav-link">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        Mediathek
+      </a></li>
+    </ul>
+  </div>
+  <div class="sidebar__footer">
+    <a href="settings.html" class="sidebar__nav-link">
+      <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      Einstellungen
+    </a>
+    <div class="sidebar__user">
+      <div class="sidebar__avatar" aria-hidden="true"></div>
+      <div class="sidebar__user-info">
+        <span class="sidebar__user-name"></span>
+        <span class="sidebar__user-plan"></span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="dashboard-layout">
+  <div class="dashboard-main">
+    <header class="topbar" role="banner">
+      <div class="topbar__left">
+        <button id="sidebar-open" class="topbar__menu-btn" aria-label="Menü öffnen" aria-expanded="false" aria-controls="sidebar" type="button">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <nav aria-label="Breadcrumb">
+          <ol class="breadcrumb" role="list">
+            <li class="breadcrumb__item"><a href="app.html" class="breadcrumb__link">Übersicht</a></li>
+            <li class="breadcrumb__item"><a href="boards.html" class="breadcrumb__link">Meine Boards</a></li>
+            <li class="breadcrumb__item breadcrumb__item--current" aria-current="page">Board erstellen</li>
+          </ol>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main-content" class="dashboard-content" tabindex="-1">
+
+      <!-- Progress -->
+      <div class="wizard-progress" role="list" aria-label="Erstellungs-Fortschritt">
+        <div class="wizard-step wizard-step--active" role="listitem" id="progress-1">
+          <div class="wizard-step__dot" aria-hidden="true">1</div>
+          <span class="wizard-step__label">Typ wählen</span>
+        </div>
+        <div class="wizard-step__line" aria-hidden="true"></div>
+        <div class="wizard-step" role="listitem" id="progress-2">
+          <div class="wizard-step__dot" aria-hidden="true">2</div>
+          <span class="wizard-step__label">Inhalte</span>
+        </div>
+        <div class="wizard-step__line" aria-hidden="true"></div>
+        <div class="wizard-step" role="listitem" id="progress-3">
+          <div class="wizard-step__dot" aria-hidden="true">3</div>
+          <span class="wizard-step__label">Vorschau &amp; Speichern</span>
+        </div>
+      </div>
+
+      <!-- ══════════ STEP 1: Type selection ══════════ -->
+      <div class="wizard-panel" id="panel-1">
+        <div class="wizard-panel__header">
+          <h1 class="wizard-panel__title">Was möchtest du erstellen?</h1>
+          <p class="wizard-panel__desc">Wähle den passenden Board-Typ — jeder Typ erzeugt fertiges HTML, das du direkt in jede Website einbetten kannst.</p>
+        </div>
+
+        <div class="type-selector type-selector--grid" role="group" aria-label="Board-Typ wählen">
+
+          <button class="type-card" data-type="blog" type="button" aria-pressed="false">
+            <div class="type-card__icon type-card__icon--blog" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </div>
+            <h2 class="type-card__title">Blog-Beitrag</h2>
+            <p class="type-card__desc">Artikel mit Bild, Text und Affiliate-Links. Ideal für Ratgeber, Reviews und Content-Marketing.</p>
+            <ul class="type-card__features">
+              <li>Überschrift, Intro &amp; Fließtext</li>
+              <li>Titelbild, Autor, Kategorie</li>
+              <li>Beliebig viele Affiliate-Links</li>
+            </ul>
+          </button>
+
+          <button class="type-card" data-type="affiliate" type="button" aria-pressed="false">
+            <div class="type-card__icon type-card__icon--affiliate" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+            </div>
+            <h2 class="type-card__title">Affiliate-Produkt</h2>
+            <p class="type-card__desc">Einzelnes Produkt mit Bild, Beschreibung, Preis und direktem Kauflink.</p>
+            <ul class="type-card__features">
+              <li>Produktname &amp; Beschreibung</li>
+              <li>Produktbild, Preis, Rating</li>
+              <li>Kaufen-Button mit Affiliate-Link</li>
+            </ul>
+          </button>
+
+          <button class="type-card" data-type="review" type="button" aria-pressed="false">
+            <div class="type-card__icon type-card__icon--review" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <h2 class="type-card__title">Produkt-Review</h2>
+            <p class="type-card__desc">Professionelle Rezension mit Sternebewertung, Pros &amp; Cons und Fazit.</p>
+            <ul class="type-card__features">
+              <li>1–5 Sterne Bewertung</li>
+              <li>Vorteile &amp; Nachteile-Liste</li>
+              <li>Fazit &amp; Kaufempfehlung</li>
+            </ul>
+          </button>
+
+          <button class="type-card" data-type="faq" type="button" aria-pressed="false">
+            <div class="type-card__icon type-card__icon--faq" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <h2 class="type-card__title">FAQ-Board</h2>
+            <p class="type-card__desc">Häufige Fragen und Antworten als aufklappbares Akkordeon auf der Kundenseite.</p>
+            <ul class="type-card__features">
+              <li>Beliebig viele Frage-Antwort-Paare</li>
+              <li>Aufklappbares Akkordeon-Design</li>
+              <li>SEO-freundliches Markup</li>
+            </ul>
+          </button>
+
+        </div>
+
+        <div class="wizard-nav wizard-nav--right">
+          <button id="btn-next-1" class="btn btn--primary" type="button" disabled aria-disabled="true">
+            Weiter
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ══════════ STEP 2: Content forms ══════════ -->
+      <div class="wizard-panel" id="panel-2" hidden>
+
+        <!-- ── Blog form ── -->
+        <div id="blog-form" hidden>
+          <div class="wizard-panel__header">
+            <h1 class="wizard-panel__title">Blog-Beitrag erstellen</h1>
+            <p class="wizard-panel__desc">Fülle die Felder aus — <strong>*</strong> sind Pflichtfelder.</p>
+          </div>
+          <div class="form-sections">
+
+            <section class="form-section">
+              <h2 class="form-section__title">Grundlagen</h2>
+              <div class="form-group">
+                <label for="blog-board-name" class="form-label">Board-Name (intern) <span class="form-required">*</span></label>
+                <input id="blog-board-name" type="text" class="form-input" placeholder="z.B. Tech-Blog für Schmidt GmbH" autocomplete="off" aria-required="true">
+                <span class="form-hint">Nur für dich sichtbar — hilft beim Organisieren.</span>
+              </div>
+              <div class="form-group">
+                <label for="blog-tags" class="form-label">Tags <span class="form-label__optional">Optional</span></label>
+                <input id="blog-tags" type="text" class="form-input" placeholder="z.B. Review, Technik, Top 5 (kommagetrennt)" autocomplete="off">
+              </div>
+            </section>
+
+            <section class="form-section">
+              <h2 class="form-section__title">Inhalt</h2>
+              <div class="form-group">
+                <label for="blog-title" class="form-label">Überschrift <span class="form-required">*</span></label>
+                <input id="blog-title" type="text" class="form-input form-input--lg" placeholder="z.B. Die 5 besten Laptops für Freelancer 2025" autocomplete="off" aria-required="true">
+              </div>
+              <div class="form-group">
+                <label for="blog-intro" class="form-label">Einleitung <span class="form-label__optional">Optional</span></label>
+                <textarea id="blog-intro" class="form-input form-textarea" rows="3" placeholder="Kurze Zusammenfassung, die Leser zum Weiterlesen animiert…"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="blog-content" class="form-label">Artikel-Text <span class="form-label__optional">Optional</span></label>
+                <textarea id="blog-content" class="form-input form-textarea" rows="10" placeholder="Schreibe deinen Beitrag hier. Absätze werden automatisch formatiert.&#10;&#10;Du kannst mehrere Absätze mit Leerzeilen trennen."></textarea>
+              </div>
+            </section>
+
+            <section class="form-section">
+              <h2 class="form-section__title">Titelbild</h2>
+              <div class="image-upload-area" id="blog-image-upload-area" role="button" tabindex="0" aria-label="Titelbild hochladen">
+                <input type="file" id="blog-image-input" class="sr-only" accept="image/jpeg,image/png,image/webp,image/gif" tabindex="-1">
+                <div class="image-upload-area__placeholder" id="blog-image-placeholder">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  <p>Bild hochladen oder hierher ziehen</p>
+                  <span class="image-upload-area__hint">JPG, PNG, WEBP — empfohlen 1200 × 630 px</span>
+                </div>
+                <img id="blog-image-preview" class="image-upload-area__preview" src="" alt="Vorschau" hidden>
+                <button id="blog-image-remove" class="image-upload-area__remove" type="button" aria-label="Bild entfernen" hidden>✕</button>
+              </div>
+            </section>
+
+            <section class="form-section">
+              <h2 class="form-section__title">Affiliate-Links <span class="form-section__badge">Optional</span></h2>
+              <p class="form-section__desc">Diese erscheinen als anklickbare Buttons im Beitrag.</p>
+              <div id="blog-links-list" class="link-list" aria-live="polite"></div>
+              <button id="blog-add-link" class="btn btn--ghost btn--sm link-add-btn" type="button">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Link hinzufügen
+              </button>
+            </section>
+
+          </div>
+        </div>
+
+        <!-- ── Affiliate form ── -->
+        <div id="affiliate-form" hidden>
+          <div class="wizard-panel__header">
+            <h1 class="wizard-panel__title">Affiliate-Produkt einbinden</h1>
+            <p class="wizard-panel__desc">Trage die Produktdaten ein.</p>
+          </div>
+          <div class="form-sections">
+            <section class="form-section">
+              <h2 class="form-section__title">Grundlagen</h2>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="aff-board-name" class="form-label">Board-Name (intern) <span class="form-required">*</span></label>
+                  <input id="aff-board-name" type="text" class="form-input" placeholder="z.B. Ergostuhl-Empfehlung für Mayer GmbH" autocomplete="off" aria-required="true">
+                </div>
+                <div class="form-group">
+                  <label for="aff-badge" class="form-label">Badge <span class="form-label__optional">Optional</span></label>
+                  <input id="aff-badge" type="text" class="form-input" placeholder="z.B. Bestseller, Top-Pick, Empfehlung" autocomplete="off">
+                </div>
+              </div>
+            </section>
+            <section class="form-section">
+              <h2 class="form-section__title">Produkt-Details</h2>
+              <div class="form-group">
+                <label for="aff-product-name" class="form-label">Produktname <span class="form-required">*</span></label>
+                <input id="aff-product-name" type="text" class="form-input form-input--lg" placeholder="z.B. Ergonomischer Bürostuhl Pro X200" autocomplete="off" aria-required="true">
+              </div>
+              <div class="form-group">
+                <label for="aff-description" class="form-label">Kurzbeschreibung</label>
+                <textarea id="aff-description" class="form-input form-textarea" rows="4" placeholder="Beschreibe das Produkt in 2–3 Sätzen. Was macht es besonders?"></textarea>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="aff-price" class="form-label">Preis <span class="form-label__optional">Optional</span></label>
+                  <input id="aff-price" type="text" class="form-input" placeholder="249,00 €" autocomplete="off">
+                </div>
+                <div class="form-group">
+                  <label for="aff-rating" class="form-label">Bewertung (1–5) <span class="form-label__optional">Optional</span></label>
+                  <input id="aff-rating" type="number" class="form-input" placeholder="4.5" min="1" max="5" step="0.1">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="aff-button-text" class="form-label">Button-Text</label>
+                  <input id="aff-button-text" type="text" class="form-input" value="Jetzt kaufen" autocomplete="off">
+                </div>
+                <div class="form-group">
+                  <label for="aff-url" class="form-label">Affiliate-Link <span class="form-required">*</span></label>
+                  <input id="aff-url" type="url" class="form-input" placeholder="https://amzn.to/dein-link" autocomplete="off" aria-required="true">
+                </div>
+              </div>
+            </section>
+            <section class="form-section">
+              <h2 class="form-section__title">Produktbild</h2>
+              <div class="image-upload-area" id="aff-image-upload-area" role="button" tabindex="0" aria-label="Produktbild hochladen">
+                <input type="file" id="aff-image-input" class="sr-only" accept="image/jpeg,image/png,image/webp,image/gif" tabindex="-1">
+                <div class="image-upload-area__placeholder" id="aff-image-placeholder">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  <p>Produktbild hochladen</p>
+                  <span class="image-upload-area__hint">JPG, PNG, WEBP — quadratisch empfohlen</span>
+                </div>
+                <img id="aff-image-preview" class="image-upload-area__preview" src="" alt="Vorschau" hidden>
+                <button id="aff-image-remove" class="image-upload-area__remove" type="button" aria-label="Bild entfernen" hidden>✕</button>
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <!-- ── Review form ── -->
+        <div id="review-form" hidden>
+          <div class="wizard-panel__header">
+            <h1 class="wizard-panel__title">Produkt-Review erstellen</h1>
+            <p class="wizard-panel__desc">Professionelle Rezension mit Sternebewertung.</p>
+          </div>
+          <div class="form-sections">
+            <section class="form-section">
+              <h2 class="form-section__title">Grundlagen</h2>
+              <div class="form-group">
+                <label for="rev-board-name" class="form-label">Board-Name (intern) <span class="form-required">*</span></label>
+                <input id="rev-board-name" type="text" class="form-input" placeholder="z.B. Sony WH Review für Audio-Blog" autocomplete="off" aria-required="true">
+                <span class="form-hint">Nur für dich sichtbar — hilft beim Organisieren.</span>
+              </div>
+            </section>
+            <section class="form-section">
+              <h2 class="form-section__title">Produkt & Bewertung</h2>
+              <div class="form-group">
+                <label for="rev-product-name" class="form-label">Produktname <span class="form-required">*</span></label>
+                <input id="rev-product-name" type="text" class="form-input form-input--lg" placeholder="z.B. Sony WH-1000XM5" autocomplete="off" aria-required="true">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Gesamtbewertung <span class="form-required">*</span></label>
+                <div class="star-picker" id="rev-star-picker" role="group" aria-label="Sternebewertung">
+                  <button type="button" class="star-btn" data-value="1" aria-label="1 Stern">★</button>
+                  <button type="button" class="star-btn" data-value="2" aria-label="2 Sterne">★</button>
+                  <button type="button" class="star-btn" data-value="3" aria-label="3 Sterne">★</button>
+                  <button type="button" class="star-btn" data-value="4" aria-label="4 Sterne">★</button>
+                  <button type="button" class="star-btn" data-value="5" aria-label="5 Sterne">★</button>
+                </div>
+                <input type="hidden" id="rev-rating" value="">
+              </div>
+              <div class="form-group">
+                <label for="rev-review-text" class="form-label">Review-Text <span class="form-required">*</span></label>
+                <textarea id="rev-review-text" class="form-input form-textarea" rows="6" placeholder="Beschreibe deine Erfahrung mit dem Produkt ausführlich…" aria-required="true"></textarea>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="rev-price" class="form-label">Preis <span class="form-label__optional">Optional</span></label>
+                  <input id="rev-price" type="text" class="form-input" placeholder="349,00 €" autocomplete="off">
+                </div>
+                <div class="form-group">
+                  <label for="rev-url" class="form-label">Affiliate-Link <span class="form-label__optional">Optional</span></label>
+                  <input id="rev-url" type="url" class="form-input" placeholder="https://amzn.to/…" autocomplete="off">
+                </div>
+              </div>
+            </section>
+            <section class="form-section">
+              <h2 class="form-section__title">Vorteile &amp; Nachteile</h2>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Vorteile (Pros)</label>
+                  <div id="rev-pros-list" class="simple-list"></div>
+                  <button type="button" class="btn btn--ghost btn--sm link-add-btn" id="rev-add-pro">+ Vorteil hinzufügen</button>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Nachteile (Cons)</label>
+                  <div id="rev-cons-list" class="simple-list"></div>
+                  <button type="button" class="btn btn--ghost btn--sm link-add-btn" id="rev-add-con">+ Nachteil hinzufügen</button>
+                </div>
+              </div>
+            </section>
+            <section class="form-section">
+              <h2 class="form-section__title">Fazit</h2>
+              <div class="form-group">
+                <label for="rev-verdict" class="form-label">Kaufempfehlung / Fazit <span class="form-label__optional">Optional</span></label>
+                <textarea id="rev-verdict" class="form-input form-textarea" rows="3" placeholder="Für wen ist das Produkt ideal? Wer sollte eher eine Alternative wählen?"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="rev-button-text" class="form-label">Button-Text</label>
+                <input id="rev-button-text" type="text" class="form-input" value="Preis prüfen" autocomplete="off">
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <!-- ── FAQ form ── -->
+        <div id="faq-form" hidden>
+          <div class="wizard-panel__header">
+            <h1 class="wizard-panel__title">FAQ-Board erstellen</h1>
+            <p class="wizard-panel__desc">Häufige Fragen und Antworten als Akkordeon.</p>
+          </div>
+          <div class="form-sections">
+            <section class="form-section">
+              <h2 class="form-section__title">Grundlagen</h2>
+              <div class="form-group">
+                <label for="faq-board-name" class="form-label">Board-Name (intern) <span class="form-required">*</span></label>
+                <input id="faq-board-name" type="text" class="form-input" placeholder="z.B. FAQ für Mayer Steuerbüro" autocomplete="off" aria-required="true">
+                <span class="form-hint">Nur für dich sichtbar — hilft beim Organisieren.</span>
+              </div>
+              <div class="form-group">
+                <label for="faq-title" class="form-label">FAQ-Überschrift <span class="form-required">*</span></label>
+                <input id="faq-title" type="text" class="form-input" placeholder="Häufige Fragen" autocomplete="off" aria-required="true" value="Häufige Fragen">
+              </div>
+            </section>
+            <section class="form-section">
+              <h2 class="form-section__title">Fragen &amp; Antworten <span class="form-required">*</span></h2>
+              <p class="form-section__desc">Mindestens eine Frage ist erforderlich.</p>
+              <div id="faq-items-list" class="faq-editor-list" aria-live="polite"></div>
+              <button type="button" class="btn btn--ghost btn--sm link-add-btn" id="faq-add-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Frage hinzufügen
+              </button>
+            </section>
+          </div>
+        </div>
+
+        <div class="wizard-nav">
+          <button id="btn-prev-2" class="btn btn--ghost" type="button">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            Zurück
+          </button>
+          <button id="btn-next-2" class="btn btn--primary" type="button">
+            Weiter zur Vorschau
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ══════════ STEP 3: Preview & Save ══════════ -->
+      <div class="wizard-panel" id="panel-3" hidden>
+        <div class="wizard-panel__header">
+          <h1 class="wizard-panel__title">Vorschau &amp; Speichern</h1>
+          <p class="wizard-panel__desc">So sieht dein Board auf der Website aus. Kopiere das Snippet und füge es einmalig in den <code>&lt;head&gt;</code> der Kundenseite ein.</p>
+        </div>
+
+        <!-- Browser chrome mockup -->
+        <div class="board-preview-frame" aria-label="Vorschau" role="region">
+          <div class="board-preview-frame__bar" aria-hidden="true">
+            <span class="board-preview-frame__dot"></span>
+            <span class="board-preview-frame__dot"></span>
+            <span class="board-preview-frame__dot"></span>
+            <span class="board-preview-frame__url" id="preview-url-bar">kunden-website.de</span>
+          </div>
+          <div class="board-preview-frame__body">
+
+            <!-- Blog preview -->
+            <div id="preview-blog" class="bp-blog" hidden>
+              <div class="bp-blog__header" id="pb-header-wrap">
+                <div class="bp-blog__meta-top" id="pb-meta-top"></div>
+                <h1 class="bp-blog__title" id="pb-title">Dein Titel</h1>
+                <div class="bp-blog__byline" id="pb-byline"></div>
+              </div>
+              <div class="bp-blog__image-wrap" id="pb-image-wrap" hidden>
+                <img id="pb-image" src="" alt="" class="bp-blog__image">
+              </div>
+              <div class="bp-blog__content">
+                <div id="pb-intro" class="bp-blog__intro"></div>
+                <div id="pb-body" class="bp-blog__body"></div>
+                <div id="pb-links" class="bp-blog__links"></div>
+              </div>
+            </div>
+
+            <!-- Affiliate preview -->
+            <div id="preview-affiliate" class="bp-affiliate" hidden>
+              <div class="bp-affiliate__image-col" id="pa-image-col">
+                <div class="bp-affiliate__image-wrap" id="pa-image-wrap" hidden>
+                  <img id="pa-image" src="" alt="" class="bp-affiliate__image">
+                </div>
+                <div class="bp-affiliate__image-placeholder" id="pa-image-placeholder">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                </div>
+              </div>
+              <div class="bp-affiliate__info">
+                <div id="pa-badge" class="bp-affiliate__badge" hidden></div>
+                <h2 id="pa-name" class="bp-affiliate__name">Produktname</h2>
+                <div id="pa-stars" class="bp-affiliate__stars" hidden></div>
+                <p id="pa-desc" class="bp-affiliate__desc"></p>
+                <div class="bp-affiliate__price-row">
+                  <div>
+                    <span id="pa-original-price" class="bp-affiliate__original-price" hidden></span>
+                    <span id="pa-price" class="bp-affiliate__price" hidden></span>
+                  </div>
+                  <a id="pa-btn" href="#" class="bp-affiliate__btn" onclick="return false;">Jetzt kaufen</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Review preview -->
+            <div id="preview-review" class="bp-review" hidden>
+              <div class="bp-review__layout">
+                <div class="bp-review__image-col">
+                  <div class="bp-review__image-wrap" id="prv-image-wrap" hidden>
+                    <img id="prv-image" src="" alt="" class="bp-review__image">
+                  </div>
+                  <div class="bp-review__image-placeholder" id="prv-image-placeholder">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  </div>
+                  <div class="bp-review__score-box">
+                    <span class="bp-review__score-value" id="prv-score">—</span>
+                    <div class="bp-review__score-stars" id="prv-score-stars"></div>
+                    <span class="bp-review__score-label">Gesamtbewertung</span>
+                  </div>
+                </div>
+                <div class="bp-review__content">
+                  <h2 class="bp-review__product-name" id="prv-name">Produktname</h2>
+                  <div class="bp-review__category" id="prv-cat" hidden></div>
+                  <p class="bp-review__text" id="prv-text"></p>
+                  <div class="bp-review__pros-cons" id="prv-pros-cons" hidden>
+                    <div class="bp-review__pros" id="prv-pros-col"></div>
+                    <div class="bp-review__cons" id="prv-cons-col"></div>
+                  </div>
+                  <div class="bp-review__verdict" id="prv-verdict" hidden>
+                    <strong>Fazit:</strong> <span id="prv-verdict-text"></span>
+                  </div>
+                  <div class="bp-review__footer">
+                    <span class="bp-review__price" id="prv-price" hidden></span>
+                    <a id="prv-btn" href="#" class="bp-review__btn" onclick="return false;">Preis prüfen</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- FAQ preview -->
+            <div id="preview-faq" class="bp-faq" hidden>
+              <div class="bp-faq__header">
+                <h2 class="bp-faq__title" id="pfaq-title">Häufige Fragen</h2>
+                <p class="bp-faq__subtitle" id="pfaq-subtitle" hidden></p>
+              </div>
+              <div class="bp-faq__list" id="pfaq-list"></div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Snippet section -->
+        <div class="dashboard-panel" style="margin-top:var(--space-6)">
+          <div class="dashboard-panel__header">
+            <div>
+              <h2 class="dashboard-panel__title">Channel-Snippet</h2>
+              <p class="dashboard-panel__description">Einmalig in den <code>&lt;head&gt;</code> der Kundenseite einfügen — alle Boards dieses Accounts erscheinen automatisch.</p>
+            </div>
+          </div>
+          <div class="snippet-block">
+            <code id="preview-snippet" class="snippet-block__code"></code>
+            <button class="snippet-block__copy btn btn--ghost btn--sm" id="copy-snippet-btn" type="button">Kopieren</button>
+          </div>
+          <p class="form-hint" style="margin-top:var(--space-2)">Alternativ: Board-spezifisches Snippet (nur diesen Board einbetten)</p>
+          <div class="snippet-block" style="opacity:.7">
+            <code id="preview-snippet-individual" class="snippet-block__code"></code>
+            <button class="snippet-block__copy btn btn--ghost btn--sm" id="copy-snippet-individual-btn" type="button">Kopieren</button>
+          </div>
+        </div>
+
+        <!-- Validation error -->
+        <div id="save-error" class="form-error-banner" hidden role="alert">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span id="save-error-text">Bitte alle Pflichtfelder ausfüllen.</span>
+        </div>
+
+        <div class="wizard-nav">
+          <button id="btn-prev-3" class="btn btn--ghost" type="button">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            Zurück
+          </button>
+          <div class="wizard-nav__save-btns">
+            <button id="btn-save-draft" class="btn btn--ghost" type="button">Als Entwurf speichern</button>
+            <button id="btn-save-publish" class="btn btn--primary" type="button">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              Veröffentlichen
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script type="module" src="js/app.js"></script>
+<script type="module">
+import { requireAuth, updateSidebar, getUser, getEmbedKey } from './js/auth.js';
+import { saveBoard, getBoardById, buildUserSnippet, buildSnippet } from './js/boards-data.js';
+import { showToast } from './js/app.js';
+
+(async () => {
+if (!requireAuth()) return;
+updateSidebar();
+
+/* ── Edit mode detection ────────────────────────────────────── */
+const urlParams  = new URLSearchParams(location.search);
+const editId     = urlParams.get('edit');
+const isEditMode = !!editId;
+let   editBoard  = null;
+
+if (isEditMode) {
+  editBoard = await getBoardById(editId);
+  if (!editBoard) {
+    showToast('Board nicht gefunden.', 'error', 3000);
+    setTimeout(() => { window.location.href = 'boards.html'; }, 1200);
+    return;
+  }
+  // Update page title + breadcrumb
+  document.title = 'Board bearbeiten — boards.solutions';
+  const h1 = document.querySelector('.wizard-header h1, .page-header__title');
+  if (h1) h1.textContent = 'Board bearbeiten';
+  const sub = document.querySelector('.wizard-header p, .page-header__subtitle');
+  if (sub) sub.textContent = 'Bearbeite den Inhalt deines Boards — die Vorschau aktualisiert sich live.';
+  // Change save buttons to "Speichern"
+  const publishBtn = document.getElementById('btn-save-publish');
+  if (publishBtn) publishBtn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Änderungen speichern`;
+}
+
+/* ── State ─────────────────────────────────────────────────── */
+const state = {
+  step: 1,
+  type: null,
+  blogImage: null,
+  affImage:  null,
+  revImage:  null,
+  affiliateLinks: [],
+  revPros:   [],
+  revCons:   [],
+  faqItems:  [],
+  revRating: 0,
+  generatedEmbedId: null,
+  editId: isEditMode ? editId : null,
+};
+
+/* ── Elements ─────────────────────────────────────────────── */
+const panels    = [1,2,3].map(n => document.getElementById(`panel-${n}`));
+const progSteps = [1,2,3].map(n => document.getElementById(`progress-${n}`));
+
+/* ── Step navigation ─────────────────────────────────────── */
+function goToStep(n) {
+  panels.forEach((p,i) => { p.hidden = i !== n-1; });
+  progSteps.forEach((s,i) => {
+    s.classList.toggle('wizard-step--active', i === n-1);
+    s.classList.toggle('wizard-step--done',   i < n-1);
+  });
+  state.step = n;
+  document.getElementById('main-content').scrollIntoView({ behavior:'smooth', block:'start' });
+  if (n === 3) buildPreview();
+}
+
+/* ── Step 1: Type selection ─────────────────────────────── */
+const typeCards = document.querySelectorAll('.type-card');
+const btnNext1  = document.getElementById('btn-next-1');
+
+typeCards.forEach(card => {
+  card.addEventListener('click', () => {
+    typeCards.forEach(c => { c.classList.remove('type-card--selected'); c.setAttribute('aria-pressed','false'); });
+    card.classList.add('type-card--selected');
+    card.setAttribute('aria-pressed','true');
+    state.type = card.dataset.type;
+    btnNext1.disabled = false;
+    btnNext1.removeAttribute('aria-disabled');
+  });
+});
+
+btnNext1.addEventListener('click', () => {
+  if (!state.type) return;
+  ['blog','affiliate','review','faq'].forEach(t => {
+    document.getElementById(`${t}-form`).hidden = t !== state.type;
+  });
+  goToStep(2);
+  setTimeout(() => {
+    const map = { blog:'blog-board-name', affiliate:'aff-board-name', review:'rev-board-name', faq:'faq-board-name' };
+    document.getElementById(map[state.type])?.focus();
+  }, 100);
+});
+
+// URL ?type= pre-select
+const urlType = new URLSearchParams(location.search).get('type');
+if (['blog','affiliate','review','faq'].includes(urlType)) {
+  document.querySelector(`.type-card[data-type="${urlType}"]`)?.click();
+}
+
+/* ── Step 2 nav ─────────────────────────────────────────── */
+document.getElementById('btn-prev-2').addEventListener('click', () => goToStep(1));
+document.getElementById('btn-next-2').addEventListener('click', () => {
+  if (!validateStep2()) return;
+  goToStep(3);
+});
+
+function validateStep2() {
+  const checks = {
+    blog:      [['blog-board-name','Bitte einen internen Board-Namen eingeben.'],['blog-title','Bitte eine Überschrift eingeben.']],
+    affiliate: [['aff-board-name','Bitte einen Board-Namen eingeben.'],['aff-product-name','Bitte den Produktnamen eingeben.'],['aff-url','Bitte den Affiliate-Link eingeben.']],
+    review:    [['rev-board-name','Bitte einen Board-Namen eingeben.'],['rev-product-name','Bitte den Produktnamen eingeben.'],['rev-review-text','Bitte den Review-Text eingeben.']],
+    faq:       [['faq-board-name','Bitte einen Board-Namen eingeben.'],['faq-title','Bitte eine FAQ-Überschrift eingeben.']],
+  };
+  for (const [id, msg] of (checks[state.type] || [])) {
+    const el = document.getElementById(id);
+    if (!el || !el.value.trim()) { focusErr(el, msg); return false; }
+  }
+  if (state.type === 'review' && !state.revRating) {
+    showToast('Bitte eine Sternebewertung auswählen.', 'error', 3000); return false;
+  }
+  if (state.type === 'faq' && state.faqItems.length === 0) {
+    showToast('Bitte mindestens eine Frage hinzufügen.', 'error', 3000); return false;
+  }
+  return true;
+}
+
+function focusErr(el, msg) {
+  if (!el) return;
+  el.focus();
+  el.classList.add('form-input--error');
+  el.setAttribute('aria-invalid','true');
+  showToast(msg, 'error', 3000);
+  el.addEventListener('input', () => { el.classList.remove('form-input--error'); el.removeAttribute('aria-invalid'); }, { once:true });
+}
+
+/* ── Step 3 nav ─────────────────────────────────────────── */
+document.getElementById('btn-prev-3').addEventListener('click', () => goToStep(2));
+document.getElementById('btn-save-draft').addEventListener('click', () => handleSave('draft'));
+document.getElementById('btn-save-publish').addEventListener('click', () => handleSave('published'));
+
+/* ── Image upload helper ──────────────────────────────── */
+function setupImageUpload({ areaId, inputId, placeholderId, previewId, removeId, onLoad, onRemove }) {
+  const area     = document.getElementById(areaId);
+  const input    = document.getElementById(inputId);
+  const ph       = document.getElementById(placeholderId);
+  const preview  = document.getElementById(previewId);
+  const removeBtn= document.getElementById(removeId);
+  if (!area) return;
+
+  const showPrev = src => { preview.src=src; preview.hidden=false; ph.hidden=true; removeBtn.hidden=false; };
+  const clearPrev= () => { preview.src=''; preview.hidden=true; ph.hidden=false; removeBtn.hidden=true; input.value=''; onRemove(); };
+
+  function loadFile(file) {
+    if (!file?.type.startsWith('image/')) { showToast('Nur Bilder erlaubt (JPG, PNG, WEBP).','error'); return; }
+    if (file.size > 5*1024*1024) { showToast('Bild zu groß — max. 5 MB.','error'); return; }
+    const r = new FileReader();
+    r.onload = e => { showPrev(e.target.result); onLoad(e.target.result); };
+    r.readAsDataURL(file);
+  }
+
+  area.addEventListener('click', () => { if (preview.hidden) input.click(); });
+  area.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') { e.preventDefault(); if (preview.hidden) input.click(); } });
+  input.addEventListener('change', () => { if (input.files[0]) loadFile(input.files[0]); });
+  removeBtn.addEventListener('click', e => { e.stopPropagation(); clearPrev(); });
+  area.addEventListener('dragover', e => { e.preventDefault(); area.classList.add('is-dragging'); });
+  area.addEventListener('dragleave', () => area.classList.remove('is-dragging'));
+  area.addEventListener('drop', e => { e.preventDefault(); area.classList.remove('is-dragging'); if (e.dataTransfer.files[0]) loadFile(e.dataTransfer.files[0]); });
+}
+
+setupImageUpload({ areaId:'blog-image-upload-area', inputId:'blog-image-input', placeholderId:'blog-image-placeholder', previewId:'blog-image-preview', removeId:'blog-image-remove', onLoad: d=>{ state.blogImage=d; }, onRemove: ()=>{ state.blogImage=null; } });
+setupImageUpload({ areaId:'aff-image-upload-area',  inputId:'aff-image-input',  placeholderId:'aff-image-placeholder',  previewId:'aff-image-preview',  removeId:'aff-image-remove',  onLoad: d=>{ state.affImage=d; },  onRemove: ()=>{ state.affImage=null; } });
+
+/* ── Blog affiliate links ────────────────────────────── */
+document.getElementById('blog-add-link')?.addEventListener('click', () => {
+  state.affiliateLinks.push({ text:'', url:'' });
+  renderAffLinks();
+  document.querySelectorAll('.link-item__text')[state.affiliateLinks.length-1]?.focus();
+});
+
+function renderAffLinks() {
+  const list = document.getElementById('blog-links-list');
+  if (!list) return;
+  list.innerHTML = state.affiliateLinks.map((l,i) => `
+    <div class="link-item" role="group" aria-label="Link ${i+1}">
+      <div class="link-item__fields">
+        <input type="text" class="form-input link-item__text" placeholder="Button-Text (z.B. Jetzt kaufen)"
+          value="${esc(l.text)}" data-link-idx="${i}" data-link-field="text" aria-label="Text Link ${i+1}">
+        <input type="url" class="form-input link-item__url" placeholder="https://…"
+          value="${esc(l.url)}" data-link-idx="${i}" data-link-field="url" aria-label="URL Link ${i+1}">
+      </div>
+      <button class="link-item__remove" type="button" aria-label="Link ${i+1} entfernen" data-remove-idx="${i}">✕</button>
+    </div>`).join('');
+
+  list.querySelectorAll('[data-link-idx]').forEach(inp => {
+    inp.addEventListener('input', () => { state.affiliateLinks[+inp.dataset.linkIdx][inp.dataset.linkField] = inp.value; });
+  });
+  list.querySelectorAll('[data-remove-idx]').forEach(b => {
+    b.addEventListener('click', () => { state.affiliateLinks.splice(+b.dataset.removeIdx,1); renderAffLinks(); });
+  });
+}
+
+/* ── Review star picker ──────────────────────────────── */
+const starPicker = document.getElementById('rev-star-picker');
+if (starPicker) {
+  starPicker.querySelectorAll('.star-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const v = +btn.dataset.value;
+      state.revRating = v;
+      document.getElementById('rev-rating').value = v;
+      starPicker.querySelectorAll('.star-btn').forEach((b,i) => {
+        b.classList.toggle('star-btn--active', i < v);
+      });
+    });
+  });
+}
+
+/* ── Review pros / cons ──────────────────────────────── */
+function makeSimpleList(listId, arr, placeholder) {
+  const container = document.getElementById(listId);
+  if (!container) return;
+  container.innerHTML = arr.map((item,i) => `
+    <div class="simple-list-item">
+      <input type="text" class="form-input" value="${esc(item)}" placeholder="${esc(placeholder)}"
+        data-simple-idx="${i}" aria-label="Eintrag ${i+1}">
+      <button type="button" class="link-item__remove" data-simple-remove="${i}" aria-label="Entfernen">✕</button>
+    </div>`).join('');
+  container.querySelectorAll('[data-simple-idx]').forEach(inp => {
+    inp.addEventListener('input', () => { arr[+inp.dataset.simpleIdx] = inp.value; });
+  });
+  container.querySelectorAll('[data-simple-remove]').forEach(b => {
+    b.addEventListener('click', () => { arr.splice(+b.dataset.simpleRemove,1); makeSimpleList(listId, arr, placeholder); });
+  });
+}
+
+document.getElementById('rev-add-pro')?.addEventListener('click', () => {
+  state.revPros.push('');
+  makeSimpleList('rev-pros-list', state.revPros, 'z.B. Langer Akku');
+  document.querySelector(`#rev-pros-list input:last-of-type`)?.focus();
+});
+document.getElementById('rev-add-con')?.addEventListener('click', () => {
+  state.revCons.push('');
+  makeSimpleList('rev-cons-list', state.revCons, 'z.B. Kein USB-C');
+  document.querySelector(`#rev-cons-list input:last-of-type`)?.focus();
+});
+
+/* ── FAQ items ───────────────────────────────────────── */
+function renderFaqItems() {
+  const list = document.getElementById('faq-items-list');
+  if (!list) return;
+  list.innerHTML = state.faqItems.map((item,i) => `
+    <div class="faq-editor-item">
+      <div class="faq-editor-item__header">
+        <span class="faq-editor-item__num">F${i+1}</span>
+        <button type="button" class="link-item__remove" data-faq-remove="${i}" aria-label="Frage ${i+1} entfernen">✕</button>
+      </div>
+      <input type="text" class="form-input" placeholder="Frage eingeben…" value="${esc(item.q)}"
+        data-faq-idx="${i}" data-faq-field="q" aria-label="Frage ${i+1}">
+      <textarea class="form-input form-textarea" rows="3" placeholder="Antwort eingeben…"
+        data-faq-idx="${i}" data-faq-field="a" aria-label="Antwort ${i+1}">${esc(item.a)}</textarea>
+    </div>`).join('');
+
+  list.querySelectorAll('[data-faq-idx]').forEach(el => {
+    el.addEventListener('input', () => { state.faqItems[+el.dataset.faqIdx][el.dataset.faqField] = el.value; });
+  });
+  list.querySelectorAll('[data-faq-remove]').forEach(b => {
+    b.addEventListener('click', () => { state.faqItems.splice(+b.dataset.faqRemove,1); renderFaqItems(); });
+  });
+}
+
+document.getElementById('faq-add-item')?.addEventListener('click', () => {
+  state.faqItems.push({ q:'', a:'' });
+  renderFaqItems();
+  const inputs = document.querySelectorAll('.faq-editor-item input');
+  inputs[inputs.length-1]?.focus();
+});
+
+// Initialize with one empty FAQ entry (only in create mode)
+if (!isEditMode) {
+  state.faqItems.push({ q:'', a:'' });
+  renderFaqItems();
+}
+
+/* ── Pre-fill for edit mode ──────────────────────────────── */
+function setVal(id, val) { const el = document.getElementById(id); if (el && val != null) el.value = val; }
+
+function prefillEditData(board) {
+  state.type = board.type;
+  state.generatedEmbedId = board.embedId || board.id;
+
+  // Mark step 1 as done, show correct form, jump to step 2
+  document.querySelector(`.type-card[data-type="${board.type}"]`)?.setAttribute('aria-pressed','true');
+  ['blog','affiliate','review','faq'].forEach(t => {
+    const f = document.getElementById(`${t}-form`);
+    if (f) f.hidden = t !== board.type;
+  });
+
+  if (board.type === 'blog') {
+    setVal('blog-board-name', board.boardName);
+    setVal('blog-title',      board.title);
+    setVal('blog-intro',      board.intro);
+    setVal('blog-content',    board.content);
+    setVal('blog-tags',       (board.tags || []).join(', '));
+    if (board.image) {
+      state.blogImage = board.image;
+      const prev = document.getElementById('blog-image-preview');
+      const ph   = document.getElementById('blog-image-placeholder');
+      const rem  = document.getElementById('blog-image-remove');
+      if (prev) { prev.src = board.image; prev.hidden = false; }
+      if (ph)   ph.hidden = true;
+      if (rem)  rem.hidden = false;
+    }
+    if (board.affiliateLinks?.length) {
+      state.affiliateLinks = board.affiliateLinks.map(l => ({ text: l.text || '', url: l.url || '' }));
+      renderAffLinks();
+    }
+  }
+
+  if (board.type === 'affiliate') {
+    setVal('aff-board-name',    board.boardName);
+    setVal('aff-product-name',  board.productName);
+    setVal('aff-description',   board.description);
+    setVal('aff-price',         board.price);
+    setVal('aff-button-text',   board.buttonText);
+    setVal('aff-url',           board.affiliateUrl);
+    setVal('aff-rating',        board.rating);
+    setVal('aff-badge',         board.badge);
+    if (board.image) {
+      state.affImage = board.image;
+      const prev = document.getElementById('aff-image-preview');
+      const ph   = document.getElementById('aff-image-placeholder');
+      const rem  = document.getElementById('aff-image-remove');
+      if (prev) { prev.src = board.image; prev.hidden = false; }
+      if (ph)   ph.hidden = true;
+      if (rem)  rem.hidden = false;
+    }
+  }
+
+  if (board.type === 'review') {
+    setVal('rev-board-name',    board.boardName);
+    setVal('rev-product-name',  board.productName);
+    setVal('rev-review-text',   board.reviewText);
+    setVal('rev-verdict',       board.verdict);
+    setVal('rev-price',         board.price);
+    setVal('rev-url',           board.affiliateUrl);
+    setVal('rev-button-text',   board.buttonText);
+    if (board.rating) {
+      state.revRating = board.rating;
+      setVal('rev-rating', board.rating);
+      const picker = document.getElementById('rev-star-picker');
+      if (picker) {
+        picker.querySelectorAll('.star-btn').forEach((b,i) => b.classList.toggle('star-btn--active', i < board.rating));
+      }
+    }
+    if (board.pros?.length) {
+      state.revPros = [...board.pros];
+      makeSimpleList('rev-pros-list', state.revPros, 'z.B. Langer Akku');
+    }
+    if (board.cons?.length) {
+      state.revCons = [...board.cons];
+      makeSimpleList('rev-cons-list', state.revCons, 'z.B. Kein USB-C');
+    }
+  }
+
+  if (board.type === 'faq') {
+    setVal('faq-board-name', board.boardName);
+    setVal('faq-title',      board.faqTitle || board.title);
+    if (board.faqs?.length) {
+      state.faqItems = board.faqs.map(f => ({ q: f.question || '', a: f.answer || '' }));
+    } else {
+      state.faqItems = [{ q:'', a:'' }];
+    }
+    renderFaqItems();
+  }
+
+  goToStep(2);
+}
+
+if (isEditMode && editBoard) {
+  prefillEditData(editBoard);
+}
+
+/* ── Preview builder ─────────────────────────────────── */
+function starsHTML(rating) {
+  const full = Math.floor(rating);
+  const half = rating % 1 >= 0.5;
+  let html = '';
+  for (let i=1; i<=5; i++) {
+    if (i <= full) html += `<span class="star star--full">★</span>`;
+    else if (i === full+1 && half) html += `<span class="star star--half">★</span>`;
+    else html += `<span class="star star--empty">☆</span>`;
+  }
+  return html;
+}
+
+function buildPreview() {
+  ['preview-blog','preview-affiliate','preview-review','preview-faq'].forEach(id => {
+    document.getElementById(id).hidden = true;
+  });
+  document.getElementById(`preview-${state.type}`).hidden = false;
+
+  if (state.type === 'blog') buildBlogPreview();
+  else if (state.type === 'affiliate') buildAffiliatePreview();
+  else if (state.type === 'review') buildReviewPreview();
+  else if (state.type === 'faq') buildFaqPreview();
+
+  // Snippets
+  const embedKey = getEmbedKey();
+  const embedId  = state.generatedEmbedId || (state.generatedEmbedId = Date.now().toString(36));
+  document.getElementById('preview-snippet').textContent = embedKey ? buildUserSnippet(embedKey) : '<!-- Kein Embed-Key für diesen Account hinterlegt -->';
+  document.getElementById('preview-snippet-individual').textContent = buildSnippet(embedId);
+}
+
+function buildBlogPreview() {
+  const title    = v('blog-title') || 'Kein Titel';
+  const intro    = v('blog-intro');
+  const content  = v('blog-content');
+
+  setText('pb-title', title);
+
+  const metaTop = document.getElementById('pb-meta-top');
+  metaTop.innerHTML = '';
+
+  const byline = document.getElementById('pb-byline');
+  byline.innerHTML = `<span class="bp-blog__date">${new Date().toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'})}</span>`;
+
+  const imgWrap = document.getElementById('pb-image-wrap');
+  if (state.blogImage) { document.getElementById('pb-image').src = state.blogImage; imgWrap.hidden = false; }
+  else imgWrap.hidden = true;
+
+  document.getElementById('pb-intro').innerHTML = intro ? `<p class="bp-blog__lead">${esc(intro)}</p>` : '';
+
+  const bodyEl = document.getElementById('pb-body');
+  if (content) {
+    bodyEl.innerHTML = content.split(/\n\n+/).map(p => `<p>${esc(p.trim())}</p>`).join('');
+  } else bodyEl.innerHTML = '';
+
+  const linksEl = document.getElementById('pb-links');
+  const validLinks = state.affiliateLinks.filter(l => l.url);
+  linksEl.innerHTML = validLinks.length
+    ? `<div class="bp-blog__links-inner">${validLinks.map(l => `<a href="#" class="bp-affiliate__btn" onclick="return false;">${esc(l.text||'Link')}</a>`).join('')}</div>`
+    : '';
+}
+
+function buildAffiliatePreview() {
+  const name    = v('aff-product-name') || 'Produktname';
+  const desc    = v('aff-description');
+  const price   = v('aff-price');
+  const btnText = v('aff-button-text') || 'Jetzt kaufen';
+  const rating  = parseFloat(v('aff-rating') || '0');
+  const badge   = v('aff-badge');
+
+  setText('pa-name', name);
+  setText('pa-desc', desc);
+  setText('pa-btn',  btnText);
+
+  const badgeEl = document.getElementById('pa-badge');
+  if (badge) { badgeEl.textContent = badge; badgeEl.hidden = false; } else badgeEl.hidden = true;
+
+  const starsEl = document.getElementById('pa-stars');
+  if (rating > 0) {
+    starsEl.innerHTML = starsHTML(rating);
+    starsEl.hidden = false;
+  } else starsEl.hidden = true;
+
+  const priceEl = document.getElementById('pa-price');
+  if (price) { priceEl.textContent = price; priceEl.hidden = false; } else priceEl.hidden = true;
+
+  const origEl = document.getElementById('pa-original-price');
+  if (origEl) origEl.hidden = true;
+
+  const imgWrap = document.getElementById('pa-image-wrap');
+  const imgPh   = document.getElementById('pa-image-placeholder');
+  if (state.affImage) { document.getElementById('pa-image').src = state.affImage; imgWrap.hidden = false; imgPh.hidden = true; }
+  else { imgWrap.hidden = true; imgPh.hidden = false; }
+}
+
+function buildReviewPreview() {
+  const name    = v('rev-product-name') || 'Produktname';
+  const text    = v('rev-review-text');
+  const price   = v('rev-price');
+  const btnText = v('rev-button-text') || 'Preis prüfen';
+  const verdict = v('rev-verdict');
+
+  setText('prv-name', name);
+  setText('prv-text', text);
+  setText('prv-btn',  btnText);
+
+  const catEl = document.getElementById('prv-cat');
+  if (catEl) catEl.hidden = true;
+
+  const scoreEl = document.getElementById('prv-score');
+  const scoreStars = document.getElementById('prv-score-stars');
+  if (state.revRating > 0) {
+    scoreEl.textContent = state.revRating + '.0';
+    scoreStars.innerHTML = starsHTML(state.revRating);
+  } else { scoreEl.textContent = '—'; scoreStars.innerHTML = ''; }
+
+  const imgWrap = document.getElementById('prv-image-wrap');
+  const imgPh   = document.getElementById('prv-image-placeholder');
+  if (imgWrap) imgWrap.hidden = true;
+  if (imgPh)   imgPh.hidden = false;
+
+  const pros = state.revPros.filter(Boolean);
+  const cons = state.revCons.filter(Boolean);
+  const pcEl = document.getElementById('prv-pros-cons');
+  if (pros.length || cons.length) {
+    pcEl.hidden = false;
+    document.getElementById('prv-pros-col').innerHTML =
+      `<h4 class="bp-review__pros-title">✓ Vorteile</h4><ul>${pros.map(p=>`<li>${esc(p)}</li>`).join('')}</ul>`;
+    document.getElementById('prv-cons-col').innerHTML =
+      `<h4 class="bp-review__cons-title">✗ Nachteile</h4><ul>${cons.map(c=>`<li>${esc(c)}</li>`).join('')}</ul>`;
+  } else pcEl.hidden = true;
+
+  const verdictEl = document.getElementById('prv-verdict');
+  if (verdict) { document.getElementById('prv-verdict-text').textContent = verdict; verdictEl.hidden = false; }
+  else verdictEl.hidden = true;
+
+  const priceEl = document.getElementById('prv-price');
+  if (price) { priceEl.textContent = price; priceEl.hidden = false; } else priceEl.hidden = true;
+}
+
+function buildFaqPreview() {
+  const title = v('faq-title') || 'Häufige Fragen';
+  setText('pfaq-title', title);
+  const subEl = document.getElementById('pfaq-subtitle');
+  if (subEl) subEl.hidden = true;
+
+  const listEl = document.getElementById('pfaq-list');
+  const items = state.faqItems.filter(i => i.q.trim());
+  listEl.innerHTML = items.map((item, idx) => `
+    <details class="bp-faq__item" ${idx === 0 ? 'open' : ''}>
+      <summary class="bp-faq__question">${esc(item.q)}</summary>
+      <div class="bp-faq__answer">${esc(item.a) || '<em>(Noch keine Antwort eingegeben)</em>'}</div>
+    </details>`).join('') || '<p style="color:#94a3b8;padding:16px">Noch keine Fragen hinzugefügt.</p>';
+}
+
+/* ── Copy snippets ────────────────────────────────────── */
+document.getElementById('copy-snippet-btn').addEventListener('click', () => {
+  navigator.clipboard.writeText(document.getElementById('preview-snippet').textContent)
+    .then(() => toast('copy-snippet-btn', 'Kopiert!'));
+});
+document.getElementById('copy-snippet-individual-btn').addEventListener('click', () => {
+  navigator.clipboard.writeText(document.getElementById('preview-snippet-individual').textContent)
+    .then(() => toast('copy-snippet-individual-btn', 'Kopiert!'));
+});
+function toast(btnId, msg) {
+  const btn = document.getElementById(btnId);
+  const orig = btn.textContent;
+  btn.textContent = '✓ ' + msg;
+  setTimeout(() => { btn.textContent = orig; }, 2000);
+}
+
+/* ── Collect & Save ───────────────────────────────────── */
+function collectData() {
+  const embedId = state.generatedEmbedId || (state.generatedEmbedId = Date.now().toString(36));
+
+  if (state.type === 'blog') return {
+    type: 'blog',
+    boardName:      v('blog-board-name'),
+    title:          v('blog-title'),
+    intro:          v('blog-intro'),
+    content:        v('blog-content'),
+    tags:           v('blog-tags').split(',').map(t=>t.trim()).filter(Boolean),
+    image:          state.blogImage,
+    affiliateLinks: state.affiliateLinks.filter(l => l.url),
+    embedId,
+  };
+
+  if (state.type === 'affiliate') return {
+    type: 'affiliate',
+    boardName:    v('aff-board-name'),
+    productName:  v('aff-product-name'),
+    description:  v('aff-description'),
+    price:        v('aff-price'),
+    buttonText:   v('aff-button-text') || 'Jetzt kaufen',
+    affiliateUrl: v('aff-url'),
+    rating:       v('aff-rating') ? parseFloat(v('aff-rating')) : null,
+    badge:        v('aff-badge'),
+    image:        state.affImage,
+    embedId,
+  };
+
+  if (state.type === 'review') return {
+    type: 'review',
+    boardName:   v('rev-board-name'),
+    productName: v('rev-product-name'),
+    reviewText:  v('rev-review-text'),
+    rating:      state.revRating,
+    pros:        state.revPros.filter(Boolean),
+    cons:        state.revCons.filter(Boolean),
+    verdict:     v('rev-verdict'),
+    price:       v('rev-price'),
+    affiliateUrl:v('rev-url'),
+    buttonText:  v('rev-button-text') || 'Preis prüfen',
+    embedId,
+  };
+
+  if (state.type === 'faq') return {
+    type: 'faq',
+    boardName: v('faq-board-name'),
+    faqTitle:  v('faq-title'),
+    faqs:      state.faqItems.filter(i => i.q.trim()).map(i => ({ question: i.q, answer: i.a })),
+    embedId,
+  };
+}
+
+async function handleSave(status) {
+  const data = collectData();
+  const draftBtn   = document.getElementById('btn-save-draft');
+  const publishBtn = document.getElementById('btn-save-publish');
+  draftBtn.disabled   = true;
+  publishBtn.disabled = true;
+
+  // In edit mode: preserve original id, embedId and createdAt
+  const saveData = isEditMode && editBoard
+    ? { ...editBoard, ...data, id: editBoard.id, embedId: editBoard.embedId || data.embedId, status }
+    : { ...data, status };
+
+  try {
+    await saveBoard(saveData);
+    const msg = isEditMode
+      ? 'Änderungen gespeichert! ✓'
+      : (status === 'published' ? 'Board veröffentlicht! 🚀' : 'Entwurf gespeichert.');
+    showToast(msg, 'success', 3000);
+    setTimeout(() => { window.location.href = 'boards.html'; }, 600);
+  } catch {
+    showToast('Speichern fehlgeschlagen. Bitte erneut versuchen.', 'error');
+    draftBtn.disabled   = false;
+    publishBtn.disabled = false;
+  }
+}
+
+/* ── Live preview while typing ────────────────────────── */
+['blog-title','blog-intro','blog-content',
+ 'aff-product-name','aff-description','aff-price','aff-button-text','aff-rating','aff-badge',
+ 'rev-product-name','rev-review-text','rev-price','rev-verdict','rev-button-text',
+ 'faq-title'
+].forEach(id => {
+  document.getElementById(id)?.addEventListener('input', () => { if (state.step === 3) buildPreview(); });
+});
+
+/* ── Helpers ──────────────────────────────────────────── */
+function v(id) { return (document.getElementById(id)?.value || '').trim(); }
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function setText(id, txt) { const el=document.getElementById(id); if(el) el.textContent=txt; }
+})();
+</script>
+</body>
+</html>

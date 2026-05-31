@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="boards.solutions – Premium-Websites vom Kunden editierbar. Content-Boards, Affiliate-Produkte, Medien und Widgets ohne WordPress.">
+  <meta property="og:title" content="boards.solutions – Premium-Websites. Vom Kunden editierbar.">
+  <meta property="og:description" content="boards.solutions macht selbstprogrammierte Websites pflegbar. Kein WordPress, kein Designbruch, WCAG 2.2 konform.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#2563EB">
+  <link rel="canonical" href="https://boards.solutions/">
+
+  <!-- Inter Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Design System -->
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/landing.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <title>boards.solutions – Premium-Websites. Vom Kunden editierbar.</title>
+</head>
+<body>
+
+  <!-- Skip Navigation — first interactive element in DOM -->
+  <a href="#main-content" class="skip-link">Zum Hauptinhalt springen</a>
+
+
+  <!-- =========================================================
+       HEADER — Sticky, Accessible Navigation
+       ========================================================= -->
+  <header class="site-header" role="banner">
+    <div class="site-header__inner">
+
+      <!-- Logo -->
+      <div class="nav__brand">
+        <a href="/" class="nav__brand-link" aria-label="boards.solutions – Startseite">
+          <svg class="nav__logo-icon" viewBox="0 0 28 28" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+            <rect width="28" height="28" rx="6" fill="#2563EB"/>
+            <rect x="6" y="6" width="7" height="7" rx="2" fill="white"/>
+            <rect x="15" y="6" width="7" height="7" rx="2" fill="white" opacity="0.6"/>
+            <rect x="6" y="15" width="7" height="7" rx="2" fill="white" opacity="0.6"/>
+            <rect x="15" y="15" width="7" height="7" rx="2" fill="white"/>
+          </svg>
+          <span class="nav__logo-text">boards<span class="logo-accent">.solutions</span></span>
+        </a>
+      </div>
+
+      <!-- Desktop Navigation Links -->
+      <nav aria-label="Hauptnavigation">
+        <ul class="nav__links" role="list">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#vergleich">Vergleich</a></li>
+          <li><a href="#widget-demo">Demo</a></li>
+          <li><a href="#accessibility">Accessibility</a></li>
+          <li><a href="app.html">Dashboard</a></li>
+        </ul>
+      </nav>
+
+      <!-- Desktop CTA Buttons -->
+      <div class="header__actions">
+        <a href="app.html" class="btn btn--ghost btn--sm">Anmelden</a>
+        <a href="app.html" class="btn btn--primary btn--sm">Kostenlos starten →</a>
+      </div>
+
+      <!-- Mobile Hamburger (positioned last in DOM = last in tab order before mobile menu) -->
+      <button
+        class="nav-toggle"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label="Menü öffnen"
+        type="button"
+      >
+        <!-- Hamburger icon -->
+        <svg class="nav-toggle__icon nav-toggle__icon--open" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <line x1="3" y1="6"  x2="19" y2="6"/>
+          <line x1="3" y1="11" x2="19" y2="11"/>
+          <line x1="3" y1="16" x2="19" y2="16"/>
+        </svg>
+        <!-- Close icon -->
+        <svg class="nav-toggle__icon nav-toggle__icon--close" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <line x1="4" y1="4" x2="18" y2="18"/>
+          <line x1="18" y1="4" x2="4"  y2="18"/>
+        </svg>
+      </button>
+
+    </div>
+  </header>
+
+  <!-- =========================================================
+       MOBILE MENU — Full-screen overlay with focus trap
+       ========================================================= -->
+  <div
+    id="mobile-menu"
+    class="mobile-menu"
+    aria-hidden="true"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Mobilmenü"
+  >
+    <div class="mobile-menu__inner">
+
+      <div class="mobile-menu__header">
+        <span class="mobile-menu__brand">boards<span class="logo-accent">.solutions</span></span>
+        <button class="mobile-menu__close" type="button" aria-label="Menü schließen">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <line x1="3" y1="3" x2="17" y2="17"/>
+            <line x1="17" y1="3" x2="3"  y2="17"/>
+          </svg>
+        </button>
+      </div>
+
+      <nav aria-label="Mobile Navigation">
+        <ul class="mobile-menu__links" role="list">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#vergleich">Vergleich</a></li>
+          <li><a href="#widget-demo">Demo</a></li>
+          <li><a href="#accessibility">Accessibility</a></li>
+          <li><a href="app.html">Dashboard</a></li>
+        </ul>
+      </nav>
+
+      <div class="mobile-menu__ctas">
+        <a href="app.html" class="btn btn--ghost btn--full">Anmelden</a>
+        <a href="app.html" class="btn btn--primary btn--full">Kostenlos starten →</a>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- =========================================================
+       MAIN CONTENT
+       ========================================================= -->
+  <main id="main-content">
+
+
+    <!-- =========================================================
+         SECTION 1 — HERO
+         ========================================================= -->
+    <section class="section hero" aria-labelledby="hero-heading">
+      <div class="container">
+
+        <div class="hero__content">
+
+          <!-- Status Badge -->
+          <span class="badge badge--new hero__badge" role="status">
+            <svg width="6" height="6" viewBox="0 0 6 6" aria-hidden="true"><circle cx="3" cy="3" r="3" fill="currentColor"/></svg>
+            Jetzt im Beta-Zugang
+          </span>
+
+          <!-- H1 — each line as span for animation stagger -->
+          <h1 id="hero-heading" class="hero__heading">
+            <span>Deine Website.</span>
+            <span>Dein Design.</span>
+            <span>Vom Kunden pflegbar.</span>
+          </h1>
+
+          <!-- Subline -->
+          <p class="hero__subline">
+            boards.solutions gibt Web-Agenturen ein professionelles Tool an die Hand:
+            Content-Boards, Affiliate-Produkte, Reviews und FAQs —
+            per Script-Tag in jede Website eingebettet, ohne Designbruch.
+          </p>
+
+          <!-- CTA Group -->
+          <div class="hero__cta-group" role="group" aria-label="Primäre Aktionen">
+            <a href="app.html" class="btn btn--primary btn--lg">Dashboard ansehen →</a>
+            <a href="#widget-demo" class="btn btn--ghost btn--lg">Widget-Demo ansehen</a>
+          </div>
+
+          <!-- Social Proof -->
+          <p class="hero__proof" aria-label="Produktversprechen">
+            <span class="hero__proof-item">
+              <span class="hero__proof-check" aria-hidden="true">
+                <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg>
+              </span>
+              Ein Script-Tag genügt.
+            </span>
+            <span class="hero__proof-item">
+              <span class="hero__proof-check" aria-hidden="true">
+                <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg>
+              </span>
+              Kein Vendor Lock-in.
+            </span>
+            <span class="hero__proof-item">
+              <span class="hero__proof-check" aria-hidden="true">
+                <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg>
+              </span>
+              WCAG 2.2 konform.
+            </span>
+          </p>
+
+          <!-- Fürst Software branding -->
+          <p class="hero__by" aria-label="Entwickelt von">
+            Entwickelt von
+            <a href="https://fuerstsoftware.de" target="_blank" rel="noopener" class="hero__by-link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              Fürst Software &amp; Web Development
+            </a>
+          </p>
+
+        </div>
+
+        <!-- Hero Visual — CSS Dashboard Mockup -->
+        <div class="hero-visual-wrapper">
+          <div class="hero-visual" role="img" aria-label="Vorschau des boards.solutions Dashboards: Sidebar mit Navigation links, rechts drei Board-Karten mit Status-Badges">
+
+            <div class="dashboard-mockup" aria-hidden="true">
+
+              <!-- Browser-style top bar -->
+              <div class="dm-topbar">
+                <div class="dm-dots">
+                  <span></span><span></span><span></span>
+                </div>
+                <div class="dm-url">boards.solutions/dashboard</div>
+              </div>
+
+              <!-- Dashboard body -->
+              <div class="dm-body">
+
+                <!-- Sidebar -->
+                <aside class="dm-sidebar">
+                  <div class="dm-sidebar__brand">bs.</div>
+                  <div class="dm-nav-item dm-nav-item--active">
+                    <div class="dm-nav-item__icon-bg"></div>
+                    <span>Boards</span>
+                  </div>
+                  <div class="dm-nav-item">
+                    <div class="dm-nav-item__icon-bg"></div>
+                    <span>Produkte</span>
+                  </div>
+                  <div class="dm-nav-item">
+                    <div class="dm-nav-item__icon-bg"></div>
+                    <span>Medien</span>
+                  </div>
+                  <div class="dm-nav-item">
+                    <div class="dm-nav-item__icon-bg"></div>
+                    <span>Analytics</span>
+                  </div>
+                </aside>
+
+                <!-- Main area -->
+                <div class="dm-main">
+                  <div class="dm-main__header">
+                    <div class="dm-skeleton dm-skeleton--title"></div>
+                    <div class="dm-skeleton dm-skeleton--btn"></div>
+                  </div>
+                  <div class="dm-cards">
+
+                    <div class="dm-card dm-card--primary">
+                      <div class="dm-card__top">
+                        <div class="dm-skeleton dm-skeleton--sm"></div>
+                        <div class="dm-card__dot dm-card__dot--blue"></div>
+                      </div>
+                      <div class="dm-skeleton dm-skeleton--line"></div>
+                      <div class="dm-skeleton dm-skeleton--line-short"></div>
+                      <div class="dm-card__badge dm-card__badge--blue">Live</div>
+                    </div>
+
+                    <div class="dm-card">
+                      <div class="dm-card__top">
+                        <div class="dm-skeleton dm-skeleton--sm"></div>
+                        <div class="dm-card__dot"></div>
+                      </div>
+                      <div class="dm-skeleton dm-skeleton--line"></div>
+                      <div class="dm-skeleton dm-skeleton--line-short"></div>
+                      <div class="dm-card__badge">Entwurf</div>
+                    </div>
+
+                    <div class="dm-card">
+                      <div class="dm-card__top">
+                        <div class="dm-skeleton dm-skeleton--sm"></div>
+                        <div class="dm-card__dot dm-card__dot--green"></div>
+                      </div>
+                      <div class="dm-skeleton dm-skeleton--line"></div>
+                      <div class="dm-skeleton dm-skeleton--line-short"></div>
+                      <div class="dm-card__badge dm-card__badge--green">Aktiv</div>
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Floating status badge -->
+            <div class="hero-visual__status-badge">
+              <span class="live-dot" aria-hidden="true"></span>
+              Live · 3 Boards aktiv
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- =========================================================
+         SECTION 2 — PROBLEM / SOLUTION
+         ========================================================= -->
+    <section class="section problem-section" aria-labelledby="problem-heading">
+      <div class="container">
+
+        <div class="section-header">
+          <span class="section-eyebrow" aria-hidden="true">Das Problem</span>
+          <h2 id="problem-heading">Warum boards.solutions existiert</h2>
+        </div>
+
+        <div class="problem-grid">
+
+          <!-- Card 1: Selbst programmiert -->
+          <article class="problem-card" aria-labelledby="prob-1-title">
+            <div class="problem-card__icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 18 22 12 16 6"/>
+                <polyline points="8 6 2 12 8 18"/>
+              </svg>
+            </div>
+            <h3 id="prob-1-title" class="problem-card__title">Selbst programmiert</h3>
+            <div class="problem-card__badge">
+              <span class="badge badge--neutral">Professionell</span>
+            </div>
+            <ul class="problem-card__list" role="list">
+              <li>
+                <svg class="list-icon list-icon--check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2,8 6,12 14,4"/></svg>
+                Einzigartiges Design
+              </li>
+              <li>
+                <svg class="list-icon list-icon--check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2,8 6,12 14,4"/></svg>
+                Hohe Performance
+              </li>
+              <li>
+                <svg class="list-icon list-icon--check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2,8 6,12 14,4"/></svg>
+                Volle technische Kontrolle
+              </li>
+              <li>
+                <svg class="list-icon list-icon--cross" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg>
+                Kunde kann nichts ändern
+              </li>
+              <li>
+                <svg class="list-icon list-icon--cross" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg>
+                Jede Textänderung kostet Entwicklerzeit
+              </li>
+            </ul>
+          </article>
+
+          <!-- Card 2: WordPress -->
+          <article class="problem-card" aria-labelledby="prob-2-title">
+            <div class="problem-card__icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"/>
+                <path d="M12 8v8M8 12h8"/>
+              </svg>
+            </div>
+            <h3 id="prob-2-title" class="problem-card__title">WordPress / Baukasten</h3>
+            <div class="problem-card__badge">
+              <span class="badge badge--neutral">Editierbar</span>
+            </div>
+            <ul class="problem-card__list" role="list">
+              <li>
+                <svg class="list-icon list-icon--check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2,8 6,12 14,4"/></svg>
+                Kunden können Inhalte ändern
+              </li>
+              <li>
+                <svg class="list-icon list-icon--check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2,8 6,12 14,4"/></svg>
+                Viele Plugins verfügbar
+              </li>
+              <li>
+                <svg class="list-icon list-icon--cross" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg>
+                Design und Markenwirkung leiden
+              </li>
+              <li>
+                <svg class="list-icon list-icon--cross" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg>
+                Performance-Probleme durch Bloat
+              </li>
+              <li>
+                <svg class="list-icon list-icon--cross" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg>
+                Sicherheitsrisiken &amp; Vendor Lock-in
+              </li>
+            </ul>
+          </article>
+
+          <!-- Card 3: boards.solutions (highlight) -->
+          <article class="problem-card problem-card--highlight" aria-labelledby="prob-3-title">
+            <div class="problem-card__icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+                <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+                <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+                <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+              </svg>
+            </div>
+            <h3 id="prob-3-title" class="problem-card__title">boards.solutions</h3>
+            <div class="problem-card__badge">
+              <span class="badge badge--success">Die Lösung</span>
+            </div>
+            <ul class="problem-card__list" role="list">
+              <li>
+                <svg class="list-icon list-icon--check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2,8 6,12 14,4"/></svg>
+                Premium Custom-Website bleibt intakt
+              </li>
+              <li>
+                <svg class="list-icon list-icon--check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2,8 6,12 14,4"/></svg>
+                Kunden bearbeiten nur freigegebene Zonen
+              </li>
+              <li>
+                <svg class="list-icon list-icon--check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2,8 6,12 14,4"/></svg>
+                Kein WordPress, kein Designbruch
+              </li>
+              <li>
+                <svg class="list-icon list-icon--check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2,8 6,12 14,4"/></svg>
+                Ein &lt;script&gt;-Tag genügt zur Integration
+              </li>
+              <li>
+                <svg class="list-icon list-icon--check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2,8 6,12 14,4"/></svg>
+                WCAG 2.2 konform
+              </li>
+            </ul>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =========================================================
+         SECTION 3 — FEATURE GRID
+         ========================================================= -->
+    <section id="features" class="section features-section" aria-labelledby="features-heading">
+      <div class="container">
+
+        <div class="section-header section-header--centered">
+          <span class="section-eyebrow" aria-hidden="true">Features</span>
+          <h2 id="features-heading">Alles, was Ihre Website braucht</h2>
+          <p class="section-subline">Freigeben Sie genau die Bereiche, die Ihre Kunden selbst pflegen sollen.</p>
+        </div>
+
+        <div class="features-grid">
+
+          <!-- Feature 1: Boards -->
+          <article class="feature-card" aria-labelledby="feat-1-title">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+                <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+                <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+                <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+              </svg>
+            </div>
+            <h3 id="feat-1-title" class="feature-card__title">Boards &amp; Content-Zonen</h3>
+            <p class="feature-card__desc">Definieren Sie editierbare Bereiche präzise. Der Kunde sieht nur, was Sie freigeben — nicht mehr, nicht weniger.</p>
+          </article>
+
+          <!-- Feature 2: Produkte -->
+          <article class="feature-card" aria-labelledby="feat-2-title">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <path d="M16 10a4 4 0 0 1-8 0"/>
+              </svg>
+            </div>
+            <h3 id="feat-2-title" class="feature-card__title">Produktkarten &amp; Affiliate</h3>
+            <p class="feature-card__desc">Erstellen Sie Produktkarten mit Preisen, Bildern und Affiliate-Links. DSGVO-konform und ohne Drittanbieter-Cookies.</p>
+          </article>
+
+          <!-- Feature 3: Medien -->
+          <article class="feature-card" aria-labelledby="feat-3-title">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21,15 16,10 5,21"/>
+              </svg>
+            </div>
+            <h3 id="feat-3-title" class="feature-card__title">Medien-Bibliothek</h3>
+            <p class="feature-card__desc">Bilder und PDFs hochladen, organisieren und direkt in Boards einsetzen. Automatische Bildoptimierung inklusive.</p>
+          </article>
+
+          <!-- Feature 4: Formulare -->
+          <article class="feature-card" aria-labelledby="feat-4-title">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+                <polyline points="10,9 9,9 8,9"/>
+              </svg>
+            </div>
+            <h3 id="feat-4-title" class="feature-card__title">Formular-Builder</h3>
+            <p class="feature-card__desc">Kontakt-, Lead- und Bestellformulare erstellen. Mit clientseitiger Validierung, E-Mail-Benachrichtigungen und Spam-Schutz.</p>
+          </article>
+
+          <!-- Feature 5: Embed Widget -->
+          <article class="feature-card" aria-labelledby="feat-5-title">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 18 22 12 16 6"/>
+                <polyline points="8 6 2 12 8 18"/>
+              </svg>
+            </div>
+            <h3 id="feat-5-title" class="feature-card__title">HTML-Embed-Widget</h3>
+            <p class="feature-card__desc">Einen Einzeiler in jede bestehende Website einbetten. Kein Framework, kein Build-Step, kein Umbau der vorhandenen Site erforderlich.</p>
+          </article>
+
+          <!-- Feature 6: Analytics -->
+          <article class="feature-card" aria-labelledby="feat-6-title">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="20" x2="18" y2="10"/>
+                <line x1="12" y1="20" x2="12" y2="4"/>
+                <line x1="6"  y1="20" x2="6"  y2="14"/>
+                <line x1="2"  y1="20" x2="22" y2="20"/>
+              </svg>
+            </div>
+            <h3 id="feat-6-title" class="feature-card__title">Analytics</h3>
+            <p class="feature-card__desc">Klicks, Views und Conversion-Ereignisse pro Board übersichtlich im Dashboard. DSGVO-konform, cookielos, keine externe Abhängigkeit.</p>
+          </article>
+
+          <!-- Feature 7: Team -->
+          <article class="feature-card" aria-labelledby="feat-7-title">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </div>
+            <h3 id="feat-7-title" class="feature-card__title">Team &amp; Rollen</h3>
+            <p class="feature-card__desc">Mehrere Nutzer mit unterschiedlichen Berechtigungen verwalten. Editor, Viewer, Admin — granular auf Board-Ebene steuerbar.</p>
+          </article>
+
+          <!-- Feature 8: Accessibility -->
+          <article class="feature-card" aria-labelledby="feat-8-title">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </div>
+            <h3 id="feat-8-title" class="feature-card__title">Accessibility</h3>
+            <p class="feature-card__desc">WCAG 2.2 AA konform. Alle Widgets barrierefrei, tastaturbedienbar, screenreader-optimiert und farbkontrastgeprüft.</p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =========================================================
+         SECTION 4 — WIDGET DEMO
+         ========================================================= -->
+    <section id="widget-demo" class="section demo-section" aria-labelledby="demo-heading">
+      <div class="container">
+
+        <div class="section-header section-header--centered">
+          <span class="section-eyebrow" aria-hidden="true">Live-Demo</span>
+          <h2 id="demo-heading">So sieht ein eingebettetes Board aus</h2>
+          <p class="section-subline">Dieser Bereich simuliert ein echtes boards.solutions-Widget, eingebettet in eine fiktive Kunden-Website.</p>
+        </div>
+
+        <!-- Edit mode toggle -->
+        <div class="demo-controls">
+          <button id="edit-toggle" class="btn btn--ghost btn--sm" type="button" aria-pressed="false">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+            <span class="btn-text">Live-Edit-Modus simulieren</span>
+          </button>
+          <!-- Screen reader announcement for edit mode state -->
+          <div id="demo-edit-status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+        </div>
+
+        <!-- Browser Chrome Mockup -->
+        <div class="browser-chrome" role="presentation">
+
+          <!-- URL bar -->
+          <div class="browser-chrome__bar" aria-hidden="true">
+            <div class="browser-chrome__dots">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="browser-chrome__url-bar">
+              <span class="browser-chrome__url-text">meine-website.de/produkte</span>
+            </div>
+          </div>
+
+          <!-- Simulated customer website -->
+          <div class="browser-chrome__content">
+            <div class="fake-website">
+
+              <header class="fake-website__header" aria-hidden="true">
+                <div class="fake-website__logo">Mayer &amp; Co. GmbH</div>
+                <nav class="fake-website__nav">
+                  <span>Start</span>
+                  <span>Über uns</span>
+                  <span class="active">Produkte</span>
+                  <span>Kontakt</span>
+                </nav>
+              </header>
+
+              <div class="fake-website__body">
+                <p class="fake-website__intro" aria-hidden="true">Unsere aktuellen Empfehlungen für Sie:</p>
+
+                <!-- Board embed wrapper — the script tag would go here in production -->
+                <div class="board-embed-wrapper">
+                  <div class="board-embed-marker" aria-hidden="true">boards.solutions Board</div>
+
+                  <!-- Actual board widget -->
+                  <div
+                    class="board-widget-demo"
+                    id="demo-board"
+                    role="region"
+                    aria-label="Demo-Board: Produktempfehlungen"
+                  >
+                    <div class="board-widget-demo__grid">
+
+                      <!-- Product Card 1 -->
+                      <article class="product-card" aria-labelledby="demo-product-1" style="position: relative;">
+                        <div class="edit-tooltip" aria-hidden="true">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+                          Bearbeiten
+                        </div>
+                        <div class="product-card__image-wrapper">
+                          <div class="product-card__image-placeholder" aria-hidden="true">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
+                          </div>
+                        </div>
+                        <div class="product-card__body">
+                          <span class="badge badge--success">Bestseller</span>
+                          <h4 id="demo-product-1">Premium Kamera-Set</h4>
+                          <p class="product-card__desc">Spiegellose Systemkamera mit 24 MP, 4K-Video und doppelter Bildstabilisierung.</p>
+                          <div class="product-card__footer">
+                            <span class="product-card__price">€ 849,00</span>
+                            <a
+                              href="#"
+                              class="btn btn--primary btn--sm"
+                              aria-label="Premium Kamera-Set – Jetzt ansehen (Affiliate-Link)"
+                              rel="nofollow noopener"
+                            >
+                              Jetzt ansehen →
+                            </a>
+                          </div>
+                        </div>
+                      </article>
+
+                      <!-- Product Card 2 -->
+                      <article class="product-card" aria-labelledby="demo-product-2" style="position: relative;">
+                        <div class="edit-tooltip" aria-hidden="true">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+                          Bearbeiten
+                        </div>
+                        <div class="product-card__image-wrapper">
+                          <div class="product-card__image-placeholder" aria-hidden="true">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
+                          </div>
+                        </div>
+                        <div class="product-card__body">
+                          <span class="badge badge--new">Neu</span>
+                          <h4 id="demo-product-2">Stativ Pro Carbon</h4>
+                          <p class="product-card__desc">Leichtes Carbon-Stativ, 180 cm Arbeitshöhe, max. 12 kg Tragkraft, Panoramakopf.</p>
+                          <div class="product-card__footer">
+                            <span class="product-card__price">€ 219,00</span>
+                            <a
+                              href="#"
+                              class="btn btn--primary btn--sm"
+                              aria-label="Stativ Pro Carbon – Jetzt ansehen (Affiliate-Link)"
+                              rel="nofollow noopener"
+                            >
+                              Jetzt ansehen →
+                            </a>
+                          </div>
+                        </div>
+                      </article>
+
+                    </div>
+
+                    <!-- Board footer -->
+                    <footer class="board-widget-demo__footer">
+                      <p class="affiliate-notice">
+                        <small>* Dieser Bereich wird über boards.solutions verwaltet. Einige Links können Affiliate-Links sein.</small>
+                      </p>
+                      <a
+                        href="https://boards.solutions"
+                        class="powered-by"
+                        rel="noopener"
+                        target="_blank"
+                        aria-label="Powered by boards.solutions (öffnet in neuem Tab)"
+                      >
+                        <svg width="12" height="12" viewBox="0 0 28 28" fill="currentColor" aria-hidden="true"><rect width="28" height="28" rx="6" fill="currentColor"/><rect x="6" y="6" width="7" height="7" rx="2" fill="white"/><rect x="15" y="6" width="7" height="7" rx="2" fill="white" opacity="0.7"/><rect x="6" y="15" width="7" height="7" rx="2" fill="white" opacity="0.7"/><rect x="15" y="15" width="7" height="7" rx="2" fill="white"/></svg>
+                        Powered by boards.solutions
+                      </a>
+                    </footer>
+
+                  </div>
+                </div>
+
+                <p class="fake-website__footer-text" aria-hidden="true">© 2025 Mayer &amp; Co. GmbH · Alle Rechte vorbehalten</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =========================================================
+         SECTION 5 — VERGLEICHSTABELLE
+         ========================================================= -->
+    <section id="vergleich" class="section comparison-section" aria-labelledby="comparison-heading">
+      <div class="container">
+
+        <div class="section-header section-header--centered">
+          <span class="section-eyebrow" aria-hidden="true">Vergleich</span>
+          <h2 id="comparison-heading">Der direkte Vergleich</h2>
+          <p class="section-subline">Transparent aufgezeigt: Was boards.solutions leistet, was die Alternativen nicht können.</p>
+        </div>
+
+        <div class="table-wrapper" role="region" aria-label="Vergleichstabelle: Selbstprogrammiert vs. WordPress vs. boards.solutions" tabindex="0">
+          <table class="comparison-table" aria-describedby="comparison-heading">
+            <caption class="sr-only">Vergleich der Ansätze: Selbstprogrammiert, WordPress / Baukasten und boards.solutions in sieben Kriterien</caption>
+            <thead>
+              <tr>
+                <th scope="col">Kriterium</th>
+                <th scope="col">Selbstprogrammiert</th>
+                <th scope="col">WordPress / Baukasten</th>
+                <th scope="col" class="table__col--highlight">boards.solutions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Design-Qualität</td>
+                <td><span class="check check--positive" aria-label="Ja, sehr hoch"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2,8 6,12 14,4"/></svg> Sehr hoch</span></td>
+                <td><span class="check check--negative" aria-label="Nein, eingeschränkt"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg> Eingeschränkt</span></td>
+                <td class="table__col--highlight"><span class="check check--positive" aria-label="Ja, sehr hoch"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2,8 6,12 14,4"/></svg> Sehr hoch</span></td>
+              </tr>
+              <tr>
+                <td>Performance</td>
+                <td><span class="check check--positive" aria-label="Ja"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2,8 6,12 14,4"/></svg> Ja</span></td>
+                <td><span class="check check--negative" aria-label="Nein, oft schlechte Core Web Vitals"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg> Oft schlechte Core Web Vitals</span></td>
+                <td class="table__col--highlight"><span class="check check--positive" aria-label="Ja"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2,8 6,12 14,4"/></svg> Ja</span></td>
+              </tr>
+              <tr>
+                <td>Kundenpflegbarkeit</td>
+                <td><span class="check check--negative" aria-label="Nein"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg> Nein</span></td>
+                <td><span class="check check--positive" aria-label="Ja"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2,8 6,12 14,4"/></svg> Ja</span></td>
+                <td class="table__col--highlight"><span class="check check--positive" aria-label="Ja, gezielt freigegebene Zonen"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2,8 6,12 14,4"/></svg> Ja, gezielt freigegeben</span></td>
+              </tr>
+              <tr>
+                <td>Sicherheit</td>
+                <td><span class="check check--positive" aria-label="Hoch"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2,8 6,12 14,4"/></svg> Hoch</span></td>
+                <td><span class="check check--partial" aria-label="Teilweise, abhängig von Plugins"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="8" x2="13" y2="8"/></svg> Plugin-abhängig</span></td>
+                <td class="table__col--highlight"><span class="check check--positive" aria-label="Hoch"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2,8 6,12 14,4"/></svg> Hoch</span></td>
+              </tr>
+              <tr>
+                <td>Accessibility</td>
+                <td><span class="check check--partial" aria-label="Teilweise, abhängig vom Entwickler"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="8" x2="13" y2="8"/></svg> Individuell</span></td>
+                <td><span class="check check--partial" aria-label="Teilweise"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="8" x2="13" y2="8"/></svg> Eingeschränkt</span></td>
+                <td class="table__col--highlight"><span class="check check--positive" aria-label="Ja, WCAG 2.2 AA"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2,8 6,12 14,4"/></svg> WCAG 2.2 AA</span></td>
+              </tr>
+              <tr>
+                <td>Entwickleraufwand (Änderungen)</td>
+                <td><span class="check check--negative" aria-label="Hoch"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg> Hoch</span></td>
+                <td><span class="check check--positive" aria-label="Niedrig"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2,8 6,12 14,4"/></svg> Niedrig</span></td>
+                <td class="table__col--highlight"><span class="check check--positive" aria-label="Niedrig"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2,8 6,12 14,4"/></svg> Niedrig</span></td>
+              </tr>
+              <tr>
+                <td>Vendor Lock-in</td>
+                <td><span class="check check--positive" aria-label="Nein, kein Lock-in"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2,8 6,12 14,4"/></svg> Kein Lock-in</span></td>
+                <td><span class="check check--negative" aria-label="Ja, starker Lock-in"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg> Starker Lock-in</span></td>
+                <td class="table__col--highlight"><span class="check check--positive" aria-label="Nein, kein Lock-in"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2,8 6,12 14,4"/></svg> Kein Lock-in</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- =========================================================
+         SECTION 6 — ACCESSIBILITY
+         ========================================================= -->
+    <section id="accessibility" class="section a11y-section" aria-labelledby="a11y-heading">
+      <div class="container">
+
+        <div class="section-header section-header--centered">
+          <span class="section-eyebrow" aria-hidden="true">Accessibility</span>
+          <h2 id="a11y-heading">Barrierefrei von Grund auf</h2>
+          <p class="section-subline">Alle von boards.solutions generierten Widgets erfüllen WCAG 2.2 Level AA. Kein Nachrüsten, keine Kompromisse.</p>
+        </div>
+
+        <!-- 2×2 A11y feature cards -->
+        <div class="a11y-grid">
+
+          <div class="a11y-card" aria-labelledby="a11y-card-1">
+            <div class="a11y-card__icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2"/>
+                <path d="M8 21h8M12 17v4"/>
+                <path d="M7 10.5l2 2 4-4"/>
+              </svg>
+            </div>
+            <h3 id="a11y-card-1" class="a11y-card__title">Tastaturbedienung</h3>
+            <p class="a11y-card__desc">Vollständige Bedienung ohne Maus. Tab, Enter, Space, Escape und Pfeiltasten funktionieren in jedem Widget konsistent.</p>
+          </div>
+
+          <div class="a11y-card" aria-labelledby="a11y-card-2">
+            <div class="a11y-card__icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                <line x1="12" y1="19" x2="12" y2="23"/>
+                <line x1="8"  y1="23" x2="16" y2="23"/>
+              </svg>
+            </div>
+            <h3 id="a11y-card-2" class="a11y-card__title">Screenreader-Unterstützung</h3>
+            <p class="a11y-card__desc">Semantisches HTML5, ARIA-Labels, Live-Regions und korrekte Fokus-Reihenfolge — getestet mit NVDA, VoiceOver und JAWS.</p>
+          </div>
+
+          <div class="a11y-card" aria-labelledby="a11y-card-3">
+            <div class="a11y-card__icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <circle cx="12" cy="12" r="6"/>
+                <circle cx="12" cy="12" r="2"/>
+              </svg>
+            </div>
+            <h3 id="a11y-card-3" class="a11y-card__title">WCAG-konforme Farbkontraste</h3>
+            <p class="a11y-card__desc">Alle Text-Hintergrund-Kombinationen erfüllen WCAG AA: mindestens 4,5:1 für Normaltext, 3:1 für großen Text und UI-Komponenten.</p>
+          </div>
+
+          <div class="a11y-card" aria-labelledby="a11y-card-4">
+            <div class="a11y-card__icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <polyline points="9 15 11 17 15 13"/>
+              </svg>
+            </div>
+            <h3 id="a11y-card-4" class="a11y-card__title">Barrierefreie Formulare</h3>
+            <p class="a11y-card__desc">Klare Feldlabels, Fehlermeldungen per <code>aria-describedby</code>, Fokus auf erstes Fehlerfeld — Farbe nie als einziger Informationsträger.</p>
+          </div>
+
+        </div>
+
+        <!-- Live Demo Form -->
+        <div class="a11y-demo">
+          <p class="a11y-demo__eyebrow" aria-hidden="true">Live-Beispiel</p>
+          <h3 class="a11y-demo__title">Barrierefreies Formular</h3>
+          <p class="a11y-demo__desc">Alle WCAG-Anforderungen sind aktiv: sichtbarer Fokus-Ring, live Fehleransagen via <code>role="alert"</code>, Pflichtfeld-Kennzeichnung und Tastaturnavigation.</p>
+
+          <form id="demo-form" class="a11y-demo__form" novalidate aria-label="Demo-Kontaktformular">
+
+            <div class="form-group">
+              <label class="form-label" for="demo-name">
+                Name
+                <span class="required-mark" aria-hidden="true">*</span>
+                <span class="sr-only">(Pflichtfeld)</span>
+              </label>
+              <input
+                class="form-input"
+                type="text"
+                id="demo-name"
+                name="name"
+                autocomplete="name"
+                required
+                aria-required="true"
+                placeholder="Ihr Name"
+              >
+              <div class="form-error" id="demo-name-error"></div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="demo-email">
+                E-Mail-Adresse
+                <span class="required-mark" aria-hidden="true">*</span>
+                <span class="sr-only">(Pflichtfeld)</span>
+              </label>
+              <input
+                class="form-input"
+                type="email"
+                id="demo-email"
+                name="email"
+                autocomplete="email"
+                required
+                aria-required="true"
+                placeholder="ihre@email.de"
+                inputmode="email"
+              >
+              <div class="form-error" id="demo-email-error"></div>
+            </div>
+
+            <button type="submit" class="btn btn--primary btn--full">
+              Absenden
+            </button>
+
+            <!-- Success region (polite — does not interrupt screen reader) -->
+            <div id="demo-success" class="form-success form-feedback" aria-live="polite" aria-atomic="true"></div>
+
+          </form>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- =========================================================
+         SECTION 7 — FINAL CTA
+         ========================================================= -->
+    <section class="section cta-section" aria-labelledby="cta-heading">
+      <div class="container">
+        <h2 id="cta-heading">Bereit, Ihre Website pflegbar zu machen?</h2>
+        <p>Starten Sie jetzt mit dem Frontend-Dashboard – kostenlos, ohne Registrierung, direkt im Browser.</p>
+        <div class="cta-section__actions" role="group" aria-label="Call-to-Action Buttons">
+          <a href="app.html" class="btn btn--primary btn--xl">Frontend-Dashboard öffnen →</a>
+          <a href="#features" class="btn btn--ghost-inverse btn--lg">Mehr erfahren</a>
+        </div>
+      </div>
+    </section>
+
+
+  </main>
+
+
+  <!-- =========================================================
+       FOOTER
+       ========================================================= -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+
+      <div class="site-footer__grid">
+
+        <!-- Brand Column -->
+        <div class="footer__brand">
+          <a href="/" class="footer__logo" aria-label="boards.solutions – Startseite">
+            <svg width="24" height="24" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+              <rect width="28" height="28" rx="6" fill="#3B82F6"/>
+              <rect x="6" y="6" width="7" height="7" rx="2" fill="white"/>
+              <rect x="15" y="6" width="7" height="7" rx="2" fill="white" opacity="0.6"/>
+              <rect x="6" y="15" width="7" height="7" rx="2" fill="white" opacity="0.6"/>
+              <rect x="15" y="15" width="7" height="7" rx="2" fill="white"/>
+            </svg>
+            <span class="footer__logo-text">boards<span class="logo-accent">.solutions</span></span>
+          </a>
+          <p class="footer__tagline">Embeddable Content-Boards für Web-Agenturen.</p>
+          <p class="footer__tagline" style="margin-top: var(--space-1); font-size: var(--font-size-xs); color: var(--color-slate-500);">
+            Ein Produkt von <a href="https://fuerstsoftware.de" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">Fürst Software &amp; Web Development</a>
+          </p>
+        </div>
+
+        <!-- Navigation Columns -->
+        <nav class="footer__nav-cols" aria-label="Footer-Navigation">
+
+          <div class="footer__col">
+            <h3 class="footer__col-title">Produkt</h3>
+            <ul class="footer__col-links" role="list">
+              <li><a href="#features">Features</a></li>
+              <li><a href="#vergleich">Vergleich</a></li>
+              <li><a href="#widget-demo">Demo</a></li>
+              <li><a href="app.html">Dashboard</a></li>
+            </ul>
+          </div>
+
+          <div class="footer__col">
+            <h3 class="footer__col-title">Unternehmen</h3>
+            <ul class="footer__col-links" role="list">
+              <li><a href="https://fuerst.dev" rel="noopener" target="_blank">Fürst Software &amp; Web Development</a></li>
+              <li><a href="#" rel="noopener">Blog</a></li>
+              <li><a href="#" rel="noopener">Kontakt</a></li>
+            </ul>
+          </div>
+
+          <div class="footer__col">
+            <h3 class="footer__col-title">Rechtliches</h3>
+            <ul class="footer__col-links" role="list">
+              <li><a href="#">Impressum</a></li>
+              <li><a href="#">Datenschutz</a></li>
+              <li><a href="#">AGB</a></li>
+            </ul>
+          </div>
+
+        </nav>
+
+      </div>
+
+      <div class="site-footer__bottom">
+        <p class="footer__copyright">
+          © 2025 boards.solutions · Ein Produkt von
+          <a href="https://fuerst.dev" rel="noopener" target="_blank">Fürst Software &amp; Web Development</a>
+        </p>
+        <p class="footer__copyright" style="color: var(--color-slate-600); font-size: var(--font-size-xs);">
+          WCAG 2.2 AA · Kein WordPress · Kein Vendor Lock-in
+        </p>
+      </div>
+
+    </div>
+  </footer>
+
+
+  <!-- =========================================================
+       SCRIPTS
+       ========================================================= -->
+  <script type="module" src="js/accessibility.js"></script>
+  <script type="module" src="js/navigation.js"></script>
+
+  <!-- Landing-page specific: Edit mode simulation for widget demo -->
+  <script type="module">
+    const editToggle = document.getElementById('edit-toggle');
+    const demoBoard  = document.getElementById('demo-board');
+    const statusEl   = document.getElementById('demo-edit-status');
+    const btnText    = editToggle?.querySelector('.btn-text');
+
+    if (editToggle && demoBoard) {
+      editToggle.addEventListener('click', () => {
+        const isActive = editToggle.getAttribute('aria-pressed') === 'true';
+        const nextState = !isActive;
+
+        editToggle.setAttribute('aria-pressed', String(nextState));
+        demoBoard.classList.toggle('is-edit-mode', nextState);
+
+        if (btnText) {
+          btnText.textContent = nextState
+            ? 'Edit-Modus beenden'
+            : 'Live-Edit-Modus simulieren';
+        }
+
+        if (statusEl) {
+          statusEl.textContent = nextState
+            ? 'Edit-Modus aktiviert. Blaue Umrandungen zeigen editierbare Felder an.'
+            : 'Edit-Modus deaktiviert.';
+          /* Clear announcement after 4s so it doesn't repeat on re-read */
+          setTimeout(() => { statusEl.textContent = ''; }, 4000);
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>
