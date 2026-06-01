@@ -335,6 +335,7 @@ body {
   gap: var(--space-4);
   flex-shrink: 0;
   box-shadow: 0 1px 0 0 var(--color-border-default);
+  position: relative;
 }
 
 .topbar__left {
@@ -343,6 +344,19 @@ body {
   gap: var(--space-4);
   flex: 1;
   min-width: 0;
+}
+
+/* Centered brand in topbar */
+.topbar__brand {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  pointer-events: none;
 }
 
 .topbar__right {
