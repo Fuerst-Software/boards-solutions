@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width="20" height="20">
+  <!-- boards.solutions logo — tight 20×20 grid, 1 px outer pad, 2 px gap -->
+  <!-- Top-left: strong blue -->
+  <rect x="1"  y="1"  width="8" height="8" rx="1.5" fill="#2563EB"/>
+  <!-- Top-right: mid blue -->
+  <rect x="11" y="1"  width="8" height="8" rx="1.5" fill="#3B82F6"/>
+  <!-- Bottom-left: mid blue -->
+  <rect x="1"  y="11" width="8" height="8" rx="1.5" fill="#3B82F6"/>
+  <!-- Bottom-right: light blue -->
+  <rect x="11" y="11" width="8" height="8" rx="1.5" fill="#93C5FD"/>
+</svg>

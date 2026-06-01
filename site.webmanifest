@@ -1,0 +1,17 @@
+{
+  "name": "boards.solutions",
+  "short_name": "boards",
+  "description": "Deine Boards, dein Design — alles an einem Ort.",
+  "start_url": "/app.html",
+  "display": "standalone",
+  "background_color": "#f1f5f9",
+  "theme_color": "#2563EB",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
