@@ -129,9 +129,11 @@
 }
 
 .nav__logo-icon {
-  width: 28px;
-  height: 28px;
+  width: 40px;
+  height: 40px;
   flex-shrink: 0;
+  border-radius: 8px;
+  object-fit: contain;
 }
 
 .nav__logo-text {
