@@ -80,6 +80,17 @@ if (isLoggedIn()) {
   window.location.replace('app.html');
 }
 
+// ── Pre-warm Railway server the moment the page loads ──────────
+// Railway spins down after inactivity. Ping /health immediately so
+// the server is warm by the time the user clicks "Einloggen".
+(async () => {
+  try {
+    await fetch('https://web-production-83480.up.railway.app/api/health', {
+      signal: AbortSignal.timeout(20000),
+    });
+  } catch { /* ignore — purely a wake-up call */ }
+})();
+
 // ── Demo Users (offline fallback) ──────────────────────────────
 const DEMO_USERS = {
   'admin@boards.solutions': {
@@ -139,10 +150,17 @@ form.addEventListener('submit', async e => {
   setLoading(true);
   hideError();
 
+  // After 3 s of waiting → show "server warming up" hint
+  const warmHint = setTimeout(() => {
+    const btnEl = document.getElementById('login-btn');
+    if (btnEl && !btnEl.disabled === false) return; // already resolved
+    btnEl.innerHTML = '<div class="auth-spinner" aria-hidden="true"></div> Server wird gestartet…';
+  }, 3000);
+
   // Try backend first
   try {
     const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 15000);
+    const timer = setTimeout(() => ctrl.abort(), 20000);
 
     const res = await fetch('https://web-production-83480.up.railway.app/api/auth/login', {
       method:  'POST',
@@ -151,6 +169,7 @@ form.addEventListener('submit', async e => {
       signal:  ctrl.signal,
     });
     clearTimeout(timer);
+    clearTimeout(warmHint);
 
     if (res.ok) {
       const data = await res.json();
@@ -161,10 +180,12 @@ form.addEventListener('submit', async e => {
     }
     // Backend responded with an error (wrong password, etc.) — show real error, no demo fallback
     const errData = await res.json().catch(() => ({}));
+    clearTimeout(warmHint);
     showError(errData.error || 'E-Mail oder Passwort falsch.');
     setLoading(false);
     return;
   } catch (e) {
+    clearTimeout(warmHint);
     // Only fall through to demo if backend was truly unreachable (network/timeout)
     if (!(e instanceof DOMException && e.name === 'AbortError') && e?.name !== 'TypeError') {
       showError('Verbindungsfehler. Bitte erneut versuchen.');

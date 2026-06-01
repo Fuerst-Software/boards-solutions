@@ -392,7 +392,7 @@
     /* Verdict box */
     .bs-modal-verdict {
       padding: 1rem 1.25rem;
-      background: color-mix(in srgb, var(--bs-primary, #0b4fd8) 6%, transparent);
+      background: #f0f4ff;
       border-left: 3px solid var(--bs-primary, #0b4fd8);
       border-radius: 0 10px 10px 0;
       font-size: .9rem;
@@ -867,14 +867,58 @@
     container.innerHTML =
       '<div class="bs-loading-pulse"><span></span><span></span><span></span></div>';
 
+    // Show a friendlier hint after 4 s (Railway cold-start can take 10–15 s)
+    const slowHint = setTimeout(() => {
+      if (container.querySelector('.bs-loading-pulse')) {
+        container.innerHTML = `
+          <div class="bs-loading-pulse"><span></span><span></span><span></span></div>
+          <p style="text-align:center;font-size:.82rem;color:#94a3b8;margin-top:.75rem">
+            Inhalte werden geladen…
+          </p>`;
+      }
+    }, 4000);
+
+    // Fire a quick health ping in parallel — warms Railway if it's sleeping
+    // while the real fetch is already in flight (overlap = zero extra wait time)
+    fetch(`${apiBase}/health`, { signal: AbortSignal.timeout(25000) }).catch(() => {});
+
+    // Fetch with timeout + 1 automatic retry (handles Railway cold start)
+    async function fetchChannel(timeout) {
+      const ctrl = new AbortController();
+      const t = setTimeout(() => ctrl.abort(), timeout);
+      try {
+        const res = await fetch(
+          `${apiBase}/embed/channel/${encodeURIComponent(key)}`,
+          { signal: ctrl.signal }
+        );
+        clearTimeout(t);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      } catch (e) {
+        clearTimeout(t);
+        throw e;
+      }
+    }
+
     try {
-      const res = await fetch(`${apiBase}/embed/channel/${encodeURIComponent(key)}`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
+      let data;
+      try {
+        data = await fetchChannel(18000); // first attempt — 18 s
+      } catch {
+        // One automatic retry after a short pause (server might now be warm)
+        await new Promise(r => setTimeout(r, 1500));
+        data = await fetchChannel(15000);
+      }
+      clearTimeout(slowHint);
       if (data.theme) applyTheme(data.theme);
       mount(container, data.boards || []);
     } catch (err) {
-      container.innerHTML = '<div class="bs-empty">Inhalte konnten nicht geladen werden.</div>';
+      clearTimeout(slowHint);
+      container.innerHTML = `
+        <div class="bs-empty">
+          Inhalte konnten nicht geladen werden.
+          <br><button onclick="location.reload()" style="margin-top:.75rem;padding:.35rem .9rem;border:1.5px solid #e2e8f0;border-radius:8px;background:#fff;cursor:pointer;font-size:.8rem;color:#64748b">Erneut versuchen</button>
+        </div>`;
       console.warn('[boards.solutions] channel.js Fehler:', err);
     }
   }
