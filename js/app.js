@@ -21,23 +21,35 @@ function initSidebar() {
 
   function open() {
     sidebar.removeAttribute('hidden');
-    sidebar.setAttribute('aria-hidden', 'false');
+    // Tiny rAF so the browser renders the element before adding the class
+    // (guarantees the CSS transform transition fires correctly)
+    requestAnimationFrame(() => {
+      sidebar.classList.add('is-open');
+      sidebar.setAttribute('aria-hidden', 'false');
+    });
     overlay?.removeAttribute('hidden');
+    requestAnimationFrame(() => overlay?.classList.add('is-visible'));
     document.body.classList.add('sidebar-open');
     trap.activate();
     closeBtn?.focus();
   }
 
   function close() {
+    sidebar.classList.remove('is-open');
     sidebar.setAttribute('aria-hidden', 'true');
-    overlay?.setAttribute('hidden', '');
+    overlay?.classList.remove('is-visible');
     document.body.classList.remove('sidebar-open');
     trap.deactivate();
     openBtn?.focus();
-    // On mobile we hide the sidebar after transition
+    // Hide sidebar + overlay after the slide-out transition finishes
     sidebar.addEventListener('transitionend', () => {
-      if (sidebar.getAttribute('aria-hidden') === 'true' && window.innerWidth < 768) {
+      if (!sidebar.classList.contains('is-open') && window.innerWidth < 768) {
         sidebar.setAttribute('hidden', '');
+      }
+    }, { once: true });
+    overlay?.addEventListener('transitionend', () => {
+      if (!overlay.classList.contains('is-visible')) {
+        overlay.setAttribute('hidden', '');
       }
     }, { once: true });
   }
@@ -55,13 +67,18 @@ function initSidebar() {
   function onBreakpoint(e) {
     if (e.matches) {
       sidebar.removeAttribute('hidden');
+      sidebar.classList.remove('is-open'); // desktop CSS always shows sidebar
       sidebar.setAttribute('aria-hidden', 'false');
       overlay?.setAttribute('hidden', '');
+      overlay?.classList.remove('is-visible');
       document.body.classList.remove('sidebar-open');
       trap.deactivate();
     } else {
-      sidebar.setAttribute('hidden', '');
-      sidebar.setAttribute('aria-hidden', 'true');
+      if (!document.body.classList.contains('sidebar-open')) {
+        sidebar.classList.remove('is-open');
+        sidebar.setAttribute('hidden', '');
+        sidebar.setAttribute('aria-hidden', 'true');
+      }
     }
   }
   mq.addEventListener('change', onBreakpoint);
