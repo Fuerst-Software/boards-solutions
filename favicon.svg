@@ -1,9 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-  <!-- Full bleed blue background -->
-  <rect width="32" height="32" rx="6" fill="#2563EB"/>
-  <!-- White grid — 4 squares, fills the icon tightly like a real app icon -->
-  <rect x="4"  y="4"  width="11" height="11" rx="2" fill="white"/>
-  <rect x="17" y="4"  width="11" height="11" rx="2" fill="white" opacity="0.7"/>
-  <rect x="4"  y="17" width="11" height="11" rx="2" fill="white" opacity="0.7"/>
-  <rect x="17" y="17" width="11" height="11" rx="2" fill="white"/>
+  <!-- Blue rounded background — full bleed -->
+  <rect width="32" height="32" rx="7" fill="#2563EB"/>
+  <!-- Top bar — long -->
+  <rect x="6" y="7" width="20" height="5" rx="2.5" fill="white"/>
+  <!-- Middle bar — medium -->
+  <rect x="6" y="14" width="14" height="5" rx="2.5" fill="white"/>
+  <!-- Bottom bar — small -->
+  <rect x="6" y="21" width="7" height="5" rx="2.5" fill="white"/>
 </svg>
