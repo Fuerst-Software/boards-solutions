@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Board bearbeiten — boards.solutions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <style>
+    /* ── Edit Layout ──────────────────────────────────────── */
+    .edit-layout {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 0;
+      min-height: calc(100vh - 64px);
+      align-items: start;
+    }
+
+    /* ── Left panel — form ────────────────────────────────── */
+    .edit-form-panel {
+      border-right: 1px solid var(--color-border-default);
+      background: var(--color-surface-base);
+      display: flex;
+      flex-direction: column;
+      min-height: calc(100vh - 64px);
+    }
+    .edit-form-panel__header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid var(--color-border-default);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      position: sticky;
+      top: 0;
+      background: var(--color-surface-base);
+      z-index: 10;
+    }
+    .edit-form-panel__title {
+      font-size: .92rem;
+      font-weight: 700;
+      color: var(--color-text-primary);
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .edit-type-pill {
+      font-size: .62rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .09em;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: #eff3fd;
+      color: #1D4ED8;
+    }
+    .edit-form-panel__body {
+      padding: 1.25rem 1.5rem;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    /* Form sections */
+    .edit-section {
+      margin-bottom: 1.75rem;
+    }
+    .edit-section__label {
+      font-size: .7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .09em;
+      color: var(--color-text-muted);
+      margin-bottom: .75rem;
+      display: block;
+    }
+    .edit-form-group {
+      margin-bottom: 1rem;
+    }
+    .edit-form-group:last-child {
+      margin-bottom: 0;
+    }
+    .edit-form-label {
+      display: block;
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      margin-bottom: .35rem;
+    }
+    .edit-input,
+    .edit-textarea {
+      width: 100%;
+      padding: .6rem .85rem;
+      font-size: .875rem;
+      font-family: inherit;
+      color: var(--color-text-primary);
+      background: var(--color-surface-base);
+      border: 1.5px solid var(--color-border-default);
+      border-radius: 10px;
+      transition: border-color .15s, box-shadow .15s;
+      box-sizing: border-box;
+    }
+    .edit-input:focus,
+    .edit-textarea:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59,130,246,.12);
+    }
+    .edit-textarea {
+      resize: vertical;
+      line-height: 1.6;
+    }
+    .edit-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .75rem;
+    }
+
+    /* Image upload */
+    .edit-image-upload {
+      border: 2px dashed var(--color-border-default);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color .15s;
+      position: relative;
+      background: #f8fafc;
+      min-height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .edit-image-upload:hover { border-color: #3b82f6; }
+    .edit-image-upload.has-image { border-style: solid; border-color: var(--color-border-default); }
+    .edit-image-upload__placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .5rem;
+      padding: 1.5rem;
+      color: #94a3b8;
+      text-align: center;
+    }
+    .edit-image-upload__placeholder p {
+      margin: 0;
+      font-size: .8rem;
+      font-weight: 500;
+    }
+    .edit-image-upload__placeholder span {
+      font-size: .7rem;
+    }
+    .edit-image-upload__preview {
+      width: 100%;
+      max-height: 220px;
+      object-fit: contain;
+      display: block;
+      border-radius: 10px;
+    }
+    .edit-image-upload__remove {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: rgba(0,0,0,.55);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-size: .8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Star picker */
+    .edit-star-picker {
+      display: flex;
+      gap: .25rem;
+    }
+    .edit-star-btn {
+      font-size: 1.6rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #d1d5db;
+      padding: 0;
+      line-height: 1;
+      transition: color .12s, transform .12s;
+    }
+    .edit-star-btn.active { color: #f59e0b; }
+    .edit-star-btn:hover { transform: scale(1.15); }
+
+    /* List items (pros/cons/links/faq) */
+    .edit-list-item {
+      display: flex;
+      align-items: flex-start;
+      gap: .5rem;
+      margin-bottom: .5rem;
+    }
+    .edit-list-item__input { flex: 1; }
+    .edit-list-item__remove {
+      width: 30px;
+      height: 36px;
+      flex-shrink: 0;
+      background: none;
+      border: 1.5px solid var(--color-border-default);
+      border-radius: 8px;
+      cursor: pointer;
+      color: #94a3b8;
+      font-size: .85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .12s, color .12s;
+    }
+    .edit-list-item__remove:hover { background: #fee2e2; color: #dc2626; border-color: #fca5a5; }
+    .edit-add-btn {
+      width: 100%;
+      padding: .5rem;
+      border: 1.5px dashed var(--color-border-default);
+      border-radius: 8px;
+      background: none;
+      color: #64748b;
+      font-size: .8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: border-color .15s, color .15s, background .15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .4rem;
+    }
+    .edit-add-btn:hover { border-color: #3b82f6; color: #3b82f6; background: #eff6ff; }
+
+    /* FAQ item */
+    .edit-faq-item {
+      border: 1.5px solid var(--color-border-default);
+      border-radius: 10px;
+      padding: .75rem;
+      margin-bottom: .5rem;
+      background: #fafafa;
+    }
+    .edit-faq-item__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: .5rem;
+    }
+    .edit-faq-item__num {
+      font-size: .7rem;
+      font-weight: 700;
+      color: #3b82f6;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    /* Footer with save actions */
+    .edit-form-panel__footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--color-border-default);
+      display: flex;
+      gap: .75rem;
+      position: sticky;
+      bottom: 0;
+      background: var(--color-surface-base);
+    }
+    .edit-form-panel__footer .btn { flex: 1; justify-content: center; }
+
+    /* ── Right panel — preview ──────────────────────────── */
+    .edit-preview-panel {
+      background: #f1f5f9;
+      min-height: calc(100vh - 64px);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      position: sticky;
+      top: 64px;
+      height: calc(100vh - 64px);
+      overflow-y: auto;
+    }
+    .edit-preview-panel__label {
+      font-size: .7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .edit-preview-panel__label span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #22c55e;
+      animation: blink 1.5s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    /* Preview browser frame */
+    .edit-preview-browser {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(15,23,42,.12);
+    }
+    .edit-preview-browser__bar {
+      background: #e8edf2;
+      padding: .6rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .edit-preview-browser__dot {
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      background: #cbd5e1;
+    }
+    .edit-preview-browser__dot:nth-child(1) { background: #f87171; }
+    .edit-preview-browser__dot:nth-child(2) { background: #fb923c; }
+    .edit-preview-browser__dot:nth-child(3) { background: #4ade80; }
+    .edit-preview-browser__url {
+      flex: 1;
+      text-align: center;
+      font-size: .7rem;
+      color: #64748b;
+      background: #fff;
+      border-radius: 20px;
+      padding: 2px 12px;
+      border: 1px solid #dde3ea;
+    }
+    .edit-preview-browser__body {
+      padding: 1.5rem;
+    }
+
+    /* ── Channel-style card preview ────────────── */
+    /* Use same CSS variables as channel.js */
+    .ep-card {
+      background: var(--ep-card-bg, #fff);
+      border: 1px solid var(--ep-border, #e5e7eb);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(15,23,42,.08);
+      max-width: 420px;
+      margin: 0 auto;
+    }
+    .ep-card-visual {
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+    .ep-card-visual img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    .ep-card-visual-placeholder {
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1.5rem;
+    }
+    .ep-card-visual-placeholder--blue   { background: linear-gradient(135deg,#3B82F6,#1D4ED8); }
+    .ep-card-visual-placeholder--green  { background: linear-gradient(135deg,#10B981,#059669); }
+    .ep-card-visual-placeholder--yellow { background: linear-gradient(135deg,#F59E0B,#D97706); }
+    .ep-card-visual-placeholder--purple { background: linear-gradient(135deg,#8B5CF6,#6D28D9); }
+    .ep-card-ph-icon {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.22);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; color: rgba(255,255,255,.9);
+    }
+    .ep-card-ph-lines { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+    .ep-card-ph-line { height: 9px; border-radius: 5px; background: rgba(255,255,255,.3); }
+    .ep-card-ph-line--short { width: 60%; }
+    .ep-card-body {
+      padding: 1.2rem 1.4rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+    }
+    .ep-badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: .64rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .09em;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: var(--ep-badge-bg, #eff3fd);
+      color: var(--ep-primary, #1D4ED8);
+      width: fit-content;
+    }
+    .ep-card-title {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--ep-text, #0f172a);
+      line-height: 1.35;
+      letter-spacing: -.01em;
+    }
+    .ep-card-desc {
+      margin: 0;
+      font-size: .875rem;
+      color: var(--ep-text-muted, #64748b);
+      line-height: 1.6;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .ep-stars { color: #f59e0b; letter-spacing: .04em; font-size: .9rem; }
+    .ep-price { font-size: 1rem; font-weight: 700; color: var(--ep-text, #0f172a); }
+    .ep-btn-read {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      margin-top: .25rem;
+      padding: .5rem 1.1rem;
+      background: transparent;
+      color: var(--ep-primary, #1D4ED8);
+      border: 1.5px solid var(--ep-primary, #1D4ED8);
+      border-radius: 10px;
+      font-size: .82rem;
+      font-weight: 600;
+      width: fit-content;
+    }
+
+    /* Detail preview */
+    .ep-detail {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(15,23,42,.12);
+      max-width: 560px;
+      margin: 0 auto;
+    }
+    .ep-detail-hero {
+      width: 100%;
+      max-height: 280px;
+      object-fit: cover;
+      display: block;
+    }
+    .ep-detail-inner {
+      padding: 1.5rem 1.75rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: .9rem;
+    }
+    .ep-detail-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .ep-detail-title {
+      margin: 0;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--ep-text, #0f172a);
+      line-height: 1.25;
+      letter-spacing: -.02em;
+    }
+    .ep-detail-content {
+      font-size: .9rem;
+      color: #374151;
+      line-height: 1.8;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .ep-faq-q { font-weight: 600; color: var(--ep-text, #0f172a); font-size: .9rem; margin-bottom: .25rem; }
+    .ep-faq-a { font-size: .84rem; color: #64748b; line-height: 1.6; }
+    .ep-faq-item { padding: .75rem 0; border-top: 1px solid #f1f5f9; }
+    .ep-pros-cons { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .ep-pros, .ep-cons { flex: 1; min-width: 120px; }
+    .ep-pros strong { color: #16a34a; font-size: .78rem; font-weight: 700; }
+    .ep-cons strong { color: #dc2626; font-size: .78rem; font-weight: 700; }
+    .ep-pros ul, .ep-cons ul { margin: .3rem 0 0; padding-left: 1rem; font-size: .82rem; color: #374151; line-height: 1.7; }
+    .ep-verdict {
+      padding: .75rem 1rem;
+      background: #f8fafc;
+      border-radius: 10px;
+      font-size: .86rem;
+      color: #374151;
+      line-height: 1.6;
+    }
+    .ep-detail-affiliate {
+      padding: 1rem 1.25rem;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 14px;
+      background: #f8fafc;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .ep-detail-price { font-size: 1.2rem; font-weight: 700; color: var(--ep-text, #0f172a); }
+    .ep-detail-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .6rem 1.25rem;
+      background: var(--ep-primary, #1D4ED8);
+      color: #fff;
+      border-radius: 10px;
+      font-size: .86rem;
+      font-weight: 600;
+      text-decoration: none;
+      border: none;
+      cursor: default;
+    }
+
+    /* Divider */
+    .edit-preview-divider {
+      font-size: .7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+    .edit-preview-divider::before,
+    .edit-preview-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #cbd5e1;
+    }
+
+    /* Status toggle */
+    .edit-status-row {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .75rem 1rem;
+      background: #f8fafc;
+      border-radius: 10px;
+      margin-bottom: 1.25rem;
+    }
+    .edit-status-toggle {
+      position: relative;
+      width: 38px;
+      height: 22px;
+      flex-shrink: 0;
+    }
+    .edit-status-toggle input { opacity: 0; width: 0; height: 0; }
+    .edit-status-toggle__slider {
+      position: absolute;
+      inset: 0;
+      background: #d1d5db;
+      border-radius: 22px;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .edit-status-toggle__slider::before {
+      content: '';
+      position: absolute;
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      background: #fff;
+      top: 3px; left: 3px;
+      transition: transform .2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,.2);
+    }
+    .edit-status-toggle input:checked ~ .edit-status-toggle__slider { background: #22c55e; }
+    .edit-status-toggle input:checked ~ .edit-status-toggle__slider::before { transform: translateX(16px); }
+    .edit-status-label {
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+    }
+    .edit-status-label strong {
+      color: var(--color-text-primary);
+    }
+
+    /* Loading skeleton */
+    .edit-skeleton {
+      background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s ease infinite;
+      border-radius: 8px;
+    }
+    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .edit-layout {
+        grid-template-columns: 1fr;
+      }
+      .edit-preview-panel {
+        position: static;
+        height: auto;
+        border-top: 1px solid var(--color-border-default);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<script>
+(function(){try{var u=JSON.parse(localStorage.getItem('bs_auth_user')||'null');if(!u)return;var n=u.name||u.email||'';var i=n.split(' ').map(function(w){return w[0]||'';}).join('').slice(0,2).toUpperCase();document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('.sidebar__user-name,.topbar__user-name').forEach(function(el){el.textContent=n;});document.querySelectorAll('.sidebar__avatar,.topbar__avatar').forEach(function(el){el.textContent=i;});var pl={'free':'Free Plan','pro':'Pro Plan','business':'Business Plan'};document.querySelectorAll('.sidebar__user-plan').forEach(function(el){el.textContent=pl[u.plan]||'Free Plan';});});}catch(e){}})();
+</script>
+
+<a href="#main-content" class="skip-link">Zum Hauptinhalt springen</a>
+<div id="sidebar-overlay" class="sidebar-overlay" hidden aria-hidden="true"></div>
+
+<nav id="sidebar" class="sidebar" aria-label="Hauptnavigation">
+  <div class="sidebar__header">
+    <a href="app.html" class="sidebar__logo" aria-label="boards.solutions Dashboard">
+      <svg class="sidebar__logo-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="3" y="3" width="8" height="8" rx="1.5" fill="var(--color-blue-500)"/>
+        <rect x="13" y="3" width="8" height="8" rx="1.5" fill="var(--color-blue-400)" opacity="0.7"/>
+        <rect x="3" y="13" width="8" height="8" rx="1.5" fill="var(--color-blue-400)" opacity="0.7"/>
+        <rect x="13" y="13" width="8" height="8" rx="1.5" fill="var(--color-blue-300)" opacity="0.5"/>
+      </svg>
+      <span class="sidebar__logo-text">boards.solutions</span>
+    </a>
+    <button id="sidebar-close" class="sidebar__close-btn" aria-label="Seitenleiste schließen" type="button">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><line x1="1" y1="1" x2="17" y2="17"/><line x1="17" y1="1" x2="1" y2="17"/></svg>
+    </button>
+  </div>
+  <div class="sidebar__body">
+    <ul class="sidebar__nav" role="list">
+      <li><a href="app.html" class="sidebar__nav-link">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Übersicht
+      </a></li>
+      <li><a href="boards.html" class="sidebar__nav-link" aria-current="page">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        Meine Boards
+      </a></li>
+      <li><a href="media-library.html" class="sidebar__nav-link">
+        <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        Mediathek
+      </a></li>
+    </ul>
+  </div>
+  <div class="sidebar__footer">
+    <a href="settings.html" class="sidebar__nav-link">
+      <svg class="sidebar__nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      Einstellungen
+    </a>
+    <div class="sidebar__user">
+      <div class="sidebar__avatar" aria-hidden="true"></div>
+      <div class="sidebar__user-info">
+        <span class="sidebar__user-name"></span>
+        <span class="sidebar__user-plan"></span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="dashboard-layout">
+  <div class="dashboard-main">
+
+    <header class="topbar" role="banner">
+      <div class="topbar__left">
+        <button id="sidebar-open" class="topbar__menu-btn" aria-label="Menü öffnen" aria-expanded="false" aria-controls="sidebar" type="button">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <nav aria-label="Breadcrumb">
+          <ol class="breadcrumb" role="list">
+            <li class="breadcrumb__item"><a href="app.html" class="breadcrumb__link">Übersicht</a></li>
+            <li class="breadcrumb__item"><a href="boards.html" class="breadcrumb__link">Meine Boards</a></li>
+            <li class="breadcrumb__item breadcrumb__item--current" aria-current="page">Board bearbeiten</li>
+          </ol>
+        </nav>
+      </div>
+      <div class="topbar__right">
+        <a href="boards.html" class="btn btn--ghost btn--sm">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          Zurück
+        </a>
+      </div>
+    </header>
+
+    <main id="main-content" class="dashboard-content" tabindex="-1" style="padding:0">
+
+      <!-- Loading state -->
+      <div id="edit-loading" style="padding:3rem;text-align:center;color:#94a3b8">
+        <div class="bs-loading-pulse" style="justify-content:center;margin-bottom:1rem">
+          <span style="width:10px;height:10px;border-radius:50%;background:#cbd5e1;animation:bsPulse 1.2s ease-in-out infinite;display:inline-block"></span>
+          <span style="width:10px;height:10px;border-radius:50%;background:#cbd5e1;animation:bsPulse 1.2s ease-in-out infinite .2s;display:inline-block"></span>
+          <span style="width:10px;height:10px;border-radius:50%;background:#cbd5e1;animation:bsPulse 1.2s ease-in-out infinite .4s;display:inline-block"></span>
+        </div>
+        <p style="margin:0;font-size:.9rem">Board wird geladen…</p>
+      </div>
+
+      <!-- Edit layout (hidden until loaded) -->
+      <div class="edit-layout" id="edit-main" hidden>
+
+        <!-- ── Left: Form ── -->
+        <div class="edit-form-panel">
+          <div class="edit-form-panel__header">
+            <div class="edit-form-panel__title">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              Inhalt bearbeiten
+              <span class="edit-type-pill" id="type-pill">Blog</span>
+            </div>
+            <button id="btn-delete" class="btn btn--ghost btn--sm" type="button" style="color:#dc2626;border-color:transparent;flex-shrink:0" title="Board löschen">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            </button>
+          </div>
+
+          <div class="edit-form-panel__body" id="edit-form-body">
+            <!-- Filled by JS -->
+          </div>
+
+          <div class="edit-form-panel__footer">
+            <button id="btn-save-draft" class="btn btn--ghost" type="button">Entwurf</button>
+            <button id="btn-save-publish" class="btn btn--primary" type="button">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+              Speichern
+            </button>
+          </div>
+        </div>
+
+        <!-- ── Right: Preview ── -->
+        <div class="edit-preview-panel">
+          <div class="edit-preview-panel__label">
+            <span></span>
+            Live-Vorschau
+          </div>
+
+          <!-- Card preview -->
+          <div>
+            <div class="edit-preview-browser">
+              <div class="edit-preview-browser__bar">
+                <div class="edit-preview-browser__dot"></div>
+                <div class="edit-preview-browser__dot"></div>
+                <div class="edit-preview-browser__dot"></div>
+                <div class="edit-preview-browser__url">Widget-Karte</div>
+              </div>
+              <div class="edit-preview-browser__body" style="padding:1.25rem">
+                <div id="preview-card"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="edit-preview-divider">Detailansicht (bei Klick)</div>
+
+          <!-- Detail/modal preview -->
+          <div class="ep-detail" id="preview-detail"></div>
+
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<style>
+@keyframes bsPulse {
+  0%,80%,100% { transform: scale(.8); opacity: .5 }
+  40%          { transform: scale(1.2); opacity: 1  }
+}
+</style>
+
+<script type="module" src="js/app.js"></script>
+<script type="module">
+import { requireAuth, updateSidebar, authHeaders } from './js/auth.js';
+import { getBoardById, saveBoard, deleteBoard } from './js/boards-data.js';
+import { showToast } from './js/app.js';
+
+if (!requireAuth()) throw new Error('auth');
+updateSidebar();
+
+const API = 'https://web-production-83480.up.railway.app/api';
+const params = new URLSearchParams(location.search);
+const boardId = params.get('id') || params.get('edit');
+
+if (!boardId) {
+  showToast('Kein Board angegeben.', 'error');
+  setTimeout(() => location.href = 'boards.html', 1200);
+  throw new Error('no id');
+}
+
+// ── Color helpers ──────────────────────────────────────────────────
+function esc(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function starsHtml(n) {
+  const r = Math.round(n * 2) / 2;
+  let s = '';
+  for (let i = 1; i <= 5; i++) s += i <= r ? '★' : (i - .5 <= r ? '⯨' : '☆');
+  return s;
+}
+
+// ── Brand colors for preview ───────────────────────────────────────
+let brandColors = {};
+try {
+  const meRes = await fetch(`${API}/auth/me`, { headers: authHeaders() });
+  if (meRes.ok) { const me = await meRes.json(); brandColors = me.brandColors || {}; }
+} catch {}
+
+function applyPreviewTheme() {
+  const style = document.getElementById('ep-theme') || (() => {
+    const s = document.createElement('style'); s.id = 'ep-theme';
+    document.head.appendChild(s); return s;
+  })();
+  const p = brandColors.primary || '#1D4ED8';
+  const bg = brandColors.card_bg || brandColors.background || '#ffffff';
+  const text = brandColors.text || '#0f172a';
+  const muted = brandColors.text_muted || '#64748b';
+  const border = brandColors.border || '#e5e7eb';
+  const badgeBg = brandColors.badge_bg || p + '18';
+  style.textContent = `
+    #edit-main {
+      --ep-primary: ${p};
+      --ep-card-bg: ${bg};
+      --ep-text: ${text};
+      --ep-text-muted: ${muted};
+      --ep-border: ${border};
+      --ep-badge-bg: ${badgeBg};
+    }`;
+}
+applyPreviewTheme();
+
+// ── Load board ─────────────────────────────────────────────────────
+const board = await getBoardById(boardId);
+if (!board) {
+  showToast('Board nicht gefunden.', 'error');
+  setTimeout(() => location.href = 'boards.html', 1200);
+  throw new Error('not found');
+}
+
+document.getElementById('edit-loading').hidden = true;
+document.getElementById('edit-main').hidden = false;
+
+// ── State ──────────────────────────────────────────────────────────
+const TYPE_META = {
+  blog:      { label: 'Blog-Beitrag',     color: 'blue',   pill: 'Blog' },
+  affiliate: { label: 'Affiliate-Produkt', color: 'green',  pill: 'Empfehlung' },
+  review:    { label: 'Produkt-Review',    color: 'yellow', pill: 'Review' },
+  faq:       { label: 'FAQ-Board',         color: 'purple', pill: 'FAQ' },
+};
+const meta = TYPE_META[board.type] || TYPE_META.blog;
+
+document.getElementById('type-pill').textContent = meta.pill;
+
+const state = {
+  id:        board.id,
+  type:      board.type,
+  status:    board.status || 'draft',
+
+  // Blog
+  boardName:  board.boardName  || '',
+  title:      board.title      || '',
+  intro:      board.intro      || '',
+  content:    board.content    || '',
+  blogImage:  board.blogImage  || board.image || '',
+  blogThumb:  board.imageThumb || '',
+  affiliateLinks: board.affiliateLinks || [],
+  tags:       (board.tags || []).join(', '),
+
+  // Affiliate
+  productName:   board.productName   || '',
+  description:   board.description   || '',
+  price:         board.price         || '',
+  rating:        board.rating        || 0,
+  affiliateUrl:  board.affiliateUrl  || '',
+  buttonText:    board.buttonText    || '',
+  badge:         board.badge         || '',
+  affImage:      board.affImage      || board.image || '',
+  affThumb:      board.imageThumb    || '',
+
+  // Review
+  reviewText:    board.reviewText    || '',
+  verdict:       board.verdict       || '',
+  revImage:      board.revImage      || board.image || '',
+  revThumb:      board.imageThumb    || '',
+  pros:          board.pros          || [],
+  cons:          board.cons          || [],
+
+  // FAQ
+  faqTitle:      board.faqTitle      || board.boardName || 'Häufige Fragen',
+  faqs:          board.faqs          || [],
+};
+
+// ── Form builder ───────────────────────────────────────────────────
+const formBody = document.getElementById('edit-form-body');
+
+function buildForm() {
+  const t = state.type;
+
+  let html = `
+    <div class="edit-status-row">
+      <label class="edit-status-toggle">
+        <input type="checkbox" id="status-toggle" ${state.status === 'published' ? 'checked' : ''}>
+        <div class="edit-status-toggle__slider"></div>
+      </label>
+      <div class="edit-status-label" id="status-label">
+        <strong>${state.status === 'published' ? '● Veröffentlicht' : '○ Entwurf'}</strong>
+        — ${state.status === 'published' ? 'Im Widget sichtbar' : 'Nicht öffentlich'}
+      </div>
+    </div>`;
+
+  if (t === 'blog') {
+    html += blogFormHtml();
+  } else if (t === 'affiliate') {
+    html += affiliateFormHtml();
+  } else if (t === 'review') {
+    html += reviewFormHtml();
+  } else if (t === 'faq') {
+    html += faqFormHtml();
+  }
+
+  formBody.innerHTML = html;
+  bindFormEvents();
+}
+
+function blogFormHtml() {
+  return `
+    <div class="edit-section">
+      <span class="edit-section__label">Grundlagen</span>
+      <div class="edit-form-group">
+        <label class="edit-form-label" for="f-board-name">Board-Name (intern)</label>
+        <input id="f-board-name" class="edit-input" type="text" value="${esc(state.boardName)}" placeholder="z.B. Tech-Blog für Schmidt GmbH" autocomplete="off">
+      </div>
+      <div class="edit-form-group">
+        <label class="edit-form-label" for="f-tags">Tags</label>
+        <input id="f-tags" class="edit-input" type="text" value="${esc(state.tags)}" placeholder="Review, Technik, Top 5 (kommagetrennt)" autocomplete="off">
+      </div>
+    </div>
+    <div class="edit-section">
+      <span class="edit-section__label">Inhalt</span>
+      <div class="edit-form-group">
+        <label class="edit-form-label" for="f-title">Überschrift</label>
+        <input id="f-title" class="edit-input" type="text" value="${esc(state.title)}" placeholder="z.B. Die 5 besten Laptops 2025" autocomplete="off">
+      </div>
+      <div class="edit-form-group">
+        <label class="edit-form-label" for="f-intro">Einleitung</label>
+        <textarea id="f-intro" class="edit-textarea" rows="3" placeholder="Kurze Zusammenfassung…">${esc(state.intro)}</textarea>
+      </div>
+      <div class="edit-form-group">
+        <label class="edit-form-label" for="f-content">Artikel-Text</label>
+        <textarea id="f-content" class="edit-textarea" rows="8" placeholder="Dein Beitrag…">${esc(state.content)}</textarea>
+      </div>
+    </div>
+    <div class="edit-section">
+      <span class="edit-section__label">Titelbild</span>
+      ${imageUploadHtml('blog')}
+    </div>
+    <div class="edit-section">
+      <span class="edit-section__label">Affiliate-Links</span>
+      <div id="aff-links-list">${renderAffLinks()}</div>
+      <button type="button" class="edit-add-btn" id="btn-add-aff-link">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Link hinzufügen
+      </button>
+    </div>`;
+}
+
+function affiliateFormHtml() {
+  return `
+    <div class="edit-section">
+      <span class="edit-section__label">Grundlagen</span>
+      <div class="edit-row">
+        <div class="edit-form-group">
+          <label class="edit-form-label" for="f-board-name">Board-Name (intern)</label>
+          <input id="f-board-name" class="edit-input" type="text" value="${esc(state.boardName)}" placeholder="Ergostuhl für Mayer GmbH" autocomplete="off">
+        </div>
+        <div class="edit-form-group">
+          <label class="edit-form-label" for="f-badge">Badge</label>
+          <input id="f-badge" class="edit-input" type="text" value="${esc(state.badge)}" placeholder="Bestseller" autocomplete="off">
+        </div>
+      </div>
+    </div>
+    <div class="edit-section">
+      <span class="edit-section__label">Produkt-Details</span>
+      <div class="edit-form-group">
+        <label class="edit-form-label" for="f-product-name">Produktname</label>
+        <input id="f-product-name" class="edit-input" type="text" value="${esc(state.productName)}" placeholder="z.B. Ergonomischer Bürostuhl Pro X200" autocomplete="off">
+      </div>
+      <div class="edit-form-group">
+        <label class="edit-form-label" for="f-description">Kurzbeschreibung</label>
+        <textarea id="f-description" class="edit-textarea" rows="4" placeholder="Was macht das Produkt besonders?">${esc(state.description)}</textarea>
+      </div>
+      <div class="edit-row">
+        <div class="edit-form-group">
+          <label class="edit-form-label" for="f-price">Preis</label>
+          <input id="f-price" class="edit-input" type="text" value="${esc(state.price)}" placeholder="249,00 €" autocomplete="off">
+        </div>
+        <div class="edit-form-group">
+          <label class="edit-form-label" for="f-rating">Bewertung (1–5)</label>
+          <input id="f-rating" class="edit-input" type="number" value="${state.rating || ''}" placeholder="4.5" min="1" max="5" step="0.1">
+        </div>
+      </div>
+      <div class="edit-row">
+        <div class="edit-form-group">
+          <label class="edit-form-label" for="f-button-text">Button-Text</label>
+          <input id="f-button-text" class="edit-input" type="text" value="${esc(state.buttonText || 'Jetzt kaufen')}" autocomplete="off">
+        </div>
+        <div class="edit-form-group">
+          <label class="edit-form-label" for="f-affiliate-url">Affiliate-Link</label>
+          <input id="f-affiliate-url" class="edit-input" type="url" value="${esc(state.affiliateUrl)}" placeholder="https://amzn.to/…" autocomplete="off">
+        </div>
+      </div>
+    </div>
+    <div class="edit-section">
+      <span class="edit-section__label">Produktbild</span>
+      ${imageUploadHtml('aff')}
+    </div>`;
+}
+
+function reviewFormHtml() {
+  return `
+    <div class="edit-section">
+      <span class="edit-section__label">Grundlagen</span>
+      <div class="edit-form-group">
+        <label class="edit-form-label" for="f-board-name">Board-Name (intern)</label>
+        <input id="f-board-name" class="edit-input" type="text" value="${esc(state.boardName)}" placeholder="Sony WH Review für Audio-Blog" autocomplete="off">
+      </div>
+    </div>
+    <div class="edit-section">
+      <span class="edit-section__label">Produkt & Bewertung</span>
+      <div class="edit-form-group">
+        <label class="edit-form-label" for="f-product-name">Produktname</label>
+        <input id="f-product-name" class="edit-input" type="text" value="${esc(state.productName)}" placeholder="z.B. Sony WH-1000XM5" autocomplete="off">
+      </div>
+      <div class="edit-form-group">
+        <label class="edit-form-label">Sternebewertung</label>
+        <div class="edit-star-picker" id="star-picker">
+          ${[1,2,3,4,5].map(n => `<button type="button" class="edit-star-btn${state.rating >= n ? ' active' : ''}" data-val="${n}">★</button>`).join('')}
+        </div>
+      </div>
+      <div class="edit-form-group">
+        <label class="edit-form-label" for="f-review-text">Review-Text</label>
+        <textarea id="f-review-text" class="edit-textarea" rows="6" placeholder="Deine ausführliche Erfahrung mit dem Produkt…">${esc(state.reviewText)}</textarea>
+      </div>
+      <div class="edit-row">
+        <div class="edit-form-group">
+          <label class="edit-form-label" for="f-price">Preis</label>
+          <input id="f-price" class="edit-input" type="text" value="${esc(state.price)}" placeholder="349,00 €" autocomplete="off">
+        </div>
+        <div class="edit-form-group">
+          <label class="edit-form-label" for="f-affiliate-url">Affiliate-Link</label>
+          <input id="f-affiliate-url" class="edit-input" type="url" value="${esc(state.affiliateUrl)}" placeholder="https://amzn.to/…" autocomplete="off">
+        </div>
+      </div>
+      <div class="edit-form-group">
+        <label class="edit-form-label" for="f-button-text">Button-Text</label>
+        <input id="f-button-text" class="edit-input" type="text" value="${esc(state.buttonText || 'Preis prüfen')}" autocomplete="off">
+      </div>
+    </div>
+    <div class="edit-section">
+      <span class="edit-section__label">Vorteile & Nachteile</span>
+      <div class="edit-row">
+        <div class="edit-form-group">
+          <label class="edit-form-label">Vorteile</label>
+          <div id="pros-list">${renderSimpleList(state.pros, 'pros')}</div>
+          <button type="button" class="edit-add-btn" id="btn-add-pro" style="margin-top:.4rem">+ Vorteil</button>
+        </div>
+        <div class="edit-form-group">
+          <label class="edit-form-label">Nachteile</label>
+          <div id="cons-list">${renderSimpleList(state.cons, 'cons')}</div>
+          <button type="button" class="edit-add-btn" id="btn-add-con" style="margin-top:.4rem">+ Nachteil</button>
+        </div>
+      </div>
+    </div>
+    <div class="edit-section">
+      <span class="edit-section__label">Fazit</span>
+      <div class="edit-form-group">
+        <label class="edit-form-label" for="f-verdict">Kaufempfehlung</label>
+        <textarea id="f-verdict" class="edit-textarea" rows="3" placeholder="Für wen ist das Produkt ideal?">${esc(state.verdict)}</textarea>
+      </div>
+    </div>
+    <div class="edit-section">
+      <span class="edit-section__label">Produktbild</span>
+      ${imageUploadHtml('rev')}
+    </div>`;
+}
+
+function faqFormHtml() {
+  return `
+    <div class="edit-section">
+      <span class="edit-section__label">Grundlagen</span>
+      <div class="edit-form-group">
+        <label class="edit-form-label" for="f-board-name">Board-Name (intern)</label>
+        <input id="f-board-name" class="edit-input" type="text" value="${esc(state.boardName)}" placeholder="z.B. FAQ für Mayer Steuerbüro" autocomplete="off">
+      </div>
+      <div class="edit-form-group">
+        <label class="edit-form-label" for="f-faq-title">FAQ-Überschrift</label>
+        <input id="f-faq-title" class="edit-input" type="text" value="${esc(state.faqTitle)}" placeholder="Häufige Fragen" autocomplete="off">
+      </div>
+    </div>
+    <div class="edit-section">
+      <span class="edit-section__label">Fragen & Antworten</span>
+      <div id="faq-list">${renderFaqItems()}</div>
+      <button type="button" class="edit-add-btn" id="btn-add-faq">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Frage hinzufügen
+      </button>
+    </div>`;
+}
+
+function imageUploadHtml(prefix) {
+  const src = prefix === 'blog' ? state.blogImage : prefix === 'aff' ? state.affImage : state.revImage;
+  const hasImg = !!src;
+  return `
+    <div class="edit-image-upload${hasImg ? ' has-image' : ''}" id="img-upload-${prefix}" role="button" tabindex="0" aria-label="Bild hochladen">
+      <input type="file" id="img-input-${prefix}" class="sr-only" accept="image/jpeg,image/png,image/webp,image/gif" tabindex="-1">
+      <div class="edit-image-upload__placeholder" id="img-ph-${prefix}" ${hasImg ? 'hidden' : ''}>
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <p>Bild hochladen oder hierher ziehen</p>
+        <span>JPG, PNG, WEBP — max. 5 MB</span>
+      </div>
+      <img id="img-preview-${prefix}" class="edit-image-upload__preview" src="${esc(src)}" alt="Vorschau" ${hasImg ? '' : 'hidden'}>
+      <button id="img-remove-${prefix}" class="edit-image-upload__remove" type="button" aria-label="Bild entfernen" ${hasImg ? '' : 'hidden'}>✕</button>
+    </div>`;
+}
+
+function renderAffLinks() {
+  return state.affiliateLinks.map((l,i) => `
+    <div class="edit-list-item">
+      <input type="text" class="edit-input edit-list-item__input" placeholder="Button-Text" value="${esc(l.text)}" data-aff-idx="${i}" data-aff-field="text">
+      <input type="url" class="edit-input edit-list-item__input" placeholder="https://…" value="${esc(l.url)}" data-aff-idx="${i}" data-aff-field="url" style="margin-left:.4rem">
+      <button type="button" class="edit-list-item__remove" data-aff-remove="${i}">✕</button>
+    </div>`).join('');
+}
+
+function renderSimpleList(arr, key) {
+  return arr.map((v,i) => `
+    <div class="edit-list-item">
+      <input type="text" class="edit-input edit-list-item__input" value="${esc(v)}"
+        data-simple-key="${key}" data-simple-idx="${i}"
+        placeholder="${key === 'pros' ? 'Vorteil…' : 'Nachteil…'}">
+      <button type="button" class="edit-list-item__remove" data-simple-remove="${i}" data-simple-key="${key}">✕</button>
+    </div>`).join('');
+}
+
+function renderFaqItems() {
+  return state.faqs.map((f,i) => `
+    <div class="edit-faq-item">
+      <div class="edit-faq-item__header">
+        <span class="edit-faq-item__num">F${i+1}</span>
+        <button type="button" class="edit-list-item__remove" data-faq-remove="${i}">✕</button>
+      </div>
+      <input type="text" class="edit-input" placeholder="Frage…" value="${esc(f.q || f.question || '')}" data-faq-idx="${i}" data-faq-field="q" style="margin-bottom:.4rem">
+      <textarea class="edit-textarea" rows="2" placeholder="Antwort…" data-faq-idx="${i}" data-faq-field="a">${esc(f.a || f.answer || '')}</textarea>
+    </div>`).join('');
+}
+
+// ── Bind form events ───────────────────────────────────────────────
+function bindFormEvents() {
+  // Status toggle
+  document.getElementById('status-toggle')?.addEventListener('change', e => {
+    state.status = e.target.checked ? 'published' : 'draft';
+    const lbl = document.getElementById('status-label');
+    if (lbl) lbl.innerHTML = `<strong>${state.status === 'published' ? '● Veröffentlicht' : '○ Entwurf'}</strong> — ${state.status === 'published' ? 'Im Widget sichtbar' : 'Nicht öffentlich'}`;
+    schedulePreviewUpdate();
+  });
+
+  // Text/textarea fields → state
+  const fieldMap = {
+    'f-board-name':    'boardName',
+    'f-title':         'title',
+    'f-intro':         'intro',
+    'f-content':       'content',
+    'f-tags':          'tags',
+    'f-product-name':  'productName',
+    'f-description':   'description',
+    'f-price':         'price',
+    'f-rating':        'rating',
+    'f-affiliate-url': 'affiliateUrl',
+    'f-button-text':   'buttonText',
+    'f-badge':         'badge',
+    'f-review-text':   'reviewText',
+    'f-verdict':       'verdict',
+    'f-faq-title':     'faqTitle',
+  };
+  Object.entries(fieldMap).forEach(([id, key]) => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', () => { state[key] = el.value; schedulePreviewUpdate(); });
+  });
+
+  // Star picker
+  document.getElementById('star-picker')?.querySelectorAll('.edit-star-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const v = +btn.dataset.val;
+      state.rating = v;
+      document.querySelectorAll('.edit-star-btn').forEach((b,i) => b.classList.toggle('active', i < v));
+      schedulePreviewUpdate();
+    });
+  });
+
+  // Affiliate links list
+  rebindAffLinks();
+
+  // Pros/cons
+  rebindSimpleList('pros-list', 'pros');
+  rebindSimpleList('cons-list', 'cons');
+  document.getElementById('btn-add-pro')?.addEventListener('click', () => {
+    state.pros.push('');
+    document.getElementById('pros-list').innerHTML = renderSimpleList(state.pros, 'pros');
+    rebindSimpleList('pros-list', 'pros');
+    schedulePreviewUpdate();
+  });
+  document.getElementById('btn-add-con')?.addEventListener('click', () => {
+    state.cons.push('');
+    document.getElementById('cons-list').innerHTML = renderSimpleList(state.cons, 'cons');
+    rebindSimpleList('cons-list', 'cons');
+    schedulePreviewUpdate();
+  });
+
+  // FAQ
+  rebindFaqList();
+  document.getElementById('btn-add-aff-link')?.addEventListener('click', () => {
+    state.affiliateLinks.push({ text: '', url: '' });
+    document.getElementById('aff-links-list').innerHTML = renderAffLinks();
+    rebindAffLinks();
+    schedulePreviewUpdate();
+  });
+  document.getElementById('btn-add-faq')?.addEventListener('click', () => {
+    state.faqs.push({ q: '', a: '' });
+    document.getElementById('faq-list').innerHTML = renderFaqItems();
+    rebindFaqList();
+    schedulePreviewUpdate();
+  });
+
+  // Image uploads
+  ['blog','aff','rev'].forEach(p => setupImageUpload(p));
+}
+
+function rebindAffLinks() {
+  const list = document.getElementById('aff-links-list');
+  if (!list) return;
+  list.querySelectorAll('[data-aff-idx]').forEach(inp => {
+    inp.addEventListener('input', () => {
+      state.affiliateLinks[+inp.dataset.affIdx][inp.dataset.affField] = inp.value;
+      schedulePreviewUpdate();
+    });
+  });
+  list.querySelectorAll('[data-aff-remove]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.affiliateLinks.splice(+btn.dataset.affRemove, 1);
+      document.getElementById('aff-links-list').innerHTML = renderAffLinks();
+      rebindAffLinks();
+      schedulePreviewUpdate();
+    });
+  });
+}
+
+function rebindSimpleList(listId, key) {
+  const list = document.getElementById(listId);
+  if (!list) return;
+  list.querySelectorAll('[data-simple-idx]').forEach(inp => {
+    inp.addEventListener('input', () => { state[key][+inp.dataset.simpleIdx] = inp.value; schedulePreviewUpdate(); });
+  });
+  list.querySelectorAll('[data-simple-remove]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state[key].splice(+btn.dataset.simpleRemove, 1);
+      list.innerHTML = renderSimpleList(state[key], key);
+      rebindSimpleList(listId, key);
+      schedulePreviewUpdate();
+    });
+  });
+}
+
+function rebindFaqList() {
+  const list = document.getElementById('faq-list');
+  if (!list) return;
+  list.querySelectorAll('[data-faq-idx]').forEach(inp => {
+    const field = inp.dataset.faqField;
+    inp.addEventListener('input', () => {
+      if (!state.faqs[+inp.dataset.faqIdx]) return;
+      state.faqs[+inp.dataset.faqIdx][field] = inp.value;
+      schedulePreviewUpdate();
+    });
+  });
+  list.querySelectorAll('[data-faq-remove]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.faqs.splice(+btn.dataset.faqRemove, 1);
+      list.innerHTML = renderFaqItems();
+      rebindFaqList();
+      schedulePreviewUpdate();
+    });
+  });
+}
+
+// ── Image upload ───────────────────────────────────────────────────
+function generateThumb(dataUrl, maxW = 640, maxH = 430) {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => {
+      const scale = Math.min(maxW / img.width, maxH / img.height, 1);
+      const w = Math.round(img.width * scale), h = Math.round(img.height * scale);
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      resolve(canvas.toDataURL('image/jpeg', 0.72));
+    };
+    img.onerror = () => resolve('');
+    img.src = dataUrl;
+  });
+}
+
+const IMAGE_KEYS = { blog: ['blogImage','blogThumb'], aff: ['affImage','affThumb'], rev: ['revImage','revThumb'] };
+
+function setupImageUpload(prefix) {
+  const area    = document.getElementById(`img-upload-${prefix}`);
+  const input   = document.getElementById(`img-input-${prefix}`);
+  const ph      = document.getElementById(`img-ph-${prefix}`);
+  const preview = document.getElementById(`img-preview-${prefix}`);
+  const rmBtn   = document.getElementById(`img-remove-${prefix}`);
+  if (!area) return;
+
+  const [imgKey, thumbKey] = IMAGE_KEYS[prefix];
+
+  function showPreview(src) {
+    preview.src = src; preview.hidden = false;
+    ph.hidden = true; rmBtn.hidden = false;
+    area.classList.add('has-image');
+  }
+  function clearPreview() {
+    preview.src = ''; preview.hidden = true;
+    ph.hidden = false; rmBtn.hidden = true;
+    area.classList.remove('has-image');
+    state[imgKey] = ''; state[thumbKey] = '';
+    input.value = '';
+    schedulePreviewUpdate();
+  }
+
+  async function loadFile(file) {
+    if (!file?.type.startsWith('image/')) { showToast('Nur Bilder erlaubt.', 'error'); return; }
+    if (file.size > 5 * 1024 * 1024) { showToast('Max. 5 MB.', 'error'); return; }
+    const reader = new FileReader();
+    reader.onload = async e => {
+      const full = e.target.result;
+      const thumb = await generateThumb(full);
+      state[imgKey] = full;
+      state[thumbKey] = thumb;
+      showPreview(full);
+      schedulePreviewUpdate();
+    };
+    reader.readAsDataURL(file);
+  }
+
+  area.addEventListener('click', () => { if (preview.hidden) input.click(); });
+  area.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') { e.preventDefault(); if (preview.hidden) input.click(); }});
+  input.addEventListener('change', () => { if (input.files[0]) loadFile(input.files[0]); });
+  rmBtn.addEventListener('click', e => { e.stopPropagation(); clearPreview(); });
+  area.addEventListener('dragover', e => { e.preventDefault(); area.style.borderColor = '#3b82f6'; });
+  area.addEventListener('dragleave', () => { area.style.borderColor = ''; });
+  area.addEventListener('drop', e => { e.preventDefault(); area.style.borderColor = ''; if (e.dataTransfer.files[0]) loadFile(e.dataTransfer.files[0]); });
+}
+
+// ── Preview renderer ───────────────────────────────────────────────
+function getImage() {
+  if (state.type === 'blog') return state.blogImage;
+  if (state.type === 'affiliate') return state.affImage;
+  if (state.type === 'review') return state.revImage;
+  return '';
+}
+
+function renderCardPreview() {
+  const t = state.type;
+  const img = state.blogThumb || state.affThumb || state.revThumb || getImage();
+  const typeName = { blog:'Blog', affiliate:'Empfehlung', review:'Review', faq:'FAQ' }[t] || t;
+
+  const visualHtml = img
+    ? `<div class="ep-card-visual"><img src="${esc(img)}" alt="" loading="lazy"></div>`
+    : `<div class="ep-card-visual">
+         <div class="ep-card-visual-placeholder ep-card-visual-placeholder--${meta.color}">
+           <div class="ep-card-ph-icon">${typeIcon(t)}</div>
+           <div class="ep-card-ph-lines">
+             <div class="ep-card-ph-line"></div>
+             <div class="ep-card-ph-line ep-card-ph-line--short"></div>
+             <div class="ep-card-ph-line"></div>
+           </div>
+         </div>
+       </div>`;
+
+  let cardBody = `
+    <div class="ep-card-body">
+      <span class="ep-badge">${esc(typeName)}</span>`;
+
+  if (t === 'blog') {
+    const title = state.title || 'Dein Beitragstitel';
+    const snippet = (state.intro || state.content || '').slice(0, 120);
+    cardBody += `
+      <h3 class="ep-card-title">${esc(title)}</h3>
+      ${snippet ? `<p class="ep-card-desc">${esc(snippet)}${snippet.length >= 120 ? '…' : ''}</p>` : ''}
+      <div class="ep-btn-read">Weiterlesen →</div>`;
+  } else if (t === 'affiliate') {
+    const name = state.productName || 'Produktname';
+    const desc = (state.description || '').slice(0, 110);
+    cardBody += `
+      <h3 class="ep-card-title">${esc(name)}</h3>
+      ${state.rating ? `<div class="ep-stars">${starsHtml(state.rating)}</div>` : ''}
+      ${desc ? `<p class="ep-card-desc">${esc(desc)}${desc.length >= 110 ? '…' : ''}</p>` : ''}
+      ${state.price ? `<div class="ep-price">${esc(state.price)}</div>` : ''}
+      <div class="ep-btn-read">Details ansehen →</div>`;
+  } else if (t === 'review') {
+    const name = state.productName || 'Produktname';
+    const txt = (state.reviewText || '').slice(0, 110);
+    cardBody += `
+      <h3 class="ep-card-title">${esc(name)}</h3>
+      ${state.rating ? `<div class="ep-stars">${starsHtml(state.rating)}</div>` : ''}
+      ${txt ? `<p class="ep-card-desc">${esc(txt)}${txt.length >= 110 ? '…' : ''}</p>` : ''}
+      <div class="ep-btn-read">Review lesen →</div>`;
+  } else if (t === 'faq') {
+    const faqs = state.faqs.slice(0, 2);
+    cardBody += `
+      <h3 class="ep-card-title">${esc(state.faqTitle || 'Häufige Fragen')}</h3>
+      ${faqs.map(f => `
+        <div style="border-top:1px solid var(--ep-border,#e5e7eb);padding-top:.6rem">
+          <div class="ep-faq-q">${esc(f.q || f.question || '')}</div>
+          <div class="ep-faq-a">${esc((f.a || f.answer || '').slice(0,60))}${(f.a||f.answer||'').length>60?'…':''}</div>
+        </div>`).join('')}
+      <div class="ep-btn-read" style="margin-top:.5rem">Alle FAQs →</div>`;
+  }
+
+  cardBody += '</div>';
+
+  return `<div class="ep-card">${visualHtml}${cardBody}</div>`;
+}
+
+function renderDetailPreview() {
+  const t = state.type;
+  const img = getImage();
+  const typeName = { blog:'Blog', affiliate:'Empfehlung', review:'Review', faq:'FAQ' }[t] || t;
+  const title = t === 'blog' ? (state.title || 'Dein Beitragstitel')
+              : t === 'faq'  ? (state.faqTitle || 'Häufige Fragen')
+              : (state.productName || 'Produktname');
+
+  const heroHtml = img
+    ? `<img class="ep-detail-hero" src="${esc(img)}" alt="${esc(title)}">`
+    : '';
+
+  let content = '';
+  if (t === 'blog') {
+    const fullText = state.content || state.intro || '';
+    content = `
+      <div class="ep-detail-content">${esc(fullText)}</div>
+      ${state.affiliateLinks.filter(l=>l.url).map(l =>
+        `<div class="ep-detail-btn" style="margin-top:.5rem;background:var(--ep-primary,#1D4ED8)">${esc(l.text || 'Link')}</div>`
+      ).join('')}`;
+  } else if (t === 'affiliate') {
+    content = `
+      ${state.rating ? `<div class="ep-stars">${starsHtml(state.rating)} <span style="color:#64748b;font-size:.83rem;margin-left:.3rem">${state.rating}/5</span></div>` : ''}
+      <div class="ep-detail-content">${esc(state.description || '')}</div>
+      ${state.affiliateUrl ? `
+        <div class="ep-detail-affiliate">
+          ${state.price ? `<span class="ep-detail-price">${esc(state.price)}</span>` : '<span></span>'}
+          <div class="ep-detail-btn">${esc(state.buttonText || 'Jetzt kaufen')}</div>
+        </div>` : ''}`;
+  } else if (t === 'review') {
+    content = `
+      ${state.rating ? `<div class="ep-stars">${starsHtml(state.rating)} <span style="color:#64748b;font-size:.83rem;margin-left:.3rem">${state.rating}/5</span></div>` : ''}
+      <div class="ep-detail-content">${esc(state.reviewText || '')}</div>
+      ${(state.pros?.length || state.cons?.length) ? `
+        <div class="ep-pros-cons">
+          ${state.pros?.length ? `<div class="ep-pros"><strong>+ Vorteile</strong><ul>${state.pros.filter(Boolean).map(p=>`<li>${esc(p)}</li>`).join('')}</ul></div>` : ''}
+          ${state.cons?.length ? `<div class="ep-cons"><strong>− Nachteile</strong><ul>${state.cons.filter(Boolean).map(c=>`<li>${esc(c)}</li>`).join('')}</ul></div>` : ''}
+        </div>` : ''}
+      ${state.verdict ? `<div class="ep-verdict"><strong>Fazit:</strong> ${esc(state.verdict)}</div>` : ''}
+      ${state.affiliateUrl ? `
+        <div class="ep-detail-affiliate">
+          ${state.price ? `<span class="ep-detail-price">${esc(state.price)}</span>` : '<span></span>'}
+          <div class="ep-detail-btn">${esc(state.buttonText || 'Preis prüfen')}</div>
+        </div>` : ''}`;
+  } else if (t === 'faq') {
+    content = `
+      <div>
+        ${state.faqs.map(f => `
+          <div class="ep-faq-item">
+            <div class="ep-faq-q">${esc(f.q || f.question || '')}</div>
+            <div class="ep-faq-a">${esc(f.a || f.answer || '')}</div>
+          </div>`).join('')}
+      </div>`;
+  }
+
+  return `
+    ${heroHtml}
+    <div class="ep-detail-inner">
+      <div class="ep-detail-topbar">
+        <span class="ep-badge">${esc(typeName)}</span>
+      </div>
+      <h2 class="ep-detail-title">${esc(title)}</h2>
+      ${content}
+    </div>`;
+}
+
+function typeIcon(t) {
+  const icons = {
+    blog: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
+    affiliate: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>',
+    review: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+    faq: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+  };
+  return icons[t] || icons.blog;
+}
+
+// ── Debounced preview update ───────────────────────────────────────
+let _previewTimer = null;
+function schedulePreviewUpdate() {
+  clearTimeout(_previewTimer);
+  _previewTimer = setTimeout(updatePreviews, 120);
+}
+
+function updatePreviews() {
+  document.getElementById('preview-card').innerHTML = renderCardPreview();
+  document.getElementById('preview-detail').innerHTML = renderDetailPreview();
+}
+
+// ── Save ───────────────────────────────────────────────────────────
+async function handleSave(status) {
+  const btn = document.getElementById(status === 'published' ? 'btn-save-publish' : 'btn-save-draft');
+  const original = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = status === 'published'
+    ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation:spin 1s linear infinite"><path d="M21 12a9 9 0 01-9 9"/></svg> Speichern…'
+    : '…';
+
+  const t = state.type;
+  const payload = {
+    id:        state.id,
+    type:      t,
+    status,
+    boardName: (t==='faq' ? state.faqTitle : state.boardName) || '',
+    tags:      state.tags.split(',').map(s=>s.trim()).filter(Boolean),
+    updatedAt: new Date().toISOString(),
+  };
+
+  if (t === 'blog') {
+    Object.assign(payload, {
+      title: state.title, intro: state.intro, content: state.content,
+      blogImage: state.blogImage, imageThumb: state.blogThumb,
+      affiliateLinks: state.affiliateLinks,
+    });
+  } else if (t === 'affiliate') {
+    Object.assign(payload, {
+      productName: state.productName, description: state.description,
+      price: state.price, rating: state.rating ? +state.rating : null,
+      affiliateUrl: state.affiliateUrl, buttonText: state.buttonText,
+      badge: state.badge,
+      affImage: state.affImage, imageThumb: state.affThumb,
+    });
+  } else if (t === 'review') {
+    Object.assign(payload, {
+      productName: state.productName, reviewText: state.reviewText,
+      rating: state.rating ? +state.rating : null,
+      price: state.price, affiliateUrl: state.affiliateUrl, buttonText: state.buttonText,
+      verdict: state.verdict, pros: state.pros.filter(Boolean), cons: state.cons.filter(Boolean),
+      revImage: state.revImage, imageThumb: state.revThumb,
+    });
+  } else if (t === 'faq') {
+    Object.assign(payload, {
+      faqTitle: state.faqTitle,
+      faqs: state.faqs.map(f => ({ question: f.q || f.question || '', answer: f.a || f.answer || '' })),
+    });
+  }
+
+  try {
+    await saveBoard(payload);
+    state.status = status;
+    const toggle = document.getElementById('status-toggle');
+    if (toggle) toggle.checked = status === 'published';
+    const lbl = document.getElementById('status-label');
+    if (lbl) lbl.innerHTML = `<strong>${status === 'published' ? '● Veröffentlicht' : '○ Entwurf'}</strong> — ${status === 'published' ? 'Im Widget sichtbar' : 'Nicht öffentlich'}`;
+    showToast(status === 'published' ? 'Board gespeichert & veröffentlicht ✓' : 'Als Entwurf gespeichert ✓', 'success', 2500);
+  } catch (err) {
+    showToast('Fehler beim Speichern: ' + err.message, 'error', 4000);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = original;
+  }
+}
+
+// ── Delete ─────────────────────────────────────────────────────────
+document.getElementById('btn-delete')?.addEventListener('click', async () => {
+  const name = state.boardName || state.title || state.productName || state.faqTitle || 'dieses Board';
+  if (!confirm(`"${name}" wirklich löschen? Dies kann nicht rückgängig gemacht werden.`)) return;
+  try {
+    await deleteBoard(state.id);
+    showToast('Board gelöscht.', 'success', 2000);
+    setTimeout(() => location.href = 'boards.html', 900);
+  } catch {
+    showToast('Fehler beim Löschen.', 'error');
+  }
+});
+
+document.getElementById('btn-save-draft').addEventListener('click', () => handleSave('draft'));
+document.getElementById('btn-save-publish').addEventListener('click', () => handleSave('published'));
+
+// ── Init ───────────────────────────────────────────────────────────
+buildForm();
+updatePreviews();
+
+</script>
+</body>
+</html>
