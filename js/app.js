@@ -7,85 +7,77 @@ import { $, $$, debounce, on } from './utils.js';
 import { createFocusTrap } from './accessibility.js';
 
 /* ─────────────────────────────────────────────
-   Sidebar
+   Sidebar — simple, reliable open/close
 ───────────────────────────────────────────── */
 function initSidebar() {
-  const sidebar   = $('#sidebar');
-  const overlay   = $('#sidebar-overlay');
-  const openBtn   = $('#sidebar-open');
-  const closeBtn  = $('#sidebar-close');
+  const sidebar  = document.getElementById('sidebar');
+  const overlay  = document.getElementById('sidebar-overlay');
+  const openBtn  = document.getElementById('sidebar-open');
+  const closeBtn = document.getElementById('sidebar-close');
 
   if (!sidebar) return;
 
-  const trap = createFocusTrap(sidebar);
+  function isDesktop() { return window.innerWidth >= 768; }
 
-  function open() {
+  function openSidebar() {
+    sidebar.classList.add('is-open');
     sidebar.removeAttribute('hidden');
-    // Tiny rAF so the browser renders the element before adding the class
-    // (guarantees the CSS transform transition fires correctly)
-    requestAnimationFrame(() => {
-      sidebar.classList.add('is-open');
-      sidebar.setAttribute('aria-hidden', 'false');
-    });
-    overlay?.removeAttribute('hidden');
-    requestAnimationFrame(() => overlay?.classList.add('is-visible'));
+    sidebar.setAttribute('aria-hidden', 'false');
+    if (overlay) {
+      overlay.removeAttribute('hidden');
+      // next frame so CSS transition fires
+      requestAnimationFrame(() => overlay.classList.add('is-visible'));
+    }
     document.body.classList.add('sidebar-open');
-    trap.activate();
-    closeBtn?.focus();
+    if (openBtn) openBtn.setAttribute('aria-expanded', 'true');
   }
 
-  function close() {
+  function closeSidebar() {
     sidebar.classList.remove('is-open');
     sidebar.setAttribute('aria-hidden', 'true');
-    overlay?.classList.remove('is-visible');
+    if (overlay) overlay.classList.remove('is-visible');
     document.body.classList.remove('sidebar-open');
-    trap.deactivate();
-    openBtn?.focus();
-    // Hide sidebar + overlay after the slide-out transition finishes
-    sidebar.addEventListener('transitionend', () => {
-      if (!sidebar.classList.contains('is-open') && window.innerWidth < 768) {
+    if (openBtn) openBtn.setAttribute('aria-expanded', 'false');
+
+    // hide after slide-out transition
+    const onEnd = () => {
+      if (!sidebar.classList.contains('is-open') && !isDesktop()) {
         sidebar.setAttribute('hidden', '');
       }
-    }, { once: true });
-    overlay?.addEventListener('transitionend', () => {
-      if (!overlay.classList.contains('is-visible')) {
-        overlay.setAttribute('hidden', '');
-      }
-    }, { once: true });
-  }
-
-  openBtn?.addEventListener('click', open);
-  closeBtn?.addEventListener('click', close);
-  overlay?.addEventListener('click', close);
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && document.body.classList.contains('sidebar-open')) close();
-  });
-
-  // On resize to desktop: ensure sidebar is always visible
-  const mq = window.matchMedia('(min-width: 768px)');
-  function onBreakpoint(e) {
-    if (e.matches) {
-      sidebar.removeAttribute('hidden');
-      sidebar.classList.remove('is-open'); // desktop CSS always shows sidebar
-      sidebar.setAttribute('aria-hidden', 'false');
-      overlay?.setAttribute('hidden', '');
-      overlay?.classList.remove('is-visible');
-      document.body.classList.remove('sidebar-open');
-      trap.deactivate();
-    } else {
-      if (!document.body.classList.contains('sidebar-open')) {
-        sidebar.classList.remove('is-open');
-        sidebar.setAttribute('hidden', '');
-        sidebar.setAttribute('aria-hidden', 'true');
-      }
+    };
+    sidebar.addEventListener('transitionend', onEnd, { once: true });
+    if (overlay) {
+      const onOverlayEnd = () => {
+        if (!overlay.classList.contains('is-visible')) overlay.setAttribute('hidden', '');
+      };
+      overlay.addEventListener('transitionend', onOverlayEnd, { once: true });
     }
   }
-  mq.addEventListener('change', onBreakpoint);
-  // Set initial state
-  if (!mq.matches) {
+
+  if (openBtn)  openBtn.addEventListener('click',  openSidebar);
+  if (closeBtn) closeBtn.addEventListener('click',  closeSidebar);
+  if (overlay)  overlay.addEventListener('click',   closeSidebar);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && sidebar.classList.contains('is-open')) closeSidebar();
+  });
+
+  // Responsive: show/hide on resize
+  window.addEventListener('resize', () => {
+    if (isDesktop()) {
+      sidebar.removeAttribute('hidden');
+      sidebar.classList.remove('is-open');
+      sidebar.setAttribute('aria-hidden', 'false');
+      if (overlay) { overlay.classList.remove('is-visible'); overlay.setAttribute('hidden', ''); }
+      document.body.classList.remove('sidebar-open');
+    }
+  });
+
+  // Initial mobile state: hide sidebar
+  if (!isDesktop()) {
     sidebar.setAttribute('hidden', '');
     sidebar.setAttribute('aria-hidden', 'true');
+    sidebar.classList.remove('is-open');
   }
 }
 
