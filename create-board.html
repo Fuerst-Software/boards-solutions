@@ -219,29 +219,14 @@
             </section>
 
             <section class="form-section">
-              <h2 class="form-section__title">Inhalt</h2>
-              <div class="form-group">
-                <label for="blog-title" class="form-label">Überschrift <span class="form-required">*</span></label>
-                <input id="blog-title" type="text" class="form-input form-input--lg" placeholder="z.B. Die 5 besten Laptops für Freelancer 2025" autocomplete="off" aria-required="true">
-              </div>
-              <div class="form-group">
-                <label for="blog-intro" class="form-label">Einleitung <span class="form-label__optional">Optional</span></label>
-                <textarea id="blog-intro" class="form-input form-textarea" rows="3" placeholder="Kurze Zusammenfassung, die Leser zum Weiterlesen animiert…"></textarea>
-              </div>
-              <div class="form-group">
-                <label for="blog-content" class="form-label">Artikel-Text <span class="form-label__optional">Optional</span></label>
-                <textarea id="blog-content" class="form-input form-textarea" rows="10" placeholder="Schreibe deinen Beitrag hier. Absätze werden automatisch formatiert.&#10;&#10;Du kannst mehrere Absätze mit Leerzeilen trennen."></textarea>
-              </div>
-            </section>
-
-            <section class="form-section">
-              <h2 class="form-section__title">Titelbild</h2>
-              <div class="image-upload-area" id="blog-image-upload-area" role="button" tabindex="0" aria-label="Titelbild hochladen">
+              <h2 class="form-section__title">Profilbild des Boards <span class="form-section__badge">Optional</span></h2>
+              <p class="form-section__desc">Wird als Vorschaubild in deiner Board-Übersicht angezeigt.</p>
+              <div class="image-upload-area image-upload-area--profile" id="blog-image-upload-area" role="button" tabindex="0" aria-label="Profilbild hochladen">
                 <input type="file" id="blog-image-input" class="sr-only" accept="image/jpeg,image/png,image/webp,image/gif" tabindex="-1">
                 <div class="image-upload-area__placeholder" id="blog-image-placeholder">
                   <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                  <p>Bild hochladen oder hierher ziehen</p>
-                  <span class="image-upload-area__hint">JPG, PNG, WEBP — empfohlen 1200 × 630 px</span>
+                  <p>Profilbild hochladen</p>
+                  <span class="image-upload-area__hint">JPG, PNG, WEBP — empfohlen quadratisch</span>
                 </div>
                 <img id="blog-image-preview" class="image-upload-area__preview" src="" alt="Vorschau" hidden>
                 <button id="blog-image-remove" class="image-upload-area__remove" type="button" aria-label="Bild entfernen" hidden>✕</button>
@@ -249,13 +234,31 @@
             </section>
 
             <section class="form-section">
-              <h2 class="form-section__title">Affiliate-Links <span class="form-section__badge">Optional</span></h2>
-              <p class="form-section__desc">Diese erscheinen als anklickbare Buttons im Beitrag.</p>
-              <div id="blog-links-list" class="link-list" aria-live="polite"></div>
-              <button id="blog-add-link" class="btn btn--ghost btn--sm link-add-btn" type="button">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                Link hinzufügen
-              </button>
+              <h2 class="form-section__title">Inhalt</h2>
+              <div class="form-group">
+                <label for="blog-title" class="form-label">Überschrift <span class="form-required">*</span></label>
+                <input id="blog-title" type="text" class="form-input form-input--lg" placeholder="z.B. Die 5 besten Laptops für Freelancer 2025" autocomplete="off" aria-required="true">
+              </div>
+
+              <!-- Dynamic content blocks -->
+              <div id="blog-blocks-list" class="blog-blocks-editor" aria-live="polite"></div>
+
+              <!-- Initial add-block buttons (shown when no blocks yet) -->
+              <div id="blog-blocks-add-initial" class="blog-block-add-row blog-block-add-row--initial">
+                <span class="blog-block-add-row__label">Inhalt hinzufügen:</span>
+                <button type="button" class="btn btn--ghost btn--sm" data-add-block-type="text" data-add-after="-1">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  Textfeld
+                </button>
+                <button type="button" class="btn btn--ghost btn--sm" data-add-block-type="image" data-add-after="-1">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  Bild
+                </button>
+                <button type="button" class="btn btn--ghost btn--sm" data-add-block-type="affiliate" data-add-after="-1">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+                  Affiliate-Link
+                </button>
+              </div>
             </section>
 
           </div>
@@ -740,7 +743,7 @@ const state = {
   blogImage: null, blogThumb: null,
   affImage:  null, affThumb:  null,
   revImage:  null, revThumb:  null,
-  affiliateLinks: [],
+  blogBlocks: [],
   revPros:   [],
   revCons:   [],
   faqItems:  [],
@@ -894,34 +897,206 @@ function setupImageUpload({ areaId, inputId, placeholderId, previewId, removeId,
 setupImageUpload({ areaId:'blog-image-upload-area', inputId:'blog-image-input', placeholderId:'blog-image-placeholder', previewId:'blog-image-preview', removeId:'blog-image-remove', onLoad: (d,t)=>{ state.blogImage=d; state.blogThumb=t; }, onRemove: ()=>{ state.blogImage=null; state.blogThumb=null; } });
 setupImageUpload({ areaId:'aff-image-upload-area',  inputId:'aff-image-input',  placeholderId:'aff-image-placeholder',  previewId:'aff-image-preview',  removeId:'aff-image-remove',  onLoad: (d,t)=>{ state.affImage=d;  state.affThumb=t;  }, onRemove: ()=>{ state.affImage=null;  state.affThumb=null;  } });
 
-/* ── Blog affiliate links ────────────────────────────── */
-document.getElementById('blog-add-link')?.addEventListener('click', () => {
-  state.affiliateLinks.push({ text:'', url:'' });
-  renderAffLinks();
-  document.querySelectorAll('.link-item__text')[state.affiliateLinks.length-1]?.focus();
-});
+/* ── Blog content blocks ─────────────────────────────── */
+function addBlogBlock(type, afterIdx) {
+  const newBlock = type === 'text'      ? { type:'text',      content:'' }
+                 : type === 'image'     ? { type:'image',     data:'', thumb:'' }
+                 : /* affiliate */        { type:'affiliate', text:'', url:'' };
+  if (afterIdx < 0 || afterIdx >= state.blogBlocks.length - 1) {
+    state.blogBlocks.push(newBlock);
+  } else {
+    state.blogBlocks.splice(afterIdx + 1, 0, newBlock);
+  }
+  renderBlogBlocks();
+  // Focus the new block's first input
+  setTimeout(() => {
+    const blocks = document.querySelectorAll('.blog-block');
+    const targetIdx = afterIdx < 0 ? blocks.length - 1 : afterIdx + 1;
+    blocks[targetIdx]?.querySelector('textarea,input')?.focus();
+  }, 50);
+}
 
-function renderAffLinks() {
-  const list = document.getElementById('blog-links-list');
+function renderBlogBlocks() {
+  const list = document.getElementById('blog-blocks-list');
+  const initialRow = document.getElementById('blog-blocks-add-initial');
   if (!list) return;
-  list.innerHTML = state.affiliateLinks.map((l,i) => `
-    <div class="link-item" role="group" aria-label="Link ${i+1}">
-      <div class="link-item__fields">
-        <input type="text" class="form-input link-item__text" placeholder="Button-Text (z.B. Jetzt kaufen)"
-          value="${esc(l.text)}" data-link-idx="${i}" data-link-field="text" aria-label="Text Link ${i+1}">
-        <input type="url" class="form-input link-item__url" placeholder="https://…"
-          value="${esc(l.url)}" data-link-idx="${i}" data-link-field="url" aria-label="URL Link ${i+1}">
-      </div>
-      <button class="link-item__remove" type="button" aria-label="Link ${i+1} entfernen" data-remove-idx="${i}">✕</button>
-    </div>`).join('');
 
-  list.querySelectorAll('[data-link-idx]').forEach(inp => {
-    inp.addEventListener('input', () => { state.affiliateLinks[+inp.dataset.linkIdx][inp.dataset.linkField] = inp.value; });
+  if (initialRow) initialRow.hidden = state.blogBlocks.length > 0;
+
+  list.innerHTML = state.blogBlocks.map((block, i) => {
+    let blockContent = '';
+    if (block.type === 'text') {
+      blockContent = `<textarea class="form-input form-textarea blog-block__textarea" rows="5"
+        placeholder="Text eingeben…" data-bidx="${i}" data-bfield="content"
+        >${esc(block.content)}</textarea>`;
+    } else if (block.type === 'affiliate') {
+      const btnColor = block.color || '#2563eb';
+      const textColor = block.textColor || '#ffffff';
+      blockContent = `
+        <div class="aff-block-fields">
+          <div class="link-item__fields">
+            <input type="text" class="form-input" placeholder="Button-Text (z.B. Jetzt kaufen)"
+              value="${esc(block.text)}" data-bidx="${i}" data-bfield="text" aria-label="Button-Text">
+            <input type="url" class="form-input" placeholder="https://amzn.to/…"
+              value="${esc(block.url)}" data-bidx="${i}" data-bfield="url" aria-label="Affiliate-URL">
+          </div>
+          <div class="aff-block-color-row">
+            <div class="aff-color-field">
+              <label class="aff-color-label">Hintergrundfarbe</label>
+              <div class="aff-color-input">
+                <input type="color" class="aff-color-picker" value="${esc(btnColor)}"
+                  data-bidx="${i}" data-bfield="color" aria-label="Button-Farbe">
+                <span class="aff-color-hex">${esc(btnColor)}</span>
+              </div>
+            </div>
+            <div class="aff-color-field">
+              <label class="aff-color-label">Textfarbe</label>
+              <div class="aff-color-input">
+                <input type="color" class="aff-color-picker" value="${esc(textColor)}"
+                  data-bidx="${i}" data-bfield="textColor" aria-label="Text-Farbe">
+                <span class="aff-color-hex">${esc(textColor)}</span>
+              </div>
+            </div>
+            <div class="aff-color-preview-wrap">
+              <span class="aff-color-label">Vorschau</span>
+              <a class="aff-btn-preview" style="background:${esc(btnColor)};color:${esc(textColor)}" href="#" onclick="return false;">${esc(block.text||'Button')}</a>
+            </div>
+          </div>
+        </div>`;
+    } else if (block.type === 'image') {
+      const hasImg = !!block.data;
+      blockContent = `
+        <div class="image-upload-area" id="bbimg-area-${i}" role="button" tabindex="0" aria-label="Bild hochladen">
+          <input type="file" id="bbimg-input-${i}" class="sr-only" accept="image/jpeg,image/png,image/webp,image/gif" tabindex="-1">
+          <div id="bbimg-ph-${i}" class="image-upload-area__placeholder" ${hasImg ? 'hidden' : ''}>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <p>Bild hochladen oder hierher ziehen</p>
+            <span class="image-upload-area__hint">JPG, PNG, WEBP — max. 5 MB</span>
+          </div>
+          <img id="bbimg-prev-${i}" class="image-upload-area__preview" src="${hasImg ? esc(block.data) : ''}" alt="Vorschau" ${hasImg ? '' : 'hidden'}>
+          <button id="bbimg-rem-${i}" class="image-upload-area__remove" type="button" aria-label="Bild entfernen" ${hasImg ? '' : 'hidden'}>✕</button>
+        </div>`;
+    }
+
+    const labels = { text:'Textfeld', image:'Bild', affiliate:'Affiliate-Link' };
+    const icons  = {
+      text:      `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="14" y2="16"/></svg>`,
+      image:     `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`,
+      affiliate: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>`,
+    };
+
+    return `
+      <div class="blog-block" data-block-idx="${i}">
+        <div class="blog-block__header">
+          <span class="blog-block__label">${icons[block.type]} ${labels[block.type]}</span>
+          <button type="button" class="blog-block__remove" data-block-remove="${i}" aria-label="Block entfernen">
+            <svg width="13" height="13" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/></svg>
+          </button>
+        </div>
+        <div class="blog-block__body">${blockContent}</div>
+        <div class="blog-block__add-row">
+          <span class="blog-block-add-row__label">Hinzufügen:</span>
+          <button type="button" class="btn btn--ghost btn--sm" data-add-block-type="text" data-add-after="${i}">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Text
+          </button>
+          <button type="button" class="btn btn--ghost btn--sm" data-add-block-type="image" data-add-after="${i}">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            Bild
+          </button>
+          <button type="button" class="btn btn--ghost btn--sm" data-add-block-type="affiliate" data-add-after="${i}">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+            Link
+          </button>
+        </div>
+      </div>`;
+  }).join('');
+
+  // Wire up: text/affiliate inputs + color pickers
+  list.querySelectorAll('[data-bidx]').forEach(el => {
+    el.addEventListener('input', () => {
+      const idx = +el.dataset.bidx;
+      const field = el.dataset.bfield;
+      state.blogBlocks[idx][field] = el.value;
+
+      // Color picker: update hex display, button preview, and live preview
+      if (el.type === 'color') {
+        const hexEl = el.closest('.aff-color-input')?.querySelector('.aff-color-hex');
+        if (hexEl) hexEl.textContent = el.value;
+        // Update the inline button preview
+        const previewBtn = el.closest('.aff-block-fields')?.querySelector('.aff-btn-preview');
+        if (previewBtn) {
+          const block = state.blogBlocks[idx];
+          previewBtn.style.background = block.color || '#2563eb';
+          previewBtn.style.color = block.textColor || '#ffffff';
+          previewBtn.textContent = block.text || 'Button';
+        }
+      }
+      // Also sync button text to preview label
+      if (field === 'text') {
+        const previewBtn = el.closest('.aff-block-fields')?.querySelector('.aff-btn-preview');
+        if (previewBtn) previewBtn.textContent = el.value || 'Button';
+      }
+
+      if (state.step === 3) buildPreview();
+    });
   });
-  list.querySelectorAll('[data-remove-idx]').forEach(b => {
-    b.addEventListener('click', () => { state.affiliateLinks.splice(+b.dataset.removeIdx,1); renderAffLinks(); });
+
+  // Wire up: remove block buttons
+  list.querySelectorAll('[data-block-remove]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.blogBlocks.splice(+btn.dataset.blockRemove, 1);
+      renderBlogBlocks();
+      if (state.step === 3) buildPreview();
+    });
+  });
+
+  // Wire up: add-block buttons (after a block)
+  list.querySelectorAll('[data-add-block-type]').forEach(btn => {
+    btn.addEventListener('click', () => addBlogBlock(btn.dataset.addBlockType, +btn.dataset.addAfter));
+  });
+
+  // Wire up: image blocks
+  state.blogBlocks.forEach((block, i) => {
+    if (block.type !== 'image') return;
+    const area  = document.getElementById(`bbimg-area-${i}`);
+    const input = document.getElementById(`bbimg-input-${i}`);
+    const ph    = document.getElementById(`bbimg-ph-${i}`);
+    const prev  = document.getElementById(`bbimg-prev-${i}`);
+    const rem   = document.getElementById(`bbimg-rem-${i}`);
+    if (!area) return;
+
+    const showImg = (src) => { prev.src=src; prev.hidden=false; ph.hidden=true; rem.hidden=false; };
+    const clearImg = () => { prev.src=''; prev.hidden=true; ph.hidden=false; rem.hidden=true; input.value=''; block.data=''; block.thumb=''; if(state.step===3) buildPreview(); };
+
+    function loadBlockImg(file) {
+      if (!file?.type.startsWith('image/')) { showToast('Nur Bilder erlaubt (JPG, PNG, WEBP).','error'); return; }
+      if (file.size > 5*1024*1024) { showToast('Bild zu groß — max. 5 MB.','error'); return; }
+      const r = new FileReader();
+      r.onload = async e => {
+        const full = e.target.result;
+        const thumb = await generateThumb(full);
+        block.data = full; block.thumb = thumb;
+        showImg(full);
+        if (state.step === 3) buildPreview();
+      };
+      r.readAsDataURL(file);
+    }
+
+    area.addEventListener('click', () => { if (prev.hidden) input.click(); });
+    area.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') { e.preventDefault(); if(prev.hidden) input.click(); } });
+    input.addEventListener('change', () => { if (input.files[0]) loadBlockImg(input.files[0]); });
+    rem.addEventListener('click', e => { e.stopPropagation(); clearImg(); });
+    area.addEventListener('dragover', e => { e.preventDefault(); area.classList.add('is-dragging'); });
+    area.addEventListener('dragleave', () => area.classList.remove('is-dragging'));
+    area.addEventListener('drop', e => { e.preventDefault(); area.classList.remove('is-dragging'); if(e.dataTransfer.files[0]) loadBlockImg(e.dataTransfer.files[0]); });
   });
 }
+
+// Initial add-block buttons (shown when blocks list is empty)
+document.getElementById('blog-blocks-add-initial')?.querySelectorAll('[data-add-block-type]').forEach(btn => {
+  btn.addEventListener('click', () => addBlogBlock(btn.dataset.addBlockType, -1));
+});
 
 /* ── Review star picker ──────────────────────────────── */
 const starPicker = document.getElementById('rev-star-picker');
@@ -1021,8 +1196,6 @@ function prefillEditData(board) {
   if (board.type === 'blog') {
     setVal('blog-board-name', board.boardName);
     setVal('blog-title',      board.title);
-    setVal('blog-intro',      board.intro);
-    setVal('blog-content',    board.content);
     setVal('blog-tags',       (board.tags || []).join(', '));
     if (board.image) {
       state.blogImage = board.image;
@@ -1034,10 +1207,18 @@ function prefillEditData(board) {
       if (ph)   ph.hidden = true;
       if (rem)  rem.hidden = false;
     }
-    if (board.affiliateLinks?.length) {
-      state.affiliateLinks = board.affiliateLinks.map(l => ({ text: l.text || '', url: l.url || '' }));
-      renderAffLinks();
+    // Restore blocks — support both new (blocks) and old (intro/content/affiliateLinks) format
+    if (board.blocks?.length) {
+      state.blogBlocks = board.blocks;
+    } else {
+      state.blogBlocks = [];
+      if (board.intro)   state.blogBlocks.push({ type:'text', content: board.intro });
+      if (board.content) state.blogBlocks.push({ type:'text', content: board.content });
+      (board.affiliateLinks || []).forEach(l => {
+        state.blogBlocks.push({ type:'affiliate', text: l.text||'', url: l.url||'' });
+      });
     }
+    renderBlogBlocks();
   }
 
   if (board.type === 'affiliate') {
@@ -1137,34 +1318,36 @@ function buildPreview() {
 }
 
 function buildBlogPreview() {
-  const title    = v('blog-title') || 'Kein Titel';
-  const intro    = v('blog-intro');
-  const content  = v('blog-content');
-
+  const title = v('blog-title') || 'Kein Titel';
   setText('pb-title', title);
 
-  const metaTop = document.getElementById('pb-meta-top');
-  metaTop.innerHTML = '';
-
-  const byline = document.getElementById('pb-byline');
-  byline.innerHTML = `<span class="bp-blog__date">${new Date().toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'})}</span>`;
+  document.getElementById('pb-meta-top').innerHTML = '';
+  document.getElementById('pb-byline').innerHTML =
+    `<span class="bp-blog__date">${new Date().toLocaleDateString('de-DE',{day:'2-digit',month:'long',year:'numeric'})}</span>`;
 
   const imgWrap = document.getElementById('pb-image-wrap');
   if (state.blogImage) { document.getElementById('pb-image').src = state.blogImage; imgWrap.hidden = false; }
   else imgWrap.hidden = true;
 
-  document.getElementById('pb-intro').innerHTML = intro ? `<p class="bp-blog__lead">${esc(intro)}</p>` : '';
+  document.getElementById('pb-intro').innerHTML = '';
 
   const bodyEl = document.getElementById('pb-body');
-  if (content) {
-    bodyEl.innerHTML = content.split(/\n\n+/).map(p => `<p>${esc(p.trim())}</p>`).join('');
-  } else bodyEl.innerHTML = '';
+  bodyEl.innerHTML = state.blogBlocks.map(block => {
+    if (block.type === 'text' && block.content.trim()) {
+      return block.content.split(/\n\n+/).map(p => `<p>${esc(p.trim())}</p>`).join('');
+    }
+    if (block.type === 'image' && block.data) {
+      return `<img src="${esc(block.data)}" alt="" style="max-width:100%;border-radius:8px;margin:12px 0;display:block;">`;
+    }
+    if (block.type === 'affiliate' && block.url) {
+      const bg  = block.color     || '#2563eb';
+      const col = block.textColor || '#ffffff';
+      return `<div style="margin:12px 0"><a href="#" class="bp-affiliate__btn" style="background:${esc(bg)};color:${esc(col)};border-color:${esc(bg)}" onclick="return false;">${esc(block.text||'Link')}</a></div>`;
+    }
+    return '';
+  }).join('');
 
-  const linksEl = document.getElementById('pb-links');
-  const validLinks = state.affiliateLinks.filter(l => l.url);
-  linksEl.innerHTML = validLinks.length
-    ? `<div class="bp-blog__links-inner">${validLinks.map(l => `<a href="#" class="bp-affiliate__btn" onclick="return false;">${esc(l.text||'Link')}</a>`).join('')}</div>`
-    : '';
+  document.getElementById('pb-links').innerHTML = '';
 }
 
 function buildAffiliatePreview() {
@@ -1282,14 +1465,16 @@ function collectData() {
 
   if (state.type === 'blog') return {
     type: 'blog',
-    boardName:      v('blog-board-name'),
-    title:          v('blog-title'),
-    intro:          v('blog-intro'),
-    content:        v('blog-content'),
-    tags:           v('blog-tags').split(',').map(t=>t.trim()).filter(Boolean),
-    image:          state.blogImage,
-    imageThumb:     state.blogThumb,
-    affiliateLinks: state.affiliateLinks.filter(l => l.url),
+    boardName:  v('blog-board-name'),
+    title:      v('blog-title'),
+    tags:       v('blog-tags').split(',').map(t=>t.trim()).filter(Boolean),
+    image:      state.blogImage,
+    imageThumb: state.blogThumb,
+    blocks:     state.blogBlocks,
+    // backward-compat fields derived from blocks
+    intro:          state.blogBlocks.filter(b=>b.type==='text').map(b=>b.content).join('\n\n'),
+    content:        '',
+    affiliateLinks: state.blogBlocks.filter(b=>b.type==='affiliate'&&b.url).map(b=>({text:b.text,url:b.url})),
     embedId,
   };
 
@@ -1361,7 +1546,7 @@ async function handleSave(status) {
 }
 
 /* ── Live preview while typing ────────────────────────── */
-['blog-title','blog-intro','blog-content',
+['blog-title',
  'aff-product-name','aff-description','aff-price','aff-button-text','aff-rating','aff-badge',
  'rev-product-name','rev-review-text','rev-price','rev-verdict','rev-button-text',
  'faq-title'

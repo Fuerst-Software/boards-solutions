@@ -134,7 +134,7 @@
         <div class="search-wrapper" data-search-wrapper>
           <label for="boards-search" class="sr-only">Boards durchsuchen</label>
           <svg class="search-wrapper__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input id="boards-search" type="search" class="search-wrapper__input" placeholder="Board suchen…" autocomplete="off">
+          <input id="boards-search" type="text" class="search-wrapper__input" placeholder="Board suchen…" autocomplete="off">
           <button id="boards-search-clear" class="search-wrapper__clear" aria-label="Suche leeren" type="button" hidden>
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
           </button>
@@ -246,6 +246,9 @@ function getFiltered() {
 }
 
 function render() {
+  // Always hide loading when render is called (fixes race with backgroundRefresh)
+  loading.hidden = true;
+
   // Tab counts
   document.getElementById('count-all').textContent       = allBoards.length;
   document.getElementById('count-blog').textContent      = allBoards.filter(b => b.type==='blog').length;
