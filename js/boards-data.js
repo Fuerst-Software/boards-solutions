@@ -6,7 +6,7 @@
  * Dispatches 'bs:boards-updated' custom event on every cache write.
  */
 
-import { authHeaders, getToken } from './auth.js';
+import { authHeaders, getToken, clearAuth } from './auth.js';
 
 const API_BASE         = 'https://web-production-83480.up.railway.app/api';
 const API_TIMEOUT      = 15000;  // health check (same as save — handles Railway cold start)
@@ -114,6 +114,7 @@ async function apiFetchBoards({ type, status, q } = {}) {
       headers: authHeaders(),
       signal: AbortSignal.timeout(API_SAVE_TIMEOUT),
     });
+    if (res.status === 401) { clearAuth(); window.location.href = 'login.html?reason=session_expired'; return null; }
     if (!res.ok) return null;
     const data = await res.json();
     return Array.isArray(data) ? data : null;
@@ -210,6 +211,12 @@ export async function saveBoard(boardData) {
       signal: AbortSignal.timeout(API_SAVE_TIMEOUT),
     });
     if (!res.ok) {
+      if (res.status === 401) {
+        // Token expired or invalid — clear auth and redirect to login
+        clearAuth();
+        window.location.href = 'login.html?reason=session_expired';
+        return saved;
+      }
       const err = await res.json().catch(() => ({}));
       throw new Error(err.error || `HTTP ${res.status}`);
     }
