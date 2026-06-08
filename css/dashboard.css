@@ -7322,3 +7322,105 @@ body.sidebar-open {
 @media (min-width: 768px) {
   body.sidebar-open { overflow: auto; }
 }
+
+/* ── 19. Website-Bereiche / Area Chips ───────────────────────── */
+.areas-checklist {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  min-height: 1.5rem;
+}
+
+.area-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .35rem .75rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--color-border-default);
+  background: var(--color-surface-base);
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: border-color .15s, background .15s, color .15s;
+  user-select: none;
+}
+.area-chip:hover {
+  border-color: var(--area-color, #2563eb);
+  color: var(--area-color, #2563eb);
+}
+.area-chip--selected {
+  background: color-mix(in srgb, var(--area-color, #2563eb) 10%, transparent);
+  border-color: var(--area-color, #2563eb);
+  color: var(--area-color, #2563eb);
+}
+.area-chip__icon {
+  flex-shrink: 0;
+  opacity: .7;
+}
+
+/* Areas manager panel in boards.html */
+.areas-manager {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: .75rem;
+  margin-top: .75rem;
+}
+.area-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  padding: .7rem 1rem;
+  border: 1.5px solid var(--color-border-default);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-base);
+}
+.area-card__info {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  min-width: 0;
+}
+.area-card__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.area-card__name {
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.area-card__count {
+  font-size: .72rem;
+  color: var(--color-text-muted);
+}
+.area-card__actions {
+  display: flex;
+  gap: .25rem;
+  flex-shrink: 0;
+}
+.area-card__btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: .25rem;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  line-height: 0;
+  transition: color .15s, background .15s;
+}
+.area-card__btn:hover {
+  color: var(--color-text-primary);
+  background: var(--color-surface-subtle);
+}
+.area-card__btn--danger:hover {
+  color: var(--color-red-600, #dc2626);
+}
+

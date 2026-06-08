@@ -438,6 +438,26 @@
           </div>
         </div>
 
+        <!-- ══════════ Website-Bereiche ══════════ -->
+        <div class="form-sections" id="areas-outer-section" style="margin-top:0">
+          <section class="form-section">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:.5rem">
+              <h2 class="form-section__title" style="margin-bottom:0">Website-Bereiche <span class="form-section__badge">Optional</span></h2>
+            </div>
+            <p class="form-section__desc" style="margin-bottom:.9rem">Wähle, auf welchen Seiten-Bereichen dieser Board erscheinen soll. Neue Bereiche kannst du direkt hier anlegen.</p>
+            <div id="areas-checklist" class="areas-checklist" role="group" aria-label="Website-Bereiche auswählen">
+              <p id="areas-loading-hint" style="color:var(--color-text-muted);font-size:.82rem;margin:0">Bereiche werden geladen…</p>
+            </div>
+            <div class="areas-new-row" style="display:flex;gap:.5rem;margin-top:.75rem;align-items:center">
+              <input type="text" id="new-area-name" class="form-input" placeholder="Neuer Bereich, z.B. Homepage, Sidebar, Blog…" autocomplete="off" style="flex:1;min-width:0">
+              <button type="button" id="btn-add-area" class="btn btn--ghost btn--sm" style="white-space:nowrap;flex-shrink:0">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Bereich erstellen
+              </button>
+            </div>
+          </section>
+        </div>
+
         <div class="wizard-nav">
           <button id="btn-prev-2" class="btn btn--ghost" type="button">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
@@ -675,7 +695,7 @@
 <script type="module" src="js/app.js"></script>
 <script type="module">
 import { requireAuth, updateSidebar, getUser, getEmbedKey, authHeaders } from './js/auth.js';
-import { saveBoard, getBoardById, buildUserSnippet, buildSnippet } from './js/boards-data.js';
+import { saveBoard, getBoardById, buildUserSnippet, buildSnippet, getAreas, saveArea } from './js/boards-data.js';
 import { showToast } from './js/app.js';
 
 (async () => {
@@ -750,6 +770,7 @@ const state = {
   revRating: 0,
   generatedEmbedId: null,
   editId: isEditMode ? editId : null,
+  selectedAreas: [],
 };
 
 /* ── Thumbnail generator ─────────────────────────────────── */
@@ -1179,6 +1200,75 @@ if (!isEditMode) {
   renderFaqItems();
 }
 
+/* ── Website-Bereiche ─────────────────────────────────── */
+let _allAreas = [];
+
+function renderAreasChecklist() {
+  const container = document.getElementById('areas-checklist');
+  const hint      = document.getElementById('areas-loading-hint');
+  if (!container) return;
+  if (hint) hint.remove();
+
+  if (_allAreas.length === 0) {
+    container.innerHTML = '<p style="color:var(--color-text-muted);font-size:.82rem;margin:0 0 .25rem">Noch keine Bereiche vorhanden — erstelle deinen ersten Bereich unten.</p>';
+    return;
+  }
+
+  const COLORS = { blue:'#2563eb', green:'#16a34a', purple:'#7c3aed', orange:'#ea580c', pink:'#db2777', yellow:'#ca8a04', gray:'#64748b' };
+
+  container.innerHTML = _allAreas.map(a => {
+    const checked  = state.selectedAreas.includes(a.id);
+    const color    = COLORS[a.color] || COLORS.blue;
+    return `
+      <label class="area-chip${checked ? ' area-chip--selected' : ''}" data-area-id="${a.id}" style="--area-color:${color}">
+        <input type="checkbox" class="sr-only" data-area-check="${a.id}" ${checked ? 'checked' : ''}>
+        <svg class="area-chip__icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        ${esc(a.name)}
+      </label>`;
+  }).join('');
+
+  container.querySelectorAll('[data-area-check]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      const id = cb.dataset.areaCheck;
+      if (cb.checked) {
+        if (!state.selectedAreas.includes(id)) state.selectedAreas.push(id);
+      } else {
+        state.selectedAreas = state.selectedAreas.filter(x => x !== id);
+      }
+      renderAreasChecklist();
+    });
+  });
+}
+
+(async () => {
+  _allAreas = await getAreas();
+  renderAreasChecklist();
+})();
+
+document.getElementById('btn-add-area')?.addEventListener('click', async () => {
+  const input = document.getElementById('new-area-name');
+  const name  = (input?.value || '').trim();
+  if (!name) { input?.focus(); return; }
+  const btn = document.getElementById('btn-add-area');
+  btn.disabled = true;
+  try {
+    const area = await saveArea({ name });
+    _allAreas.push(area);
+    state.selectedAreas.push(area.id);
+    input.value = '';
+    renderAreasChecklist();
+    showToast(`Bereich „${name}" erstellt und ausgewählt.`, 'success', 2500);
+  } catch (e) {
+    showToast(e.message || 'Bereich konnte nicht erstellt werden.', 'error', 3500);
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+document.getElementById('new-area-name')?.addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); document.getElementById('btn-add-area')?.click(); }
+});
+
 /* ── Pre-fill for edit mode ──────────────────────────────── */
 function setVal(id, val) { const el = document.getElementById(id); if (el && val != null) el.value = val; }
 
@@ -1277,6 +1367,12 @@ function prefillEditData(board) {
       state.faqItems = [{ q:'', a:'' }];
     }
     renderFaqItems();
+  }
+
+  // Restore selected areas
+  if (Array.isArray(board.areas)) {
+    state.selectedAreas = [...board.areas];
+    renderAreasChecklist();
   }
 
   goToStep(2);
@@ -1463,6 +1559,8 @@ function toast(btnId, msg) {
 function collectData() {
   const embedId = state.generatedEmbedId || (state.generatedEmbedId = Date.now().toString(36));
 
+  const areas = state.selectedAreas;
+
   if (state.type === 'blog') return {
     type: 'blog',
     boardName:  v('blog-board-name'),
@@ -1475,7 +1573,7 @@ function collectData() {
     intro:          state.blogBlocks.filter(b=>b.type==='text').map(b=>b.content).join('\n\n'),
     content:        '',
     affiliateLinks: state.blogBlocks.filter(b=>b.type==='affiliate'&&b.url).map(b=>({text:b.text,url:b.url})),
-    embedId,
+    areas, embedId,
   };
 
   if (state.type === 'affiliate') return {
@@ -1490,7 +1588,7 @@ function collectData() {
     badge:        v('aff-badge'),
     image:        state.affImage,
     imageThumb:   state.affThumb,
-    embedId,
+    areas, embedId,
   };
 
   if (state.type === 'review') return {
@@ -1505,7 +1603,7 @@ function collectData() {
     price:       v('rev-price'),
     affiliateUrl:v('rev-url'),
     buttonText:  v('rev-button-text') || 'Preis prüfen',
-    embedId,
+    areas, embedId,
   };
 
   if (state.type === 'faq') return {
@@ -1513,7 +1611,7 @@ function collectData() {
     boardName: v('faq-board-name'),
     faqTitle:  v('faq-title'),
     faqs:      state.faqItems.filter(i => i.q.trim()).map(i => ({ question: i.q, answer: i.a })),
-    embedId,
+    areas, embedId,
   };
 }
 

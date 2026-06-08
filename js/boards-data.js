@@ -395,6 +395,47 @@ export function getStats() {
   };
 }
 
+// ═══════════════════════════════════════════════════════════════
+//  Website Areas API
+// ═══════════════════════════════════════════════════════════════
+
+export async function getAreas() {
+  if (!getToken()) return [];
+  try {
+    const res = await fetch(`${API_BASE}/areas`, {
+      headers: authHeaders(),
+      signal: AbortSignal.timeout(API_SAVE_TIMEOUT),
+    });
+    if (!res.ok) return [];
+    return await res.json();
+  } catch { return []; }
+}
+
+export async function saveArea(areaData) {
+  const method = areaData.id ? 'PUT' : 'POST';
+  const url    = areaData.id ? `${API_BASE}/areas/${areaData.id}` : `${API_BASE}/areas`;
+  const res = await fetch(url, {
+    method,
+    headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+    body: JSON.stringify(areaData),
+    signal: AbortSignal.timeout(API_SAVE_TIMEOUT),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || `HTTP ${res.status}`);
+  }
+  return res.json();
+}
+
+export async function deleteArea(id) {
+  const res = await fetch(`${API_BASE}/areas/${id}`, {
+    method: 'DELETE',
+    headers: authHeaders(),
+    signal: AbortSignal.timeout(API_SAVE_TIMEOUT),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+}
+
 // ── Demo data seeding ─────────────────────────────────────────────
 const DEMO_BOARDS = [
   {

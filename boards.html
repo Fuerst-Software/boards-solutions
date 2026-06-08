@@ -179,6 +179,46 @@
         <button type="button" class="btn btn--ghost btn--sm" id="reset-filters">Filter zurücksetzen</button>
       </div>
 
+      <!-- ══════════ Website-Bereiche Manager ══════════ -->
+      <div class="dashboard-panel" style="margin-top:2.5rem" id="areas-manager-panel">
+        <div class="dashboard-panel__header">
+          <div>
+            <h2 class="dashboard-panel__title">Website-Bereiche</h2>
+            <p class="dashboard-panel__description">Definiere Bereiche deiner Website, auf denen Boards angezeigt werden sollen — z.B. Homepage, Blog, Sidebar.</p>
+          </div>
+        </div>
+
+        <div id="areas-manager" class="areas-manager">
+          <p id="areas-manager-loading" style="color:var(--color-text-muted);font-size:.85rem;grid-column:1/-1">Bereiche werden geladen…</p>
+        </div>
+
+        <!-- New area form -->
+        <div style="display:flex;gap:.6rem;margin-top:1rem;align-items:center;flex-wrap:wrap">
+          <input type="text" id="new-area-name" class="form-input" placeholder="Name des neuen Bereichs, z.B. Homepage…" autocomplete="off" style="flex:1;min-width:180px;max-width:360px">
+          <div style="display:flex;gap:.4rem;align-items:center">
+            <label for="new-area-color" class="sr-only">Farbe</label>
+            <select id="new-area-color" class="form-input" style="width:auto;padding-right:2rem">
+              <option value="blue">🔵 Blau</option>
+              <option value="green">🟢 Grün</option>
+              <option value="purple">🟣 Lila</option>
+              <option value="orange">🟠 Orange</option>
+              <option value="pink">🩷 Pink</option>
+              <option value="yellow">🟡 Gelb</option>
+              <option value="gray">⚫ Grau</option>
+            </select>
+            <button type="button" id="btn-create-area" class="btn btn--primary btn--sm">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Bereich erstellen
+            </button>
+          </div>
+        </div>
+
+        <p class="form-hint" style="margin-top:.6rem">
+          Weise Boards einem Bereich zu beim Erstellen oder Bearbeiten. Nutze dann
+          <code>data-area="bereich-id"</code> im Embed-Snippet für bereichsspezifische Einbettung.
+        </p>
+      </div>
+
     </main>
   </div>
 </div>
@@ -186,7 +226,7 @@
 <script type="module" src="js/app.js"></script>
 <script type="module">
 import { requireAuth, updateSidebar } from './js/auth.js';
-import { getBoards, deleteBoard, duplicateBoard, toggleBoardStatus, relativeDate, seedDemoData } from './js/boards-data.js';
+import { getBoards, deleteBoard, duplicateBoard, toggleBoardStatus, relativeDate, seedDemoData, getAreas, saveArea, deleteArea } from './js/boards-data.js';
 import { showToast } from './js/app.js';
 
 (async () => {
@@ -525,6 +565,89 @@ window.addEventListener('bs:boards-updated', e => {
 });
 
 init();
+
+// ══════════ Website-Bereiche Manager ══════════
+const AREA_COLORS = { blue:'#2563eb', green:'#16a34a', purple:'#7c3aed', orange:'#ea580c', pink:'#db2777', yellow:'#ca8a04', gray:'#64748b' };
+let _areas = [];
+
+async function initAreasManager() {
+  _areas = await getAreas();
+  renderAreasManager();
+}
+
+function renderAreasManager() {
+  const container = document.getElementById('areas-manager');
+  if (!container) return;
+  const hint = document.getElementById('areas-manager-loading');
+  if (hint) hint.remove();
+
+  if (_areas.length === 0) {
+    container.innerHTML = '<p style="color:var(--color-text-muted);font-size:.85rem;grid-column:1/-1;margin:0">Noch keine Bereiche erstellt.</p>';
+    return;
+  }
+
+  container.innerHTML = _areas.map(a => {
+    const color = AREA_COLORS[a.color] || AREA_COLORS.blue;
+    // Count boards assigned to this area
+    const count = allBoards.filter(b => Array.isArray(b.areas) && b.areas.includes(a.id)).length;
+    return `
+      <div class="area-card" data-area-id="${esc(a.id)}">
+        <div class="area-card__info">
+          <span class="area-card__dot" style="background:${color}"></span>
+          <div>
+            <div class="area-card__name">${esc(a.name)}</div>
+            <div class="area-card__count">${count} Board${count !== 1 ? 's' : ''}</div>
+          </div>
+        </div>
+        <div class="area-card__actions">
+          <button class="area-card__btn area-card__btn--danger" data-delete-area="${esc(a.id)}" data-area-name="${esc(a.name)}" title="Bereich löschen" type="button">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+          </button>
+        </div>
+      </div>`;
+  }).join('');
+
+  container.querySelectorAll('[data-delete-area]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id   = btn.dataset.deleteArea;
+      const name = btn.dataset.areaName;
+      if (!confirm(`Bereich „${name}" wirklich löschen?\n\nDie Boards bleiben erhalten, verlieren aber diese Zuweisung.`)) return;
+      try {
+        await deleteArea(id);
+        _areas = _areas.filter(a => a.id !== id);
+        renderAreasManager();
+        showToast(`Bereich „${name}" gelöscht.`, 'success', 2500);
+      } catch { showToast('Fehler beim Löschen des Bereichs.', 'error'); }
+    });
+  });
+}
+
+document.getElementById('btn-create-area')?.addEventListener('click', async () => {
+  const nameInput  = document.getElementById('new-area-name');
+  const colorSelect= document.getElementById('new-area-color');
+  const name = (nameInput?.value || '').trim();
+  if (!name) { nameInput?.focus(); return; }
+  const btn = document.getElementById('btn-create-area');
+  btn.disabled = true;
+  try {
+    const area = await saveArea({ name, color: colorSelect?.value || 'blue' });
+    _areas.push(area);
+    nameInput.value = '';
+    renderAreasManager();
+    showToast(`Bereich „${name}" erstellt.`, 'success', 2000);
+  } catch (e) {
+    showToast(e.message || 'Bereich konnte nicht erstellt werden.', 'error', 3500);
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+document.getElementById('new-area-name')?.addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); document.getElementById('btn-create-area')?.click(); }
+});
+
+initAreasManager();
+
 })();
 </script>
 

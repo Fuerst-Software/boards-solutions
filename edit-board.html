@@ -775,7 +775,7 @@
 <script type="module" src="js/app.js"></script>
 <script type="module">
 import { requireAuth, updateSidebar, authHeaders } from './js/auth.js';
-import { getBoardById, saveBoard, deleteBoard } from './js/boards-data.js';
+import { getBoardById, saveBoard, deleteBoard, getAreas, saveArea } from './js/boards-data.js';
 import { showToast } from './js/app.js';
 
 if (!requireAuth()) throw new Error('auth');
@@ -891,7 +891,76 @@ const state = {
   // FAQ
   faqTitle:      board.faqTitle      || board.boardName || 'Häufige Fragen',
   faqs:          board.faqs          || [],
+
+  // Areas
+  areas:         board.areas         || [],
 };
+
+// ── Website-Bereiche editor ────────────────────────────────────────
+let _allAreas = [];
+
+function renderAreasChecklist() {
+  const container = document.getElementById('areas-checklist');
+  const hint      = document.getElementById('areas-loading-hint');
+  if (!container) return;
+  if (hint) hint.remove();
+
+  const COLORS = { blue:'#2563eb', green:'#16a34a', purple:'#7c3aed', orange:'#ea580c', pink:'#db2777', yellow:'#ca8a04', gray:'#64748b' };
+
+  if (_allAreas.length === 0) {
+    container.innerHTML = '<p style="color:var(--color-text-muted);font-size:.78rem;margin:0">Noch keine Bereiche — erstelle deinen ersten unten.</p>';
+    return;
+  }
+
+  container.innerHTML = _allAreas.map(a => {
+    const checked = state.areas.includes(a.id);
+    const color   = COLORS[a.color] || COLORS.blue;
+    return `
+      <label class="area-chip${checked ? ' area-chip--selected' : ''}" data-area-id="${a.id}" style="--area-color:${color}">
+        <input type="checkbox" class="sr-only" data-area-check="${a.id}" ${checked ? 'checked' : ''}>
+        <svg class="area-chip__icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        ${esc(a.name)}
+      </label>`;
+  }).join('');
+
+  container.querySelectorAll('[data-area-check]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      const id = cb.dataset.areaCheck;
+      if (cb.checked) { if (!state.areas.includes(id)) state.areas.push(id); }
+      else             { state.areas = state.areas.filter(x => x !== id); }
+      renderAreasChecklist();
+    });
+  });
+}
+
+async function initAreasEditor() {
+  _allAreas = await getAreas();
+  renderAreasChecklist();
+
+  document.getElementById('btn-add-area')?.addEventListener('click', async () => {
+    const input = document.getElementById('new-area-name');
+    const name  = (input?.value || '').trim();
+    if (!name) { input?.focus(); return; }
+    const btn = document.getElementById('btn-add-area');
+    btn.disabled = true;
+    try {
+      const area = await saveArea({ name });
+      _allAreas.push(area);
+      state.areas.push(area.id);
+      input.value = '';
+      renderAreasChecklist();
+      showToast(`Bereich „${name}" erstellt.`, 'success', 2000);
+    } catch (e) {
+      showToast(e.message || 'Fehler beim Erstellen.', 'error', 3000);
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  document.getElementById('new-area-name')?.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); document.getElementById('btn-add-area')?.click(); }
+  });
+}
 
 // ── Form builder ───────────────────────────────────────────────────
 const formBody = document.getElementById('edit-form-body');
@@ -921,8 +990,26 @@ function buildForm() {
     html += faqFormHtml();
   }
 
+  // Shared: Website-Bereiche section
+  html += `
+    <div class="edit-section" id="areas-edit-section">
+      <span class="edit-section__label">Website-Bereiche</span>
+      <p style="font-size:.78rem;color:var(--color-text-muted);margin:0 0 .6rem">Auf welchen Seiten soll dieser Board erscheinen?</p>
+      <div id="areas-checklist" class="areas-checklist" role="group" aria-label="Website-Bereiche">
+        <p id="areas-loading-hint" style="color:var(--color-text-muted);font-size:.78rem;margin:0">Wird geladen…</p>
+      </div>
+      <div style="display:flex;gap:.5rem;margin-top:.6rem;align-items:center">
+        <input type="text" id="new-area-name" class="edit-input" placeholder="Neuer Bereich…" autocomplete="off" style="flex:1;min-width:0">
+        <button type="button" id="btn-add-area" class="btn btn--ghost btn--sm" style="white-space:nowrap;flex-shrink:0">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Erstellen
+        </button>
+      </div>
+    </div>`;
+
   formBody.innerHTML = html;
   bindFormEvents();
+  initAreasEditor();
 }
 
 function blogFormHtml() {
@@ -1536,6 +1623,7 @@ async function handleSave(status) {
     status,
     boardName: (t==='faq' ? state.faqTitle : state.boardName) || '',
     tags:      state.tags.split(',').map(s=>s.trim()).filter(Boolean),
+    areas:     state.areas,
     updatedAt: new Date().toISOString(),
   };
 
