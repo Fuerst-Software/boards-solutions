@@ -3391,6 +3391,7 @@ body.sidebar-open { overflow: hidden; }
 }
 .action-card--blog   { border-left: 4px solid var(--color-blue-500); }
 .action-card--affiliate { border-left: 4px solid #10B981; }
+.action-card--areas { border-left: 4px solid #0891B2; }
 
 .action-card__icon {
   width: 52px;
@@ -3408,6 +3409,10 @@ body.sidebar-open { overflow: hidden; }
 .action-card--affiliate .action-card__icon {
   background: #ECFDF5;
   color: #10B981;
+}
+.action-card--areas .action-card__icon {
+  background: #ECFEFF;
+  color: #0891B2;
 }
 
 .action-card__body {
@@ -3438,6 +3443,7 @@ body.sidebar-open { overflow: hidden; }
 }
 .action-card--blog .action-card__cta      { color: var(--color-blue-500); }
 .action-card--affiliate .action-card__cta { color: #10B981; }
+.action-card--areas .action-card__cta     { color: #0891B2; }
 
 
 /* ── Dashboard Home: recent boards list ── */
@@ -3865,6 +3871,10 @@ body.sidebar-open { overflow: hidden; }
   padding: 2px 8px;
   border-radius: 999px;
   font-weight: var(--font-weight-medium);
+}
+.form-section__badge--required {
+  background: #FEF3C7;
+  color: #B45309;
 }
 
 .form-section__desc {
@@ -7113,8 +7123,10 @@ a.link:hover { text-decoration: underline; }
   /* Keep left-border accent colors for all types */
   .action-card--review { border-left: 4px solid #F59E0B; }
   .action-card--faq    { border-left: 4px solid #7C3AED; }
+  .action-card--areas  { border-left: 4px solid #0891B2; }
   .action-card--review .action-card__cta { color: #D97706 !important; }
   .action-card--faq    .action-card__cta { color: #7C3AED !important; }
+  .action-card--areas  .action-card__cta { color: #0891B2 !important; }
 }
 
 @media (min-width: 600px) and (max-width: 959px) {
@@ -7369,13 +7381,26 @@ body.sidebar-open {
 }
 .area-card {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: .5rem;
+  flex-direction: column;
+  gap: .6rem;
   padding: .7rem 1rem;
   border: 1.5px solid var(--color-border-default);
   border-radius: var(--radius-lg);
   background: var(--color-surface-base);
+  grid-column: span 1;
+}
+.area-card:has(.area-card__snippet:not([hidden])) {
+  grid-column: 1 / -1;
+}
+.area-card__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+}
+.area-card__snippet {
+  border-top: 1px solid var(--color-border-default);
+  padding-top: .6rem;
 }
 .area-card__info {
   display: flex;

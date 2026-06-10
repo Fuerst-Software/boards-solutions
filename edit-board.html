@@ -993,8 +993,8 @@ function buildForm() {
   // Shared: Website-Bereiche section
   html += `
     <div class="edit-section" id="areas-edit-section">
-      <span class="edit-section__label">Website-Bereiche</span>
-      <p style="font-size:.78rem;color:var(--color-text-muted);margin:0 0 .6rem">Auf welchen Seiten soll dieser Board erscheinen?</p>
+      <span class="edit-section__label">Website-Bereiche <span class="form-section__badge form-section__badge--required">Erforderlich</span></span>
+      <p style="font-size:.78rem;color:var(--color-text-muted);margin:0 0 .6rem">Wähle mindestens einen Bereich, auf dem dieser Board erscheinen soll.</p>
       <div id="areas-checklist" class="areas-checklist" role="group" aria-label="Website-Bereiche">
         <p id="areas-loading-hint" style="color:var(--color-text-muted);font-size:.78rem;margin:0">Wird geladen…</p>
       </div>
@@ -1609,6 +1609,12 @@ function updatePreviews() {
 
 // ── Save ───────────────────────────────────────────────────────────
 async function handleSave(status) {
+  if (state.areas.length === 0) {
+    showToast('Bitte wähle mindestens einen Website-Bereich aus oder erstelle einen.', 'error', 4000);
+    document.getElementById('areas-edit-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
   const btn = document.getElementById(status === 'published' ? 'btn-save-publish' : 'btn-save-draft');
   const original = btn.innerHTML;
   btn.disabled = true;

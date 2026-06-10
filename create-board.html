@@ -442,9 +442,9 @@
         <div class="form-sections" id="areas-outer-section" style="margin-top:0">
           <section class="form-section">
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:.5rem">
-              <h2 class="form-section__title" style="margin-bottom:0">Website-Bereiche <span class="form-section__badge">Optional</span></h2>
+              <h2 class="form-section__title" style="margin-bottom:0">Website-Bereiche <span class="form-section__badge form-section__badge--required">Erforderlich</span></h2>
             </div>
-            <p class="form-section__desc" style="margin-bottom:.9rem">Wähle, auf welchen Seiten-Bereichen dieser Board erscheinen soll. Neue Bereiche kannst du direkt hier anlegen.</p>
+            <p class="form-section__desc" style="margin-bottom:.9rem">Wähle mindestens einen Bereich deiner Website, auf dem dieser Board erscheinen soll. Neue Bereiche kannst du direkt hier anlegen.</p>
             <div id="areas-checklist" class="areas-checklist" role="group" aria-label="Website-Bereiche auswählen">
               <p id="areas-loading-hint" style="color:var(--color-text-muted);font-size:.82rem;margin:0">Bereiche werden geladen…</p>
             </div>
@@ -1616,6 +1616,12 @@ function collectData() {
 }
 
 async function handleSave(status) {
+  if (state.selectedAreas.length === 0) {
+    showToast('Bitte wähle mindestens einen Website-Bereich aus oder erstelle einen.', 'error', 4000);
+    document.getElementById('areas-outer-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
   const data = collectData();
   const draftBtn   = document.getElementById('btn-save-draft');
   const publishBtn = document.getElementById('btn-save-publish');

@@ -225,8 +225,8 @@
 
 <script type="module" src="js/app.js"></script>
 <script type="module">
-import { requireAuth, updateSidebar } from './js/auth.js';
-import { getBoards, deleteBoard, duplicateBoard, toggleBoardStatus, relativeDate, seedDemoData, getAreas, saveArea, deleteArea } from './js/boards-data.js';
+import { requireAuth, updateSidebar, getUser } from './js/auth.js';
+import { getBoards, deleteBoard, duplicateBoard, toggleBoardStatus, relativeDate, seedDemoData, getAreas, saveArea, deleteArea, buildAreaSnippet } from './js/boards-data.js';
 import { showToast } from './js/app.js';
 
 (async () => {
@@ -569,6 +569,8 @@ init();
 // ══════════ Website-Bereiche Manager ══════════
 const AREA_COLORS = { blue:'#2563eb', green:'#16a34a', purple:'#7c3aed', orange:'#ea580c', pink:'#db2777', yellow:'#ca8a04', gray:'#64748b' };
 let _areas = [];
+let _expandedAreaId = null;
+const _embedKey = getUser()?.embedKey || '';
 
 async function initAreasManager() {
   _areas = await getAreas();
@@ -590,19 +592,35 @@ function renderAreasManager() {
     const color = AREA_COLORS[a.color] || AREA_COLORS.blue;
     // Count boards assigned to this area
     const count = allBoards.filter(b => Array.isArray(b.areas) && b.areas.includes(a.id)).length;
+    const expanded = _expandedAreaId === a.id;
+    const snippet = buildAreaSnippet(_embedKey, a.id);
     return `
       <div class="area-card" data-area-id="${esc(a.id)}">
-        <div class="area-card__info">
-          <span class="area-card__dot" style="background:${color}"></span>
-          <div>
-            <div class="area-card__name">${esc(a.name)}</div>
-            <div class="area-card__count">${count} Board${count !== 1 ? 's' : ''}</div>
+        <div class="area-card__row">
+          <div class="area-card__info">
+            <span class="area-card__dot" style="background:${color}"></span>
+            <div>
+              <div class="area-card__name">${esc(a.name)}</div>
+              <div class="area-card__count">${count} Board${count !== 1 ? 's' : ''}</div>
+            </div>
+          </div>
+          <div class="area-card__actions">
+            <button class="area-card__btn" data-toggle-snippet="${esc(a.id)}" title="Embed-Code anzeigen" type="button" aria-expanded="${expanded}">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            </button>
+            <button class="area-card__btn area-card__btn--danger" data-delete-area="${esc(a.id)}" data-area-name="${esc(a.name)}" title="Bereich löschen" type="button">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+            </button>
           </div>
         </div>
-        <div class="area-card__actions">
-          <button class="area-card__btn area-card__btn--danger" data-delete-area="${esc(a.id)}" data-area-name="${esc(a.name)}" title="Bereich löschen" type="button">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
-          </button>
+        <div class="area-card__snippet" ${expanded ? '' : 'hidden'}>
+          <p class="form-hint" style="margin:0 0 .4rem">
+            Füge diesen Code in den HTML-Bereich „${esc(a.name)}" deiner Website ein, um dort nur diesem Bereich zugewiesene Boards anzuzeigen:
+          </p>
+          <div class="snippet-block">
+            <code class="snippet-block__code">${esc(snippet)}</code>
+            <button class="snippet-block__copy btn btn--ghost btn--sm" data-copy-snippet="${esc(a.id)}" type="button">Kopieren</button>
+          </div>
         </div>
       </div>`;
   }).join('');
@@ -615,9 +633,31 @@ function renderAreasManager() {
       try {
         await deleteArea(id);
         _areas = _areas.filter(a => a.id !== id);
+        if (_expandedAreaId === id) _expandedAreaId = null;
         renderAreasManager();
         showToast(`Bereich „${name}" gelöscht.`, 'success', 2500);
       } catch { showToast('Fehler beim Löschen des Bereichs.', 'error'); }
+    });
+  });
+
+  container.querySelectorAll('[data-toggle-snippet]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.toggleSnippet;
+      _expandedAreaId = _expandedAreaId === id ? null : id;
+      renderAreasManager();
+    });
+  });
+
+  container.querySelectorAll('[data-copy-snippet]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id = btn.dataset.copySnippet;
+      const snippet = buildAreaSnippet(_embedKey, id);
+      try {
+        await navigator.clipboard.writeText(snippet);
+        const orig = btn.textContent;
+        btn.textContent = 'Kopiert!';
+        setTimeout(() => { btn.textContent = orig; }, 2000);
+      } catch { showToast('Kopieren fehlgeschlagen.', 'error'); }
     });
   });
 }
@@ -633,8 +673,10 @@ document.getElementById('btn-create-area')?.addEventListener('click', async () =
     const area = await saveArea({ name, color: colorSelect?.value || 'blue' });
     _areas.push(area);
     nameInput.value = '';
+    _expandedAreaId = area.id;
     renderAreasManager();
     showToast(`Bereich „${name}" erstellt.`, 'success', 2000);
+    document.querySelector(`.area-card[data-area-id="${area.id}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   } catch (e) {
     showToast(e.message || 'Bereich konnte nicht erstellt werden.', 'error', 3500);
   } finally {

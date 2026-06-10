@@ -376,6 +376,10 @@ export function buildSnippet(embedId) {
   return `<script src="https://cdn.boards.solutions/embed.js" data-board="${embedId}" defer><\/script>`;
 }
 
+export function buildAreaSnippet(embedKey, areaId) {
+  return `<script src="https://cdn.boards.solutions/channel.js" data-key="${embedKey}" data-area="${areaId}" defer><\/script>`;
+}
+
 export function getStats() {
   const boards = lsGet();
   return {
