@@ -368,8 +368,10 @@ export function relativeDate(isoString) {
   return new Date(isoString).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
 }
 
+const CHANNEL_JS_URL = 'https://web-production-83480.up.railway.app/channel.js';
+
 export function buildUserSnippet(embedKey) {
-  return `<script src="https://cdn.boards.solutions/channel.js" data-key="${embedKey}" defer><\/script>`;
+  return `<script\n        src="${CHANNEL_JS_URL}"\n        data-key="${embedKey}"\n        defer>\n      <\/script>`;
 }
 
 export function buildSnippet(embedId) {
@@ -377,7 +379,7 @@ export function buildSnippet(embedId) {
 }
 
 export function buildAreaSnippet(embedKey, areaId) {
-  return `<script src="https://cdn.boards.solutions/channel.js" data-key="${embedKey}" data-area="${areaId}" defer><\/script>`;
+  return `<script\n        src="${CHANNEL_JS_URL}"\n        data-key="${embedKey}"\n        data-area="${areaId}"\n        defer>\n      <\/script>`;
 }
 
 export function getStats() {
