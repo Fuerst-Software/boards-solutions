@@ -442,74 +442,7 @@ export async function deleteArea(id) {
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
 }
 
-// ── Demo data seeding ─────────────────────────────────────────────
-const DEMO_BOARDS = [
-  {
-    type: 'blog',
-    boardName: 'Die 5 besten Laptops 2025 — Schmidt GmbH',
-    title: 'Die 5 besten Laptops für Freelancer 2025',
-    intro: 'Als Freelancer verbringst du deinen ganzen Arbeitstag am Laptop. Wir haben die besten Modelle des Jahres getestet und zeigen dir, welcher zu deinem Workflow passt.',
-    content: 'Die Auswahl des richtigen Laptops ist entscheidend für deine Produktivität. Nach ausführlichen Tests empfehlen wir vor allem Geräte mit langer Akkulaufzeit, gutem Display und ausreichend RAM für Multitasking.\n\nBesonders beeindruckt hat uns der MacBook Pro M3, der dank Apple-Silicon-Chip eine außergewöhnliche Performance bei minimalem Verbrauch bietet. Für Windows-Nutzer ist das Dell XPS 15 die erste Wahl.',
-    tags: ['Technik', 'Produktivität', 'Review'],
-    affiliateLinks: [
-      { text: 'MacBook Pro M3 ansehen', url: 'https://amzn.to/example1' },
-      { text: 'Dell XPS 15 ansehen', url: 'https://amzn.to/example2' },
-    ],
-    status: 'published',
-  },
-  {
-    type: 'affiliate',
-    boardName: 'Ergostuhl-Empfehlung — Mayer GmbH',
-    productName: 'Ergonomischer Bürostuhl Herman Miller Aeron',
-    description: 'Der Herman Miller Aeron gilt als bester Bürostuhl der Welt. Mit adaptiver Rückenlehne, einstellbarer Lendenstütze und PostureFit SL-Technologie sorgt er für gesundes Sitzen über den ganzen Arbeitstag.',
-    price: '1.499,00 €',
-    buttonText: 'Jetzt kaufen',
-    affiliateUrl: 'https://amzn.to/example3',
-    tags: ['Büro', 'Ergonomie'],
-    rating: 4.8,
-    badge: 'Bestseller',
-    status: 'published',
-  },
-  {
-    type: 'review',
-    boardName: 'Noise-Cancelling-Kopfhörer Review — Tech Blog',
-    productName: 'Sony WH-1000XM5',
-    reviewText: 'Der Sony WH-1000XM5 setzt neue Maßstäbe beim Noise Cancelling. In unserem zweiwöchigen Praxistest hat er uns in lauten Büros, Zügen und Flugzeugen überzeugt.',
-    pros: ['Bestes Noise Cancelling der Klasse', 'Hervorragender Klang', '30h Akku', 'Komfortables Headband'],
-    cons: ['Kein 3,5mm-Kabel inklusive', 'Scharnier weniger robust als Vorgänger'],
-    rating: 4.5,
-    verdict: 'Pflichtlektüre für alle, die viel unterwegs arbeiten oder in lauter Umgebung konzentriert bleiben müssen.',
-    price: '349,00 €',
-    affiliateUrl: 'https://amzn.to/example4',
-    buttonText: 'Preis prüfen',
-    tags: ['Audio', 'Technik'],
-    status: 'published',
-  },
-  {
-    type: 'faq',
-    boardName: 'FAQ — Häufige Fragen zur Webentwicklung',
-    faqTitle: 'Häufig gestellte Fragen',
-    faqSubtitle: 'Alles, was du über unsere Leistungen wissen musst.',
-    faqs: [
-      { question: 'Wie lange dauert die Erstellung einer Website?', answer: 'Je nach Umfang dauert ein Standard-Webprojekt zwischen 2 und 8 Wochen. Wir beginnen immer mit einem kostenlosen Erstgespräch.' },
-      { question: 'Welche Technologien setzen Sie ein?', answer: 'Wir arbeiten mit modernen Web-Technologien wie React, Next.js, WordPress und individuellen Backend-Lösungen.' },
-      { question: 'Bieten Sie auch Wartung und Support an?', answer: 'Ja, wir bieten flexible Wartungsverträge ab 49 €/Monat an, die Updates, Sicherheitschecks und technischen Support umfassen.' },
-    ],
-    tags: ['FAQ', 'Support'],
-    status: 'published',
-  },
-];
-
+// ── Demo data seeding (disabled) ────────────────────────────────────
 export function seedDemoData() {
-  const existing = lsGet();
-  if (existing.length > 0) return;
-  const now = new Date();
-  const boards = DEMO_BOARDS.map((b, i) => ({
-    ...b,
-    id:        uid(),
-    embedId:   uid(),
-    createdAt: new Date(now.getTime() - (i + 1) * 86400000 * 3).toISOString(),
-    updatedAt: new Date(now.getTime() - i * 3600000).toISOString(),
-  }));
-  lsSet(boards);
+  // intentionally a no-op: new accounts start with zero boards
 }
