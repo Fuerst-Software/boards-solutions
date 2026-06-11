@@ -22,6 +22,9 @@
 
   // ── Base styles ──────────────────────────────────────────────────
   const CSS_BASE = `
+    .bs-channel, .bs-channel *, .bs-channel *::before, .bs-channel *::after {
+      box-sizing: border-box;
+    }
     .bs-channel { font-family: inherit; }
 
     /* ── Grid — feels like native content, not a widget box ── */
@@ -36,17 +39,18 @@
     .bs-card {
       background: var(--bs-card-bg, #fff);
       border: 1px solid var(--bs-border, #e5e7eb);
-      border-radius: 18px;
+      border-radius: 20px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
       cursor: pointer;
-      transition: box-shadow .22s ease, transform .22s ease;
-      box-shadow: 0 2px 16px rgba(15,23,42,.07);
+      transition: box-shadow .25s ease, transform .25s ease, border-color .25s ease;
+      box-shadow: 0 1px 2px rgba(15,23,42,.04), 0 8px 24px rgba(15,23,42,.06);
     }
     .bs-card:hover {
-      box-shadow: 0 16px 48px rgba(15,23,42,.14);
-      transform: translateY(-5px);
+      box-shadow: 0 1px 2px rgba(15,23,42,.04), 0 20px 48px rgba(15,23,42,.14);
+      transform: translateY(-6px);
+      border-color: var(--bs-primary, #0b4fd8);
     }
 
     /* ── Card image ── */
@@ -87,10 +91,11 @@
 
     /* ── Card body ── */
     .bs-card-body {
-      padding: 1.25rem 1.5rem 1.5rem;
+      padding: 1.35rem 1.5rem 1.5rem;
       display: flex;
       flex-direction: column;
-      gap: .65rem;
+      align-items: flex-start;
+      gap: .7rem;
       flex: 1;
     }
 
@@ -102,21 +107,24 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: .09em;
-      padding: 3px 9px;
+      padding: 4px 11px;
       border-radius: 999px;
       background: var(--bs-badge-bg, #eff3fd);
       color: var(--bs-primary, #0b4fd8);
-      width: fit-content;
+      width: auto;
+      max-width: 100%;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     /* ── Card heading ── */
     .bs-card h3 {
       margin: 0;
-      font-size: 1.1rem;
-      font-weight: 700;
+      font-size: 1.12rem;
+      font-weight: 750;
       line-height: 1.35;
       color: var(--bs-text, #0f172a);
-      letter-spacing: -.01em;
+      letter-spacing: -.015em;
     }
 
     /* ── Card description ── */
@@ -134,52 +142,65 @@
 
     .bs-stars { color: #f59e0b; font-size: .9rem; letter-spacing: .04em; }
 
-    /* ── Read button ── */
-    .bs-btn-read {
+    /* ── Buttons — shared sizing rules so labels never overflow ── */
+    .bs-btn-read,
+    .bs-btn {
       display: inline-flex;
       align-items: center;
-      gap: .4rem;
+      justify-content: center;
+      gap: .45rem;
+      width: auto;
+      max-width: 100%;
+      white-space: nowrap;
+      flex-shrink: 0;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* ── Read button ── */
+    .bs-btn-read {
       margin-top: auto;
-      padding: .52rem 1.1rem;
+      padding: .6rem 1.3rem;
       background: transparent;
       color: var(--bs-primary, #0b4fd8);
       border: 1.5px solid var(--bs-primary, #0b4fd8);
-      border-radius: 10px;
+      border-radius: 999px;
       font-size: .82rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background .15s, color .15s;
-      width: fit-content;
-      text-decoration: none;
+      font-weight: 650;
+      transition: background .18s ease, color .18s ease, box-shadow .18s ease, transform .18s ease;
     }
     .bs-btn-read:hover {
       background: var(--bs-primary, #0b4fd8);
       color: var(--bs-btn-text, #fff);
+      box-shadow: 0 6px 18px color-mix(in srgb, var(--bs-primary, #0b4fd8) 35%, transparent);
+      transform: translateY(-1px);
     }
 
     /* ── CTA button ── */
     .bs-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
-      padding: .65rem 1.4rem;
+      padding: .7rem 1.6rem;
       background: var(--bs-primary, #0b4fd8);
       color: var(--bs-btn-text, #fff);
-      border-radius: 10px;
+      border-radius: 999px;
       font-size: .88rem;
-      font-weight: 600;
-      text-decoration: none;
-      width: fit-content;
-      transition: opacity .15s, transform .15s;
+      font-weight: 700;
+      letter-spacing: -.005em;
       border: none;
-      cursor: pointer;
       margin-top: auto;
+      box-shadow: 0 4px 14px color-mix(in srgb, var(--bs-primary, #0b4fd8) 30%, transparent);
+      transition: opacity .18s ease, transform .18s ease, box-shadow .18s ease;
     }
-    .bs-btn:hover { opacity: .88; transform: translateY(-1px); }
+    .bs-btn:hover {
+      opacity: .92;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 22px color-mix(in srgb, var(--bs-primary, #0b4fd8) 40%, transparent);
+    }
+    .bs-btn:active { transform: translateY(0); }
 
     .bs-price {
-      font-size: 1.05rem;
-      font-weight: 700;
+      font-size: 1.1rem;
+      font-weight: 750;
+      letter-spacing: -.01em;
       color: var(--bs-text, #0f172a);
     }
 
