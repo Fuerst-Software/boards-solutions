@@ -1615,6 +1615,9 @@ function collectData() {
   };
 }
 
+// Holds the locally-saved board from a failed first save, so retries do a PUT instead of POST.
+let _pendingNewBoard = null;
+
 async function handleSave(status) {
   if (state.selectedAreas.length === 0) {
     showToast('Bitte wähle mindestens einen Website-Bereich aus oder erstelle einen.', 'error', 4000);
@@ -1628,13 +1631,15 @@ async function handleSave(status) {
   draftBtn.disabled   = true;
   publishBtn.disabled = true;
 
-  // In edit mode: preserve original id, embedId and createdAt
-  const saveData = isEditMode && editBoard
-    ? { ...editBoard, ...data, id: editBoard.id, embedId: editBoard.embedId || data.embedId, status }
+  // Priority: edit mode > pending retry board > new board
+  const baseBoard = (isEditMode && editBoard) ? editBoard : _pendingNewBoard;
+  const saveData = baseBoard
+    ? { ...baseBoard, ...data, id: baseBoard.id, embedId: baseBoard.embedId || data.embedId, status }
     : { ...data, status };
 
   try {
     await saveBoard(saveData);
+    _pendingNewBoard = null;
     const msg = isEditMode
       ? 'Änderungen gespeichert! ✓'
       : (status === 'published' ? 'Board veröffentlicht! 🚀' : 'Entwurf gespeichert.');
@@ -1642,6 +1647,8 @@ async function handleSave(status) {
     setTimeout(() => { window.location.href = 'boards.html'; }, 600);
   } catch (err) {
     console.error('[boards] saveBoard failed:', err);
+    // Capture the locally-saved board so a retry updates it instead of creating a duplicate.
+    if (!isEditMode && err.localBoard) _pendingNewBoard = err.localBoard;
     const msg = err?.message ? `Speichern fehlgeschlagen: ${err.message}` : 'Speichern fehlgeschlagen. Bitte erneut versuchen.';
     showToast(msg, 'error', 8000);
     draftBtn.disabled   = false;

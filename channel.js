@@ -169,12 +169,29 @@
       font-weight: 650;
       transition: background .18s ease, color .18s ease, box-shadow .18s ease, transform .18s ease;
     }
-    .bs-btn-read:hover {
+    .bs-btn-read:hover:not([data-bs-loading]) {
       background: var(--bs-primary, #0b4fd8);
       color: var(--bs-btn-text, #fff);
       box-shadow: 0 6px 18px color-mix(in srgb, var(--bs-primary, #0b4fd8) 35%, transparent);
       transform: translateY(-1px);
     }
+    .bs-btn-read[data-bs-loading] {
+      background: var(--bs-primary, #0b4fd8);
+      color: var(--bs-btn-text, #fff);
+      cursor: wait;
+      pointer-events: none;
+      opacity: .85;
+    }
+    .bs-btn-spinner {
+      display: inline-block;
+      width: 11px; height: 11px;
+      border: 2px solid rgba(255,255,255,.35);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: bsBtnSpin .65s linear infinite;
+      flex-shrink: 0;
+    }
+    @keyframes bsBtnSpin { to { transform: rotate(360deg); } }
 
     /* ── CTA button ── */
     .bs-btn {
@@ -583,7 +600,18 @@
   }
 
   // ── Modal ────────────────────────────────────────────────────────
-  function openModal(b) {
+  let _modalOpen = false;
+
+  function openModal(b, triggerBtn) {
+    if (_modalOpen) return;
+    _modalOpen = true;
+
+    // Show loading state on the button immediately
+    if (triggerBtn) {
+      triggerBtn._bsOrigText = triggerBtn.innerHTML;
+      triggerBtn.setAttribute('data-bs-loading', '');
+      triggerBtn.innerHTML = `<span class="bs-btn-spinner"></span> Lädt…`;
+    }
     const overlay = document.createElement('div');
     overlay.className = 'bs-modal-overlay';
     overlay.setAttribute('role', 'dialog');
@@ -595,12 +623,20 @@
     modal.innerHTML = buildModalContent(b, true);
     overlay.appendChild(modal);
 
+    function restoreBtn() {
+      if (triggerBtn) {
+        triggerBtn.removeAttribute('data-bs-loading');
+        triggerBtn.innerHTML = triggerBtn._bsOrigText || triggerBtn.innerHTML;
+      }
+    }
+
     function close() {
       overlay.style.opacity = '0';
       overlay.style.transition = 'opacity .18s';
       setTimeout(() => overlay.remove(), 180);
       document.removeEventListener('keydown', onKey);
       document.body.style.overflow = '';
+      _modalOpen = false;
     }
     function onKey(e) { if (e.key === 'Escape') close(); }
 
@@ -612,15 +648,18 @@
     document.body.appendChild(overlay);
     document.body.style.overflow = 'hidden';
 
-    // Fetch full board data
+    // Fetch full board data, then restore button and show content
     if (b.embedId) {
       fetch(`${apiBase}/embed/board/${encodeURIComponent(b.embedId)}`)
         .then(r => r.ok ? r.json() : null)
         .then(full => {
+          restoreBtn();
           if (!full || !overlay.isConnected) return;
           modal.innerHTML = buildModalContent(full, false);
         })
-        .catch(() => {});
+        .catch(() => { restoreBtn(); });
+    } else {
+      restoreBtn();
     }
   }
 
@@ -861,7 +900,7 @@
       if (!btn && !card) return;
       const id    = (btn || card).closest('.bs-card')?.dataset.bsId;
       const board = boardsData.find(b => b.id === id);
-      if (board) openModal(board);
+      if (board) openModal(board, btn || null);
     });
   }
 

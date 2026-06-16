@@ -877,12 +877,17 @@ const state = {
   // Blog
   boardName:  board.boardName  || '',
   title:      board.title      || '',
-  intro:      board.intro      || '',
-  content:    board.content    || '',
   blogImage:  board.blogImage  || board.image || '',
   blogThumb:  board.imageThumb || '',
-  affiliateLinks: board.affiliateLinks || [],
   tags:       (board.tags || []).join(', '),
+  blogBlocks: (() => {
+    if (board.blocks?.length) return board.blocks;
+    const blocks = [];
+    if (board.intro)   blocks.push({ type: 'text', content: board.intro });
+    if (board.content) blocks.push({ type: 'text', content: board.content });
+    (board.affiliateLinks || []).forEach(l => blocks.push({ type: 'affiliate', text: l.text || '', url: l.url || '' }));
+    return blocks;
+  })(),
 
   // Affiliate
   productName:   board.productName   || '',
@@ -1041,31 +1046,31 @@ function blogFormHtml() {
       </div>
     </div>
     <div class="edit-section">
+      <span class="edit-section__label">Titelbild</span>
+      ${imageUploadHtml('blog')}
+    </div>
+    <div class="edit-section">
       <span class="edit-section__label">Inhalt</span>
       <div class="edit-form-group">
         <label class="edit-form-label" for="f-title">Überschrift</label>
         <input id="f-title" class="edit-input" type="text" value="${esc(state.title)}" placeholder="z.B. Die 5 besten Laptops 2025" autocomplete="off">
       </div>
-      <div class="edit-form-group">
-        <label class="edit-form-label" for="f-intro">Einleitung</label>
-        <textarea id="f-intro" class="edit-textarea" rows="3" placeholder="Kurze Zusammenfassung…">${esc(state.intro)}</textarea>
+      <div id="blog-blocks-list" class="blog-blocks-editor" aria-live="polite"></div>
+      <div id="blog-blocks-add-initial" class="blog-block-add-row blog-block-add-row--initial">
+        <span class="blog-block-add-row__label">Hinzufügen:</span>
+        <button type="button" class="btn btn--ghost btn--sm" data-add-block-type="text" data-add-after="-1">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Textfeld
+        </button>
+        <button type="button" class="btn btn--ghost btn--sm" data-add-block-type="image" data-add-after="-1">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          Bild
+        </button>
+        <button type="button" class="btn btn--ghost btn--sm" data-add-block-type="affiliate" data-add-after="-1">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+          Affiliate-Link
+        </button>
       </div>
-      <div class="edit-form-group">
-        <label class="edit-form-label" for="f-content">Artikel-Text</label>
-        <textarea id="f-content" class="edit-textarea" rows="8" placeholder="Dein Beitrag…">${esc(state.content)}</textarea>
-      </div>
-    </div>
-    <div class="edit-section">
-      <span class="edit-section__label">Titelbild</span>
-      ${imageUploadHtml('blog')}
-    </div>
-    <div class="edit-section">
-      <span class="edit-section__label">Affiliate-Links</span>
-      <div id="aff-links-list">${renderAffLinks()}</div>
-      <button type="button" class="edit-add-btn" id="btn-add-aff-link">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Link hinzufügen
-      </button>
     </div>`;
 }
 
@@ -1228,14 +1233,6 @@ function imageUploadHtml(prefix) {
     </div>`;
 }
 
-function renderAffLinks() {
-  return state.affiliateLinks.map((l,i) => `
-    <div class="edit-list-item">
-      <input type="text" class="edit-input edit-list-item__input" placeholder="Button-Text" value="${esc(l.text)}" data-aff-idx="${i}" data-aff-field="text">
-      <input type="url" class="edit-input edit-list-item__input" placeholder="https://…" value="${esc(l.url)}" data-aff-idx="${i}" data-aff-field="url" style="margin-left:.4rem">
-      <button type="button" class="edit-list-item__remove" data-aff-remove="${i}">✕</button>
-    </div>`).join('');
-}
 
 function renderSimpleList(arr, key) {
   return arr.map((v,i) => `
@@ -1259,6 +1256,198 @@ function renderFaqItems() {
     </div>`).join('');
 }
 
+// ── Blog block editor ──────────────────────────────────────────────
+function addBlogBlock(type, afterIdx) {
+  const newBlock = type === 'text'      ? { type: 'text',      content: '' }
+                 : type === 'image'     ? { type: 'image',     data: '', thumb: '' }
+                 : /* affiliate */        { type: 'affiliate', text: '', url: '' };
+  if (afterIdx < 0 || afterIdx >= state.blogBlocks.length - 1) {
+    state.blogBlocks.push(newBlock);
+  } else {
+    state.blogBlocks.splice(afterIdx + 1, 0, newBlock);
+  }
+  renderBlogBlocks();
+  setTimeout(() => {
+    const blocks = document.querySelectorAll('.blog-block');
+    const targetIdx = afterIdx < 0 ? blocks.length - 1 : afterIdx + 1;
+    blocks[targetIdx]?.querySelector('textarea,input[type="text"],input[type="url"]')?.focus();
+  }, 50);
+}
+
+function renderBlogBlocks() {
+  const list = document.getElementById('blog-blocks-list');
+  const initialRow = document.getElementById('blog-blocks-add-initial');
+  if (!list) return;
+
+  if (initialRow) initialRow.hidden = state.blogBlocks.length > 0;
+
+  const TYPE_ICONS = {
+    text:      `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="14" y2="16"/></svg>`,
+    image:     `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`,
+    affiliate: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>`,
+  };
+  const TYPE_LABELS = { text: 'Textfeld', image: 'Bild', affiliate: 'Affiliate-Link' };
+
+  list.innerHTML = state.blogBlocks.map((block, i) => {
+    let blockContent = '';
+
+    if (block.type === 'text') {
+      blockContent = `<textarea class="form-input form-textarea blog-block__textarea" rows="5"
+        placeholder="Text eingeben…" data-bidx="${i}" data-bfield="content"
+        >${esc(block.content)}</textarea>`;
+
+    } else if (block.type === 'image') {
+      const hasImg = !!block.data;
+      blockContent = `
+        <div class="image-upload-area${hasImg ? ' has-image' : ''}" id="bbimg-area-${i}" role="button" tabindex="0" aria-label="Bild hochladen">
+          <input type="file" id="bbimg-input-${i}" class="sr-only" accept="image/jpeg,image/png,image/webp,image/gif" tabindex="-1">
+          <div id="bbimg-ph-${i}" class="image-upload-area__placeholder" ${hasImg ? 'hidden' : ''}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <p>Bild hochladen</p>
+          </div>
+          <img id="bbimg-prev-${i}" class="image-upload-area__img" src="${hasImg ? esc(block.data) : ''}" alt="" ${hasImg ? '' : 'hidden'}>
+          <button id="bbimg-rem-${i}" class="image-upload-area__remove" type="button" aria-label="Bild entfernen" ${hasImg ? '' : 'hidden'}>✕</button>
+        </div>`;
+
+    } else if (block.type === 'affiliate') {
+      const btnColor  = block.color     || '#2563eb';
+      const textColor = block.textColor || '#ffffff';
+      blockContent = `
+        <div class="aff-block-fields">
+          <div class="link-item__fields">
+            <input type="text" class="form-input" placeholder="Button-Text (z.B. Jetzt kaufen)"
+              value="${esc(block.text)}" data-bidx="${i}" data-bfield="text" aria-label="Button-Text">
+            <input type="url" class="form-input" placeholder="https://amzn.to/…"
+              value="${esc(block.url)}" data-bidx="${i}" data-bfield="url" aria-label="Affiliate-URL">
+          </div>
+          <div class="aff-block-color-row">
+            <div class="aff-color-field">
+              <label class="aff-color-label">Hintergrundfarbe</label>
+              <div class="aff-color-input">
+                <input type="color" class="aff-color-picker" value="${esc(btnColor)}"
+                  data-bidx="${i}" data-bfield="color" aria-label="Button-Farbe">
+                <span class="aff-color-hex">${esc(btnColor)}</span>
+              </div>
+            </div>
+            <div class="aff-color-field">
+              <label class="aff-color-label">Textfarbe</label>
+              <div class="aff-color-input">
+                <input type="color" class="aff-color-picker" value="${esc(textColor)}"
+                  data-bidx="${i}" data-bfield="textColor" aria-label="Text-Farbe">
+                <span class="aff-color-hex">${esc(textColor)}</span>
+              </div>
+            </div>
+            <div class="aff-color-preview-wrap">
+              <label class="aff-color-label">Vorschau</label>
+              <button type="button" class="aff-btn-preview" style="background:${esc(btnColor)};color:${esc(textColor)}">${esc(block.text || 'Button')}</button>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    const addRow = `
+      <div class="blog-block__add-row">
+        <span class="blog-block-add-row__label">Hinzufügen:</span>
+        <button type="button" class="btn btn--ghost btn--sm" data-add-block-type="text" data-add-after="${i}">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Text
+        </button>
+        <button type="button" class="btn btn--ghost btn--sm" data-add-block-type="image" data-add-after="${i}">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> Bild
+        </button>
+        <button type="button" class="btn btn--ghost btn--sm" data-add-block-type="affiliate" data-add-after="${i}">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg> Link
+        </button>
+      </div>`;
+
+    return `
+      <div class="blog-block" data-block-idx="${i}">
+        <div class="blog-block__header">
+          <span class="blog-block__label">${TYPE_ICONS[block.type] || ''} ${TYPE_LABELS[block.type] || ''}</span>
+          <button type="button" class="blog-block__remove" data-block-remove="${i}" aria-label="Block entfernen">
+            <svg width="13" height="13" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/></svg>
+          </button>
+        </div>
+        <div class="blog-block__body">${blockContent}</div>
+        ${addRow}
+      </div>`;
+  }).join('');
+
+  // Wire inputs
+  list.querySelectorAll('[data-bidx]').forEach(el => {
+    el.addEventListener('input', () => {
+      const idx   = +el.dataset.bidx;
+      const field = el.dataset.bfield;
+      state.blogBlocks[idx][field] = el.value;
+      if (el.type === 'color') {
+        const hexEl = el.closest('.aff-color-input')?.querySelector('.aff-color-hex');
+        if (hexEl) hexEl.textContent = el.value;
+        const prev = el.closest('.aff-block-fields')?.querySelector('.aff-btn-preview');
+        if (prev) {
+          const b = state.blogBlocks[idx];
+          prev.style.background = b.color || '#2563eb';
+          prev.style.color      = b.textColor || '#ffffff';
+        }
+      }
+      if (field === 'text') {
+        const prev = el.closest('.aff-block-fields')?.querySelector('.aff-btn-preview');
+        if (prev) prev.textContent = el.value || 'Button';
+      }
+      schedulePreviewUpdate();
+    });
+  });
+
+  // Wire remove buttons
+  list.querySelectorAll('[data-block-remove]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.blogBlocks.splice(+btn.dataset.blockRemove, 1);
+      renderBlogBlocks();
+      schedulePreviewUpdate();
+    });
+  });
+
+  // Wire add-after buttons
+  list.querySelectorAll('[data-add-block-type]').forEach(btn => {
+    btn.addEventListener('click', () => addBlogBlock(btn.dataset.addBlockType, +btn.dataset.addAfter));
+  });
+
+  // Wire image blocks
+  state.blogBlocks.forEach((block, i) => {
+    if (block.type !== 'image') return;
+    const area  = document.getElementById(`bbimg-area-${i}`);
+    const input = document.getElementById(`bbimg-input-${i}`);
+    const ph    = document.getElementById(`bbimg-ph-${i}`);
+    const prev  = document.getElementById(`bbimg-prev-${i}`);
+    const rem   = document.getElementById(`bbimg-rem-${i}`);
+    if (!area) return;
+
+    const showImg  = src => { prev.src = src; prev.hidden = false; ph.hidden = true; rem.hidden = false; area.classList.add('has-image'); };
+    const clearImg = ()  => { prev.src = ''; prev.hidden = true; ph.hidden = false; rem.hidden = true; area.classList.remove('has-image'); input.value = ''; block.data = ''; block.thumb = ''; schedulePreviewUpdate(); };
+
+    function loadBlockImg(file) {
+      if (!file?.type.startsWith('image/')) { showToast('Nur Bilder erlaubt (JPG, PNG, WEBP).', 'error'); return; }
+      if (file.size > 5 * 1024 * 1024)     { showToast('Bild zu groß — max. 5 MB.', 'error'); return; }
+      const r = new FileReader();
+      r.onload = async e => {
+        const full  = e.target.result;
+        const thumb = await generateThumb(full);
+        block.data  = full;
+        block.thumb = thumb;
+        showImg(full);
+        schedulePreviewUpdate();
+      };
+      r.readAsDataURL(file);
+    }
+
+    area.addEventListener('click',    () => { if (prev.hidden) input.click(); });
+    area.addEventListener('keydown',  e  => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (prev.hidden) input.click(); } });
+    input.addEventListener('change',  () => { if (input.files[0]) loadBlockImg(input.files[0]); });
+    rem.addEventListener('click',     e  => { e.stopPropagation(); clearImg(); });
+    area.addEventListener('dragover', e  => { e.preventDefault(); area.classList.add('is-dragging'); });
+    area.addEventListener('dragleave',()  => area.classList.remove('is-dragging'));
+    area.addEventListener('drop',     e  => { e.preventDefault(); area.classList.remove('is-dragging'); if (e.dataTransfer.files[0]) loadBlockImg(e.dataTransfer.files[0]); });
+  });
+}
+
 // ── Bind form events ───────────────────────────────────────────────
 function bindFormEvents() {
   // Status toggle
@@ -1269,12 +1458,18 @@ function bindFormEvents() {
     schedulePreviewUpdate();
   });
 
+  // Blog block editor — initial add buttons + first render
+  if (state.type === 'blog') {
+    renderBlogBlocks();
+    document.getElementById('blog-blocks-add-initial')?.querySelectorAll('[data-add-block-type]').forEach(btn => {
+      btn.addEventListener('click', () => addBlogBlock(btn.dataset.addBlockType, -1));
+    });
+  }
+
   // Text/textarea fields → state
   const fieldMap = {
     'f-board-name':    'boardName',
     'f-title':         'title',
-    'f-intro':         'intro',
-    'f-content':       'content',
     'f-tags':          'tags',
     'f-product-name':  'productName',
     'f-description':   'description',
@@ -1302,9 +1497,6 @@ function bindFormEvents() {
     });
   });
 
-  // Affiliate links list
-  rebindAffLinks();
-
   // Pros/cons
   rebindSimpleList('pros-list', 'pros');
   rebindSimpleList('cons-list', 'cons');
@@ -1323,12 +1515,6 @@ function bindFormEvents() {
 
   // FAQ
   rebindFaqList();
-  document.getElementById('btn-add-aff-link')?.addEventListener('click', () => {
-    state.affiliateLinks.push({ text: '', url: '' });
-    document.getElementById('aff-links-list').innerHTML = renderAffLinks();
-    rebindAffLinks();
-    schedulePreviewUpdate();
-  });
   document.getElementById('btn-add-faq')?.addEventListener('click', () => {
     state.faqs.push({ q: '', a: '' });
     document.getElementById('faq-list').innerHTML = renderFaqItems();
@@ -1340,24 +1526,6 @@ function bindFormEvents() {
   ['blog','aff','rev'].forEach(p => setupImageUpload(p));
 }
 
-function rebindAffLinks() {
-  const list = document.getElementById('aff-links-list');
-  if (!list) return;
-  list.querySelectorAll('[data-aff-idx]').forEach(inp => {
-    inp.addEventListener('input', () => {
-      state.affiliateLinks[+inp.dataset.affIdx][inp.dataset.affField] = inp.value;
-      schedulePreviewUpdate();
-    });
-  });
-  list.querySelectorAll('[data-aff-remove]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      state.affiliateLinks.splice(+btn.dataset.affRemove, 1);
-      document.getElementById('aff-links-list').innerHTML = renderAffLinks();
-      rebindAffLinks();
-      schedulePreviewUpdate();
-    });
-  });
-}
 
 function rebindSimpleList(listId, key) {
   const list = document.getElementById(listId);
@@ -1495,7 +1663,8 @@ function renderCardPreview() {
 
   if (t === 'blog') {
     const title = state.title || 'Dein Beitragstitel';
-    const snippet = (state.intro || state.content || '').slice(0, 120);
+    const firstText = state.blogBlocks.find(b => b.type === 'text')?.content || '';
+    const snippet = firstText.slice(0, 120);
     cardBody += `
       <h3 class="ep-card-title">${esc(title)}</h3>
       ${snippet ? `<p class="ep-card-desc">${esc(snippet)}${snippet.length >= 120 ? '…' : ''}</p>` : ''}
@@ -1548,12 +1717,15 @@ function renderDetailPreview() {
 
   let content = '';
   if (t === 'blog') {
-    const fullText = state.content || state.intro || '';
-    content = `
-      <div class="ep-detail-content">${esc(fullText)}</div>
-      ${state.affiliateLinks.filter(l=>l.url).map(l =>
-        `<div class="ep-detail-btn" style="margin-top:.5rem;background:var(--ep-primary,#1D4ED8)">${esc(l.text || 'Link')}</div>`
-      ).join('')}`;
+    content = state.blogBlocks.map(block => {
+      if (block.type === 'text' && block.content.trim())
+        return `<div class="ep-detail-content" style="margin-bottom:.75rem">${esc(block.content)}</div>`;
+      if (block.type === 'image' && block.data)
+        return `<img src="${esc(block.data)}" alt="" style="max-width:100%;border-radius:8px;margin:8px 0;display:block;">`;
+      if (block.type === 'affiliate' && block.url)
+        return `<div style="margin:8px 0"><div class="ep-detail-btn" style="background:${esc(block.color||'var(--ep-primary,#1D4ED8)')};color:${esc(block.textColor||'#fff')}">${esc(block.text || 'Link')}</div></div>`;
+      return '';
+    }).join('');
   } else if (t === 'affiliate') {
     content = `
       ${state.rating ? `<div class="ep-stars">${starsHtml(state.rating)} <span style="color:#64748b;font-size:.83rem;margin-left:.3rem">${state.rating}/5</span></div>` : ''}
@@ -1650,9 +1822,13 @@ async function handleSave(status) {
 
   if (t === 'blog') {
     Object.assign(payload, {
-      title: state.title, intro: state.intro, content: state.content,
-      blogImage: state.blogImage, imageThumb: state.blogThumb,
-      affiliateLinks: state.affiliateLinks,
+      title:          state.title,
+      blocks:         state.blogBlocks,
+      intro:          state.blogBlocks.filter(b => b.type === 'text').map(b => b.content).join('\n\n'),
+      content:        '',
+      affiliateLinks: state.blogBlocks.filter(b => b.type === 'affiliate' && b.url).map(b => ({ text: b.text, url: b.url })),
+      blogImage:      state.blogImage,
+      imageThumb:     state.blogThumb,
     });
   } else if (t === 'affiliate') {
     Object.assign(payload, {

@@ -229,7 +229,8 @@ export async function saveBoard(boardData) {
     return fresh[fi] ?? saved;
   } catch (err) {
     // Do NOT rollback localStorage — board stays visible locally.
-    // UI will show error toast so user knows sync failed.
+    // Attach the locally-saved board so callers can retry as an update.
+    err.localBoard = saved;
     throw err; // bubble up so UI shows toast error
   }
 }

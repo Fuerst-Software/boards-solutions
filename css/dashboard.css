@@ -4216,6 +4216,7 @@ body.sidebar-open { overflow: hidden; }
   border-radius: var(--radius-lg);
   background: var(--color-surface-raised);
 }
+.blog-block-add-row--initial[hidden] { display: none; }
 
 .blog-block-add-row__label {
   font-size: var(--font-size-xs);
