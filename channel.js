@@ -912,13 +912,23 @@
     container.innerHTML =
       `<div class="bs-channel-grid">${boards.map(renderCard).join('')}</div>`;
 
+    // Direct listeners on each open-button — bypass customer-site stopPropagation
+    container.querySelectorAll('[data-bs-open]').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const id    = btn.closest('.bs-card')?.dataset.bsId;
+        const board = boardsData.find(b => b.id === id);
+        if (board) openModal(board, btn);
+      });
+    });
+
+    // Card click for non-button areas
     container.addEventListener('click', e => {
-      const btn  = e.target.closest('[data-bs-open]');
+      if (e.target.closest('[data-bs-open]')) return;
       const card = e.target.closest('.bs-card');
-      if (!btn && !card) return;
-      const id    = (btn || card).closest('.bs-card')?.dataset.bsId;
-      const board = boardsData.find(b => b.id === id);
-      if (board) openModal(board, btn || null);
+      if (!card) return;
+      const board = boardsData.find(b => b.id === card.dataset.bsId);
+      if (board) openModal(board, null);
     });
   }
 
