@@ -631,6 +631,7 @@
     }
 
     function close() {
+      restoreBtn();
       overlay.style.opacity = '0';
       overlay.style.transition = 'opacity .18s';
       setTimeout(() => overlay.remove(), 180);
