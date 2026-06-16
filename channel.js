@@ -635,7 +635,7 @@
 
     const modal = document.createElement('div');
     modal.className = 'bs-modal';
-    modal.innerHTML = buildModalContent(b, true);
+    modal.innerHTML = buildModalContent(b, false);
     overlay.appendChild(modal);
 
     function restoreBtn() {
@@ -664,18 +664,18 @@
     document.body.appendChild(overlay);
     document.body.style.overflow = 'hidden';
 
-    // Fetch full board data, then restore button and show content
+    // Restore button immediately — content is already shown from card data
+    restoreBtn();
+
+    // Silently fetch full board data and update if richer content is available
     if (b.embedId) {
       fetch(`${apiBase}/embed/board/${encodeURIComponent(b.embedId)}`)
         .then(r => r.ok ? r.json() : null)
         .then(full => {
-          restoreBtn();
           if (!full || !overlay.isConnected) return;
           modal.innerHTML = buildModalContent(full, false);
         })
-        .catch(() => { restoreBtn(); });
-    } else {
-      restoreBtn();
+        .catch(() => {});
     }
   }
 
