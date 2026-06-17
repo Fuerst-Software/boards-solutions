@@ -925,9 +925,7 @@ body {
 /* Real image takes full space */
 .board-card__preview-img {
   width: 100%;
-  height: 180px;
-  object-fit: contain;
-  background: #f1f5f9;
+  height: auto;
   display: block;
   flex-shrink: 0;
 }
@@ -5589,8 +5587,8 @@ a.link:hover { text-decoration: underline; }
 /* Board card v4 — editorial style */
 .board-card { background: var(--color-surface-base); border: 1px solid var(--color-border-default); border-radius: 18px; overflow: hidden; display: flex; flex-direction: column; transition: box-shadow .22s ease, transform .22s ease; box-shadow: 0 2px 12px rgba(15,23,42,.06); }
 .board-card:hover { box-shadow: 0 12px 40px rgba(15,23,42,.13); transform: translateY(-4px); }
-.board-card__visual { position: relative; height: 200px; overflow: hidden; flex-shrink: 0; background: #f1f5f9; display: flex; align-items: center; justify-content: center; }
-.board-card__preview-img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.board-card__visual { position: relative; flex-shrink: 0; background: #f1f5f9; display: flex; align-items: center; justify-content: center; }
+.board-card__preview-img { width: 100%; height: auto; display: block; }
 .board-card__preview { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; gap: var(--space-4); padding: var(--space-6); }
 .board-card__preview--blue   { background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%); }
 .board-card__preview--green  { background: linear-gradient(135deg, #10B981 0%, #059669 100%); }
@@ -7177,7 +7175,7 @@ a.link:hover { text-decoration: underline; }
 @media (max-width: 599px) {
   .boards-grid { grid-template-columns: 1fr !important; }
   .board-card { border-radius: var(--radius-xl) !important; }
-  .board-card__visual { height: 160px !important; }
+  .board-card__visual { height: auto !important; }
 }
 
 /* ── 10. Mobile bottom nav: enhanced app-like style ─────────── */

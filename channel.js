@@ -71,9 +71,7 @@
     /* ── Card image ── */
     .bs-card-img {
       width: 100%;
-      height: 220px;
-      object-fit: contain;
-      background: #f1f5f9;
+      height: auto;
       display: block;
     }
 
@@ -318,19 +316,15 @@
     /* Hero image — full-bleed at the very top */
     .bs-modal-hero {
       width: 100%;
-      height: 360px;
-      object-fit: contain;
-      background: #f1f5f9;
+      height: auto;
       display: block;
       flex-shrink: 0;
       border-radius: 22px 22px 0 0;
     }
 
-    /* Product image — same contain behaviour */
+    /* Product image */
     .bs-modal-hero--product {
-      object-fit: contain;
       background: #f8fafc;
-      height: 300px;
     }
 
     /* Floating close button over hero (when hero present) */
@@ -540,8 +534,8 @@
     /* Responsive modal */
     @media (max-width: 600px) {
       .bs-modal { border-radius: 16px 16px 0 0; max-height: 95vh; margin-top: auto; }
-      .bs-modal-hero { height: 240px; border-radius: 16px 16px 0 0; }
-      .bs-modal-hero--product { height: 200px; }
+      .bs-modal-hero { border-radius: 16px 16px 0 0; }
+      .bs-modal-hero--product { }
       .bs-modal h2 { font-size: 1.3rem; }
       .bs-modal-inner { padding: 1.25rem 1.25rem 1.75rem; }
       .bs-modal-overlay { align-items: flex-end; padding: 0; }
