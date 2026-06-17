@@ -897,24 +897,6 @@
   }
 
   // ── Main ─────────────────────────────────────────────────────────
-  let boardsData = [];
-
-  function mount(container, boards) {
-    boardsData = boards;
-    if (!boards.length) {
-      container.innerHTML = '<div class="bs-empty">Noch keine veröffentlichten Inhalte.</div>';
-      return;
-    }
-    container.innerHTML =
-      `<div class="bs-channel-grid">${boards.map(renderCard).join('')}</div>`;
-
-    container.addEventListener('click', e => {
-      const card = e.target.closest('.bs-card');
-      if (!card) return;
-      const board = boardsData.find(b => b.id === card.dataset.bsId);
-      if (board) openModal(board, null);
-    });
-  }
 
   function injectStyles() {
     if (document.getElementById('bs-channel-styles')) return;
@@ -924,22 +906,42 @@
     document.head.appendChild(style);
   }
 
-  async function init() {
-    injectStyles();
+  // One instance per script tag — each gets its own container + boardsData
+  async function initOne(scriptEl) {
+    const iKey  = scriptEl.getAttribute('data-key');
+    const iArea = scriptEl.getAttribute('data-area');
+    const iApi  = scriptEl.getAttribute('data-api') ||
+      'https://web-production-83480.up.railway.app/api';
 
-    const container = document.getElementById('boards-channel') ||
-      (() => {
-        const div = document.createElement('div');
-        div.id = 'boards-channel';
-        script.parentNode.insertBefore(div, script.nextSibling);
-        return div;
-      })();
+    if (!iKey) return;
 
-    container.classList.add('bs-channel');
+    // Create a dedicated container right after this script tag
+    const container = document.createElement('div');
+    container.className = 'bs-channel';
+    scriptEl.parentNode.insertBefore(container, scriptEl.nextSibling);
+
+    // Per-instance board list (no shared state between areas)
+    let boardsData = [];
+
+    function mount(boards) {
+      boardsData = boards;
+      if (!boards.length) {
+        container.innerHTML = '<div class="bs-empty">Noch keine veröffentlichten Inhalte.</div>';
+        return;
+      }
+      container.innerHTML =
+        `<div class="bs-channel-grid">${boards.map(renderCard).join('')}</div>`;
+      container.addEventListener('click', e => {
+        const card = e.target.closest('.bs-card');
+        if (!card) return;
+        const board = boardsData.find(b => b.id === card.dataset.bsId);
+        if (board) openModal(board, null);
+      });
+    }
+
     container.innerHTML =
       '<div class="bs-loading-pulse"><span></span><span></span><span></span></div>';
 
-    // Show a friendlier hint after 4 s (Railway cold-start can take 10–15 s)
     const slowHint = setTimeout(() => {
       if (container.querySelector('.bs-loading-pulse')) {
         container.innerHTML = `
@@ -950,18 +952,13 @@
       }
     }, 4000);
 
-    // Fire a quick health ping in parallel — warms Railway if it's sleeping
-    // while the real fetch is already in flight (overlap = zero extra wait time)
-    fetch(`${apiBase}/health`, { signal: AbortSignal.timeout(25000) }).catch(() => {});
-
-    // Fetch with timeout + 1 automatic retry (handles Railway cold start)
     async function fetchChannel(timeout) {
       const ctrl = new AbortController();
       const t = setTimeout(() => ctrl.abort(), timeout);
       try {
-        const params = area ? `?area=${encodeURIComponent(area)}` : '';
+        const params = iArea ? `?area=${encodeURIComponent(iArea)}` : '';
         const res = await fetch(
-          `${apiBase}/embed/channel/${encodeURIComponent(key)}${params}`,
+          `${iApi}/embed/channel/${encodeURIComponent(iKey)}${params}`,
           { signal: ctrl.signal }
         );
         clearTimeout(t);
@@ -976,15 +973,14 @@
     try {
       let data;
       try {
-        data = await fetchChannel(18000); // first attempt — 18 s
+        data = await fetchChannel(18000);
       } catch {
-        // One automatic retry after a short pause (server might now be warm)
         await new Promise(r => setTimeout(r, 1500));
         data = await fetchChannel(15000);
       }
       clearTimeout(slowHint);
       if (data.theme) applyTheme(data.theme);
-      mount(container, data.boards || []);
+      mount(data.boards || []);
     } catch (err) {
       clearTimeout(slowHint);
       container.innerHTML = `
@@ -994,6 +990,20 @@
         </div>`;
       console.warn('[boards.solutions] channel.js Fehler:', err);
     }
+  }
+
+  async function init() {
+    injectStyles();
+    // One health ping total to warm Railway
+    fetch('https://web-production-83480.up.railway.app/api/health',
+      { signal: AbortSignal.timeout(25000) }).catch(() => {});
+
+    // Find all channel.js script tags, mark as processed, init each one
+    const allScripts = Array.from(
+      document.querySelectorAll('script[data-key][src*="channel.js"]:not([data-bs-init])')
+    );
+    allScripts.forEach(s => s.setAttribute('data-bs-init', '1'));
+    await Promise.all(allScripts.map(s => initOne(s)));
   }
 
   if (document.readyState === 'loading') {
