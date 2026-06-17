@@ -706,18 +706,29 @@
     let content = '';
 
     if (b.type === 'blog') {
-      const fullText = b.content || b.intro || '';
-      content = `
-        <div class="bs-modal-content">${textToHtml(fullText)}</div>
-        ${(b.affiliateLinks || []).filter(l => l.url).length ? `
-          <div class="bs-modal-links">
-            ${(b.affiliateLinks).filter(l => l.url).map(l =>
-              `<a class="bs-btn" href="${esc(l.url)}" target="_blank" rel="noopener nofollow">
-                ${esc(l.text || 'Mehr erfahren')} →
-               </a>`
-            ).join('')}
-          </div>` : ''}`;
-
+      if (b.blocks && b.blocks.length) {
+        content = b.blocks.map(block => {
+          if (block.type === 'text' && block.content && block.content.trim())
+            return '<div class="bs-modal-content">' + textToHtml(block.content) + '</div>';
+          if (block.type === 'image' && block.data)
+            return '<div style="margin:16px 0"><img src="' + esc(block.data) + '" style="width:100%;height:auto;display:block;border-radius:10px"></div>';
+          if (block.type === 'affiliate' && block.url)
+            return '<div class="bs-modal-links"><a class="bs-btn" href="' + esc(block.url) + '" target="_blank" rel="noopener nofollow" style="background:' + esc(block.color || '#2563eb') + ';color:' + esc(block.textColor || '#fff') + '">' + esc(block.text || 'Mehr erfahren') + ' →</a></div>';
+          return '';
+        }).join('');
+      } else {
+        const fullText = b.content || b.intro || '';
+        const links = (b.affiliateLinks || []).filter(l => l.url);
+        content = '<div class="bs-modal-content">' + textToHtml(fullText) + '</div>';
+        if (links.length) {
+          content += '<div class="bs-modal-links">' +
+            links.map(l =>
+              '<a class="bs-btn" href="' + esc(l.url) + '" target="_blank" rel="noopener nofollow">' +
+              esc(l.text || 'Mehr erfahren') + ' →</a>'
+            ).join('') +
+            '</div>';
+        }
+      }
     } else if (b.type === 'affiliate') {
       content = `
         ${b.rating ? `<div class="bs-modal-rating">${stars(b.rating)}<span>${b.rating} / 5 Sterne</span></div>` : ''}
