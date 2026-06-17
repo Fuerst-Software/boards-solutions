@@ -72,11 +72,10 @@
     .bs-card-img {
       width: 100%;
       height: 220px;
-      object-fit: cover;
+      object-fit: contain;
+      background: #f1f5f9;
       display: block;
-      transition: transform .4s ease;
     }
-    .bs-card:hover .bs-card-img { transform: scale(1.04); }
 
     /* ── No-image placeholder ── */
     .bs-card-img-placeholder {
@@ -320,13 +319,14 @@
     .bs-modal-hero {
       width: 100%;
       height: 360px;
-      object-fit: cover;
+      object-fit: contain;
+      background: #f1f5f9;
       display: block;
       flex-shrink: 0;
       border-radius: 22px 22px 0 0;
     }
 
-    /* Product image — contain so nothing is cut off */
+    /* Product image — same contain behaviour */
     .bs-modal-hero--product {
       object-fit: contain;
       background: #f8fafc;
