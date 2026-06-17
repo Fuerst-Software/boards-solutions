@@ -834,7 +834,6 @@
         <span class="bs-type-badge">Blog</span>
         <h3>${esc(b.title || b.boardName)}</h3>
         ${snippet ? `<p>${esc(snippet)}</p>` : ''}
-        <button class="bs-btn-read" data-bs-open>Weiterlesen →</button>
       </div>`;
   }
 
@@ -851,7 +850,6 @@
         ${b.rating ? stars(b.rating) : ''}
         ${desc ? `<p>${esc(desc)}${(b.description||'').length > 115 ? '…' : ''}</p>` : ''}
         ${b.price ? `<span class="bs-price">${esc(b.price)}</span>` : ''}
-        <button class="bs-btn-read" data-bs-open>Details ansehen →</button>
       </div>`;
   }
 
@@ -864,7 +862,6 @@
         <h3>${esc(b.productName || b.boardName)}</h3>
         ${b.rating ? stars(b.rating) : ''}
         ${txt ? `<p>${esc(txt)}${(b.reviewText||'').length > 115 ? '…' : ''}</p>` : ''}
-        <button class="bs-btn-read" data-bs-open>Review lesen →</button>
       </div>`;
   }
 
@@ -880,7 +877,6 @@
             <div class="bs-faq-q">${esc(f.question || f.q || '')}</div>
             <div class="bs-faq-a">${esc((f.answer || f.a || '').slice(0, 75))}${(f.answer||f.a||'').length > 75 ? '…' : ''}</div>
           </div>`).join('')}
-        <button class="bs-btn-read" data-bs-open>Alle FAQs →</button>
       </div>`;
   }
 
@@ -894,7 +890,6 @@
       inner = `${cardImage(b)}<div class="bs-card-body">
         <span class="bs-type-badge">${esc(b.type)}</span>
         <h3>${esc(b.boardName || b.title || 'Board')}</h3>
-        <button class="bs-btn-read" data-bs-open>Öffnen →</button>
       </div>`;
     }
     return `<article class="bs-card" data-bs-id="${esc(b.id)}">${inner}</article>`;
@@ -912,19 +907,7 @@
     container.innerHTML =
       `<div class="bs-channel-grid">${boards.map(renderCard).join('')}</div>`;
 
-    // Direct listeners on each open-button — bypass customer-site stopPropagation
-    container.querySelectorAll('[data-bs-open]').forEach(btn => {
-      btn.addEventListener('click', e => {
-        e.stopPropagation();
-        const id    = btn.closest('.bs-card')?.dataset.bsId;
-        const board = boardsData.find(b => b.id === id);
-        if (board) openModal(board, btn);
-      });
-    });
-
-    // Card click for non-button areas
     container.addEventListener('click', e => {
-      if (e.target.closest('[data-bs-open]')) return;
       const card = e.target.closest('.bs-card');
       if (!card) return;
       const board = boardsData.find(b => b.id === card.dataset.bsId);
