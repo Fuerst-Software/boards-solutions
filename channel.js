@@ -12,6 +12,7 @@
   const script  = document.currentScript ||
     document.querySelector('script[data-key][src*="channel.js"]');
   const key     = script && script.getAttribute('data-key');
+  const area    = script && script.getAttribute('data-area');
   const apiBase = (script && script.getAttribute('data-api')) ||
     'https://web-production-83480.up.railway.app/api';
 
@@ -958,8 +959,9 @@
       const ctrl = new AbortController();
       const t = setTimeout(() => ctrl.abort(), timeout);
       try {
+        const params = area ? `?area=${encodeURIComponent(area)}` : '';
         const res = await fetch(
-          `${apiBase}/embed/channel/${encodeURIComponent(key)}`,
+          `${apiBase}/embed/channel/${encodeURIComponent(key)}${params}`,
           { signal: ctrl.signal }
         );
         clearTimeout(t);
