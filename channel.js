@@ -906,104 +906,87 @@
     document.head.appendChild(style);
   }
 
-  // One instance per script tag — each gets its own container + boardsData
-  async function initOne(scriptEl) {
-    const iKey  = scriptEl.getAttribute('data-key');
-    const iArea = scriptEl.getAttribute('data-area');
-    const iApi  = scriptEl.getAttribute('data-api') ||
-      'https://web-production-83480.up.railway.app/api';
-
-    if (!iKey) return;
-
-    // Create a dedicated container right after this script tag
-    const container = document.createElement('div');
-    container.className = 'bs-channel';
-    scriptEl.parentNode.insertBefore(container, scriptEl.nextSibling);
-
-    // Per-instance board list (no shared state between areas)
-    let boardsData = [];
-
-    function mount(boards) {
-      boardsData = boards;
-      if (!boards.length) {
-        container.innerHTML = '<div class="bs-empty">Noch keine veröffentlichten Inhalte.</div>';
-        return;
-      }
-      container.innerHTML =
-        `<div class="bs-channel-grid">${boards.map(renderCard).join('')}</div>`;
-      container.addEventListener('click', e => {
-        const card = e.target.closest('.bs-card');
-        if (!card) return;
-        const board = boardsData.find(b => b.id === card.dataset.bsId);
-        if (board) openModal(board, null);
-      });
-    }
-
-    container.innerHTML =
-      '<div class="bs-loading-pulse"><span></span><span></span><span></span></div>';
-
-    const slowHint = setTimeout(() => {
-      if (container.querySelector('.bs-loading-pulse')) {
-        container.innerHTML = `
-          <div class="bs-loading-pulse"><span></span><span></span><span></span></div>
-          <p style="text-align:center;font-size:.82rem;color:#94a3b8;margin-top:.75rem">
-            Inhalte werden geladen…
-          </p>`;
-      }
-    }, 4000);
-
-    async function fetchChannel(timeout) {
-      const ctrl = new AbortController();
-      const t = setTimeout(() => ctrl.abort(), timeout);
-      try {
-        const params = iArea ? `?area=${encodeURIComponent(iArea)}` : '';
-        const res = await fetch(
-          `${iApi}/embed/channel/${encodeURIComponent(iKey)}${params}`,
-          { signal: ctrl.signal }
-        );
-        clearTimeout(t);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.json();
-      } catch (e) {
-        clearTimeout(t);
-        throw e;
-      }
-    }
-
-    try {
-      let data;
-      try {
-        data = await fetchChannel(18000);
-      } catch {
-        await new Promise(r => setTimeout(r, 1500));
-        data = await fetchChannel(15000);
-      }
-      clearTimeout(slowHint);
-      if (data.theme) applyTheme(data.theme);
-      mount(data.boards || []);
-    } catch (err) {
-      clearTimeout(slowHint);
-      container.innerHTML = `
-        <div class="bs-empty">
-          Inhalte konnten nicht geladen werden.
-          <br><button onclick="location.reload()" style="margin-top:.75rem;padding:.35rem .9rem;border:1.5px solid #e2e8f0;border-radius:8px;background:#fff;cursor:pointer;font-size:.8rem;color:#64748b">Erneut versuchen</button>
-        </div>`;
-      console.warn('[boards.solutions] channel.js Fehler:', err);
-    }
-  }
 
   async function init() {
     injectStyles();
-    // One health ping total to warm Railway
-    fetch('https://web-production-83480.up.railway.app/api/health',
-      { signal: AbortSignal.timeout(25000) }).catch(() => {});
 
-    // Find all channel.js script tags, mark as processed, init each one
+    // Find all channel.js script tags on this page
     const allScripts = Array.from(
       document.querySelectorAll('script[data-key][src*="channel.js"]:not([data-bs-init])')
     );
+    if (!allScripts.length) return;
     allScripts.forEach(s => s.setAttribute('data-bs-init', '1'));
-    await Promise.all(allScripts.map(s => initOne(s)));
+
+    // Group by embed key — one fetch per key covers all areas on the page
+    const byKey = {};
+    allScripts.forEach(s => {
+      const k = s.getAttribute('data-key');
+      if (!byKey[k]) byKey[k] = { api: s.getAttribute('data-api') || 'https://web-production-83480.up.railway.app/api', scripts: [] };
+      byKey[k].scripts.push(s);
+    });
+
+    await Promise.all(Object.entries(byKey).map(async ([iKey, { api: iApi, scripts }]) => {
+      // Create containers immediately so the page layout is stable while loading
+      const instances = scripts.map(scriptEl => {
+        const container = document.createElement('div');
+        container.className = 'bs-channel';
+        scriptEl.parentNode.insertBefore(container, scriptEl.nextSibling);
+        container.innerHTML = '<div class="bs-loading-pulse"><span></span><span></span><span></span></div>';
+        return { scriptEl, container, area: scriptEl.getAttribute('data-area') };
+      });
+
+      // ONE fetch for all boards of this key (no area filter = get everything)
+      async function fetchAll(timeout) {
+        const ctrl = new AbortController();
+        const t = setTimeout(() => ctrl.abort(), timeout);
+        try {
+          const res = await fetch(`${iApi}/embed/channel/${encodeURIComponent(iKey)}`,
+            { signal: ctrl.signal });
+          clearTimeout(t);
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return res.json();
+        } catch (e) { clearTimeout(t); throw e; }
+      }
+
+      let data;
+      try {
+        data = await fetchAll(12000);
+      } catch {
+        await new Promise(r => setTimeout(r, 800));
+        try { data = await fetchAll(12000); }
+        catch (err) {
+          instances.forEach(({ container }) => {
+            container.innerHTML = `<div class="bs-empty">Inhalte konnten nicht geladen werden.
+              <br><button onclick="location.reload()" style="margin-top:.75rem;padding:.35rem .9rem;border:1.5px solid #e2e8f0;border-radius:8px;background:#fff;cursor:pointer;font-size:.8rem;color:#64748b">Erneut versuchen</button></div>`;
+          });
+          console.warn('[boards.solutions] channel.js Fehler:', err);
+          return;
+        }
+      }
+
+      if (data.theme) applyTheme(data.theme);
+      const allBoards = data.boards || [];
+
+      // Distribute boards to each container by area — all at once, no extra requests
+      instances.forEach(({ container, area }) => {
+        const boards = area
+          ? allBoards.filter(b => (b.areas || []).includes(area))
+          : allBoards;
+
+        let boardsData = boards;
+        if (!boards.length) {
+          container.innerHTML = '<div class="bs-empty">Noch keine veröffentlichten Inhalte.</div>';
+          return;
+        }
+        container.innerHTML = `<div class="bs-channel-grid">${boards.map(renderCard).join('')}</div>`;
+        container.addEventListener('click', e => {
+          const card = e.target.closest('.bs-card');
+          if (!card) return;
+          const board = boardsData.find(b => b.id === card.dataset.bsId);
+          if (board) openModal(board, null);
+        });
+      });
+    }));
   }
 
   if (document.readyState === 'loading') {
