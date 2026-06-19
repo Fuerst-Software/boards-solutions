@@ -226,7 +226,7 @@
 <script type="module" src="js/app.js"></script>
 <script type="module">
 import { requireAuth, updateSidebar, getUser } from './js/auth.js';
-import { getBoards, deleteBoard, duplicateBoard, toggleBoardStatus, relativeDate, seedDemoData, getAreas, saveArea, deleteArea, buildAreaSnippet } from './js/boards-data.js';
+import { getBoards, deleteBoard, duplicateBoard, toggleBoardStatus, relativeDate, seedDemoData, getAreas, saveArea, deleteArea, buildAreaSnippet, retrySyncPending, resyncBoard } from './js/boards-data.js';
 import { showToast } from './js/app.js';
 
 (async () => {
@@ -255,6 +255,13 @@ async function init() {
   catch { allBoards = []; showToast('Boards konnten nicht geladen werden.', 'error'); }
   showLoading(false);
   render();
+  // Auto-retry boards that failed to sync to DB during creation
+  retrySyncPending().then(count => {
+    if (count > 0) {
+      getBoards().then(fresh => { allBoards = fresh; render(); });
+      showToast(`${count} Board${count > 1 ? 's' : ''} erfolgreich synchronisiert. ✓`, 'success', 4000);
+    }
+  }).catch(() => {});
 }
 
 function showLoading(v) {
@@ -319,9 +326,10 @@ const TYPE_META = {
 };
 
 function cardHTML(board) {
-  const meta       = TYPE_META[board.type] || TYPE_META.blog;
-  const isPublished= board.status === 'published';
-  const name       = board.boardName || board.title || board.productName || 'Unbenannter Board';
+  const meta        = TYPE_META[board.type] || TYPE_META.blog;
+  const isPublished = board.status === 'published';
+  const isSyncPending = !!board._syncPending;
+  const name        = board.boardName || board.title || board.productName || 'Unbenannter Board';
   const desc       = board.intro || board.description || board.reviewText || '';
   const menuId     = `menu-${board.id}`;
   const when       = relativeDate(board.updatedAt);
@@ -376,6 +384,7 @@ function cardHTML(board) {
         <span class="badge ${isPublished ? 'badge--success' : 'badge--neutral'} board-card__status-badge">
           ${isPublished ? '● Live' : '○ Entwurf'}
         </span>
+        ${isSyncPending ? `<span class="badge board-card__sync-badge" title="Nicht mit Server synchronisiert">⚠ Lokal</span>` : ''}
       </div>
 
       <div class="board-card__body">
@@ -409,6 +418,11 @@ function cardHTML(board) {
                 data-action="duplicate" data-id="${esc(board.id)}" type="button">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
                 Duplizieren
+              </button></li>
+              <li><button class="board-card__dropdown-item" role="menuitem"
+                data-action="resync" data-id="${esc(board.id)}" type="button">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+                Erneut veröffentlichen
               </button></li>
               <li><hr class="board-card__dropdown-divider"></li>
               <li><button class="board-card__dropdown-item board-card__dropdown-item--danger" role="menuitem"
@@ -448,6 +462,12 @@ function cardHTML(board) {
           ${isPublished
             ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> Entwurf'
             : '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Veröffentlichen'}
+        </button>
+        <button class="btn btn--sm btn--ghost board-card__footer-btn board-card__resync-btn"
+          data-action="resync" data-id="${esc(board.id)}" type="button"
+          title="Board in Datenbank speichern und live schalten">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+          Neu veröffentlichen
         </button>
         <button class="btn btn--ghost btn--sm board-card__footer-btn"
           data-action="delete" data-id="${esc(board.id)}" data-name="${esc(name)}" type="button"
@@ -532,6 +552,21 @@ grid.addEventListener('click', async e => {
       render();
       showToast(newStatus==='published' ? 'Board veröffentlicht! 🚀' : 'Als Entwurf gespeichert.', 'success', 3000);
     } catch { showToast('Statusänderung fehlgeschlagen.', 'error'); }
+  }
+
+  else if (action === 'resync') {
+    btn.disabled = true;
+    btn.textContent = '…';
+    try {
+      const updated = await resyncBoard(id);
+      const idx = allBoards.findIndex(b => b.id === id);
+      if (idx >= 0) { allBoards[idx] = { ...allBoards[idx], ...updated, _syncPending: undefined, status: 'published' }; }
+      render();
+      showToast('Board gespeichert und live! 🚀', 'success', 3500);
+    } catch (err) {
+      showToast(`Synchronisierung fehlgeschlagen: ${err.message}`, 'error', 6000);
+      btn.disabled = false;
+    }
   }
 
   else if (action === 'duplicate') {

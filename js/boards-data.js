@@ -229,10 +229,94 @@ export async function saveBoard(boardData) {
     return fresh[fi] ?? saved;
   } catch (err) {
     // Do NOT rollback localStorage — board stays visible locally.
-    // Attach the locally-saved board so callers can retry as an update.
+    // Mark as sync-pending so boards.html can auto-retry on next load.
+    const pending = lsGet();
+    const pi = pending.findIndex(b => b.id === saved.id);
+    if (pi >= 0) { pending[pi]._syncPending = true; lsSet(pending); }
     err.localBoard = saved;
     throw err; // bubble up so UI shows toast error
   }
+}
+
+// Retries POST for all boards marked _syncPending (API sync failed on creation).
+// Returns number of successfully synced boards.
+export async function retrySyncPending() {
+  if (!getToken() || !(await apiOk())) return 0;
+  const boards  = lsGet();
+  const pending = boards.filter(b => b._syncPending);
+  if (!pending.length) return 0;
+
+  let synced = 0;
+  for (const board of pending) {
+    try {
+      const { _syncPending, ...payload } = board;
+      const res = await fetch(`${API_BASE}/boards`, {
+        method: 'POST',
+        headers: apiHeaders(),
+        body: JSON.stringify(payload),
+        signal: AbortSignal.timeout(API_SAVE_TIMEOUT),
+      });
+      if (res.ok) {
+        const created = await res.json();
+        const fresh = lsGet();
+        const fi = fresh.findIndex(b => b.id === board.id);
+        if (fi >= 0) { fresh[fi] = { ...fresh[fi], ...created, _syncPending: undefined }; lsSet(fresh); }
+        synced++;
+      }
+    } catch { /* skip, will retry next time */ }
+  }
+  return synced;
+}
+
+// Force-syncs a single board from localStorage to DB (POST if missing, PUT if exists).
+export async function resyncBoard(id) {
+  if (!getToken()) throw new Error('Nicht eingeloggt');
+  const boards = lsGet();
+  const board  = boards.find(b => b.id === id);
+  if (!board) throw new Error('Board nicht im lokalen Speicher gefunden');
+
+  const { _syncPending, ...payload } = board;
+
+  // Always publish when resyncing
+  const syncPayload = { ...payload, status: 'published' };
+
+  // Try PUT first (board might already exist in DB)
+  const putRes = await fetch(`${API_BASE}/boards/${id}`, {
+    method: 'PUT',
+    headers: apiHeaders(),
+    body: JSON.stringify(syncPayload),
+    signal: AbortSignal.timeout(API_SAVE_TIMEOUT),
+  });
+
+  if (putRes.ok) {
+    const updated = await putRes.json();
+    const fresh = lsGet();
+    const fi = fresh.findIndex(b => b.id === id);
+    if (fi >= 0) { fresh[fi] = { ...fresh[fi], ...updated, _syncPending: undefined }; lsSet(fresh); }
+    return fresh[fi] ?? updated;
+  }
+
+  // 404 → board not in DB yet, create it
+  if (putRes.status === 404) {
+    const postRes = await fetch(`${API_BASE}/boards`, {
+      method: 'POST',
+      headers: apiHeaders(),
+      body: JSON.stringify(syncPayload),
+      signal: AbortSignal.timeout(API_SAVE_TIMEOUT),
+    });
+    if (!postRes.ok) {
+      const err = await postRes.json().catch(() => ({}));
+      throw new Error(err.error || `HTTP ${postRes.status}`);
+    }
+    const created = await postRes.json();
+    const fresh = lsGet();
+    const fi = fresh.findIndex(b => b.id === id);
+    if (fi >= 0) { fresh[fi] = { ...fresh[fi], ...created, _syncPending: undefined }; lsSet(fresh); }
+    return fresh[fi] ?? created;
+  }
+
+  const err = await putRes.json().catch(() => ({}));
+  throw new Error(err.error || `HTTP ${putRes.status}`);
 }
 
 export async function deleteBoard(id) {
@@ -287,6 +371,23 @@ export async function toggleBoardStatus(id, status) {
         const fi = fresh.findIndex(b => b.id === id);
         if (fi >= 0) { fresh[fi] = { ...fresh[fi], ...updated }; lsSet(fresh); }
         return updated;
+      }
+      // Board existiert nicht in der DB (nur localStorage) → als neues Board anlegen
+      if (res.status === 404 && boards[idx]) {
+        const boardToSync = { ...boards[idx], status, updatedAt: now };
+        const createRes = await fetch(`${API_BASE}/boards`, {
+          method: 'POST',
+          headers: apiHeaders(),
+          body: JSON.stringify(boardToSync),
+          signal: AbortSignal.timeout(API_SAVE_TIMEOUT),
+        });
+        if (createRes.ok) {
+          const created = await createRes.json();
+          const fresh = lsGet();
+          const fi = fresh.findIndex(b => b.id === id);
+          if (fi >= 0) { fresh[fi] = { ...fresh[fi], ...created }; lsSet(fresh); }
+          return created;
+        }
       }
     } catch {}
   }
