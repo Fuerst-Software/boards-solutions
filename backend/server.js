@@ -7,9 +7,32 @@ import db, { initDb } from './db.js';
 const app = express();
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'boards-solutions-secret-change-me';
+const NODE_ENV = process.env.NODE_ENV || 'development';
+
+// Validate environment in production
+if (NODE_ENV === 'production') {
+  if (!process.env.JWT_SECRET || process.env.JWT_SECRET === 'boards-solutions-secret-change-me') {
+    console.warn('⚠️  WARNUNG: JWT_SECRET ist der Default! Bitte ändern für Production.');
+  }
+  if (!process.env.TURSO_DATABASE_URL) {
+    console.error('❌ FEHLER: TURSO_DATABASE_URL muss in Production gesetzt sein');
+    process.exit(1);
+  }
+}
 
 app.use(cors());
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({
+  limit: '10mb',
+  strict: true,
+}));
+
+// JSON parse error handler
+app.use((err, req, res, next) => {
+  if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+    return res.status(400).json({ error: 'Ungüliges JSON' });
+  }
+  next(err);
+});
 
 // ── Helpers ──────────────────────────────────────────────────────
 
@@ -19,6 +42,14 @@ function uid() {
 
 function now() {
   return new Date().toISOString();
+}
+
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function isValidPassword(password) {
+  return password && password.length >= 8;
 }
 
 function boardFromRow(row) {
@@ -86,6 +117,7 @@ app.get('/api/health', (_req, res) => {
 app.post('/api/auth/login', async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) return res.status(400).json({ error: 'E-Mail und Passwort erforderlich' });
+  if (!isValidEmail(email)) return res.status(400).json({ error: 'Ungültige E-Mail-Adresse' });
 
   try {
     const result = await db.execute({ sql: 'SELECT * FROM users WHERE email = ?', args: [email.toLowerCase()] });
@@ -193,6 +225,21 @@ app.post('/api/auth/change-password', auth, async (req, res) => {
 
 app.get('/api/boards', auth, async (req, res) => {
   const { type, status, q } = req.query;
+
+  // Validate enum values
+  const validStatuses = ['draft', 'published'];
+  const validTypes = ['blog', 'affiliate', 'review', 'faq', 'comparison', 'newsletter'];
+
+  if (status && !validStatuses.includes(status)) {
+    return res.status(400).json({ error: 'Ungültiger Status' });
+  }
+  if (type && !validTypes.includes(type)) {
+    return res.status(400).json({ error: 'Ungültiger Board-Typ' });
+  }
+  if (q && q.length > 100) {
+    return res.status(400).json({ error: 'Suchtext zu lang (max 100 Zeichen)' });
+  }
+
   try {
     let sql = 'SELECT * FROM boards WHERE userId = ?';
     const args = [req.user.id];
@@ -214,6 +261,14 @@ app.get('/api/boards', auth, async (req, res) => {
 });
 
 app.post('/api/boards', auth, async (req, res) => {
+  const { type, boardName } = req.body;
+
+  // Validate
+  const validTypes = ['blog', 'affiliate', 'review', 'faq', 'comparison', 'newsletter'];
+  if (!type || !validTypes.includes(type)) {
+    return res.status(400).json({ error: 'Gültiger Board-Typ erforderlich' });
+  }
+
   try {
     const ts = now();
     const board = {
@@ -297,6 +352,9 @@ app.delete('/api/boards/:id', auth, async (req, res) => {
 app.patch('/api/boards/:id/status', auth, async (req, res) => {
   const { status } = req.body;
   if (!status) return res.status(400).json({ error: 'Status erforderlich' });
+  if (!['draft', 'published'].includes(status)) {
+    return res.status(400).json({ error: 'Ungültiger Status (draft oder published)' });
+  }
 
   try {
     const ts = now();
@@ -600,7 +658,18 @@ app.get('/api/admin/customers', auth, adminOnly, async (_req, res) => {
 app.post('/api/admin/customers', auth, adminOnly, async (req, res) => {
   const { name, email, password, company, plan, role, status, notes } = req.body;
   if (!name || !email || !password) return res.status(400).json({ error: 'Name, E-Mail und Passwort erforderlich' });
-  if (password.length < 8) return res.status(400).json({ error: 'Passwort muss mindestens 8 Zeichen haben' });
+  if (!isValidEmail(email)) return res.status(400).json({ error: 'Ungültige E-Mail-Adresse' });
+  if (!isValidPassword(password)) return res.status(400).json({ error: 'Passwort muss mindestens 8 Zeichen haben' });
+
+  if (plan && !['free', 'pro', 'business'].includes(plan)) {
+    return res.status(400).json({ error: 'Ungültiger Plan' });
+  }
+  if (role && !['user', 'admin'].includes(role)) {
+    return res.status(400).json({ error: 'Ungültige Rolle' });
+  }
+  if (status && !['active', 'inactive', 'suspended'].includes(status)) {
+    return res.status(400).json({ error: 'Ungültiger Status' });
+  }
 
   try {
     const existing = await db.execute({ sql: 'SELECT id FROM users WHERE email = ?', args: [email.toLowerCase()] });
@@ -631,10 +700,23 @@ app.put('/api/admin/customers/:id', auth, adminOnly, async (req, res) => {
   const { name, email, password, company, plan, role, status, notes } = req.body;
   if (!name) return res.status(400).json({ error: 'Name erforderlich' });
 
+  if (email && !isValidEmail(email)) {
+    return res.status(400).json({ error: 'Ungültige E-Mail-Adresse' });
+  }
+  if (plan && !['free', 'pro', 'business'].includes(plan)) {
+    return res.status(400).json({ error: 'Ungültiger Plan' });
+  }
+  if (role && !['user', 'admin'].includes(role)) {
+    return res.status(400).json({ error: 'Ungültige Rolle' });
+  }
+  if (status && !['active', 'inactive', 'suspended'].includes(status)) {
+    return res.status(400).json({ error: 'Ungültiger Status' });
+  }
+
   try {
     const ts = now();
     if (password) {
-      if (password.length < 8) return res.status(400).json({ error: 'Passwort muss mindestens 8 Zeichen haben' });
+      if (!isValidPassword(password)) return res.status(400).json({ error: 'Passwort muss mindestens 8 Zeichen haben' });
       const hashed = await bcrypt.hash(password, 10);
       await db.execute({
         sql: `UPDATE users SET name = ?, email = ?, password = ?, company = ?, plan = ?, role = ?, status = ?, notes = ?, updatedAt = ?
@@ -697,10 +779,22 @@ async function seedAdmin() {
 //  Start
 // ═════════════════════════════════════════════════════════════════
 
+// Global error handler (always last)
+app.use((err, req, res, _next) => {
+  console.error('Unerwarteter Fehler:', err.message);
+  res.status(500).json({ error: 'Serverfehler' });
+});
+
+// 404 handler
+app.use((_req, res) => {
+  res.status(404).json({ error: 'Endpoint nicht gefunden' });
+});
+
 await initDb();
 await seedAdmin();
 
 app.listen(PORT, () => {
-  console.log(`boards.solutions backend running on port ${PORT}`);
-  console.log(`Database: Turso (${process.env.TURSO_DATABASE_URL || 'local file'})`);
+  console.log(`📡 boards.solutions backend running on port ${PORT}`);
+  console.log(`🗄️  Database: Turso (${process.env.TURSO_DATABASE_URL || 'local file'})`);
+  console.log(`🔐 JWT Secret: ${process.env.JWT_SECRET ? '✓ set' : '⚠️  using default (change in production!)'}`);
 });

@@ -52,12 +52,24 @@ if (!TURSO_TOKEN) {
 
 let neonClient;
 try {
-  const { Client } = await import('pg');
+  let pg;
+  try {
+    pg = await import('pg');
+  } catch {
+    console.error('❌ Fehler: pg-Modul nicht installiert');
+    console.error('   Bitte installieren: npm install pg');
+    process.exit(1);
+  }
+  const { Client } = pg;
   neonClient = new Client({ connectionString: NEON_URL, ssl: { rejectUnauthorized: false } });
   await neonClient.connect();
 } catch (err) {
-  console.error('❌ Kann nicht zu Neon verbinden. pg-Module installiert?');
-  console.error('   npm install pg');
+  console.error('❌ Kann nicht zu Neon-Datenbank verbinden');
+  console.error('   Fehler:', err.message);
+  console.error('\n   Prüfe:');
+  console.error('   1. NEON_DATABASE_URL gesetzt? (postgresql://...)');
+  console.error('   2. Neon-Server erreichbar?');
+  console.error('   3. Credentials korrekt?');
   process.exit(1);
 }
 
