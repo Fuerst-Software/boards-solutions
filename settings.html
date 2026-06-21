@@ -817,7 +817,7 @@ import { getBoards, buildUserSnippet } from './js/boards-data.js';
 if (!requireAuth()) return;
 updateSidebar();
 
-const API = 'https://web-production-83480.up.railway.app/api';
+const { API_URL: API } = await import('./js/config.js');
 
 // ── Elements ───────────────────────────────────────────────────
 const profileAvatar      = document.getElementById('profile-avatar');

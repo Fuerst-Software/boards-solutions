@@ -315,7 +315,7 @@ import { requireAdmin, updateSidebar, authHeaders } from './js/auth.js';
 if (!requireAdmin()) return;
 updateSidebar();
 
-const API = 'https://web-production-83480.up.railway.app/api';
+const { API_URL: API } = await import('./js/config.js');
 
 // ── State ──────────────────────────────────────────────────────
 let allCustomers  = [];

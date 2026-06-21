@@ -7,8 +7,9 @@
  */
 
 import { authHeaders, getToken, clearAuth } from './auth.js';
+import { API_URL } from './config.js';
 
-const API_BASE         = 'https://web-production-83480.up.railway.app/api';
+const API_BASE         = API_URL;
 const API_TIMEOUT      = 15000;  // health check (same as save — handles Railway cold start)
 const API_SAVE_TIMEOUT = 15000;  // save / mutate operations
 const CACHE_VER        = 'v5';
@@ -470,7 +471,7 @@ export function relativeDate(isoString) {
   return new Date(isoString).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
 }
 
-const CHANNEL_JS_URL = 'https://web-production-83480.up.railway.app/channel.js';
+const CHANNEL_JS_URL = API_URL.replace('/api', '') + '/channel.js';
 
 export function buildUserSnippet(embedKey) {
   return `<script\n        src="${CHANNEL_JS_URL}"\n        data-key="${embedKey}"\n        defer>\n      <\/script>`;
