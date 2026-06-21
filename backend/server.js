@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import compression from 'compression';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import db, { initDb } from './db.js';
@@ -20,11 +21,18 @@ if (NODE_ENV === 'production') {
   }
 }
 
+app.use(compression());
 app.use(cors());
 app.use(express.json({
   limit: '10mb',
   strict: true,
 }));
+
+// Cache-Control header (API responses aren't cached by default)
+app.use((req, res, next) => {
+  res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+  next();
+});
 
 // JSON parse error handler
 app.use((err, req, res, next) => {
