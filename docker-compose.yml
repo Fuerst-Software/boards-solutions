@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   backend:
     build:
@@ -7,8 +5,8 @@ services:
       dockerfile: Dockerfile
     container_name: boards-backend
     restart: unless-stopped
-    ports:
-      - "3000:3000"
+    expose:
+      - "3000"
     volumes:
       - boards-data:/app/data
     environment:
@@ -17,5 +15,34 @@ services:
       - JWT_SECRET=boards-sol-imac-2026-secure-key
       - TURSO_DATABASE_URL=file:./data/boards.db
 
+  caddy:
+    image: caddy:2-alpine
+    container_name: boards-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./index.html:/srv/index.html:ro
+      - ./login.html:/srv/login.html:ro
+      - ./app.html:/srv/app.html:ro
+      - ./boards.html:/srv/boards.html:ro
+      - ./create-board.html:/srv/create-board.html:ro
+      - ./edit-board.html:/srv/edit-board.html:ro
+      - ./admin.html:/srv/admin.html:ro
+      - ./settings.html:/srv/settings.html:ro
+      - ./media-library.html:/srv/media-library.html:ro
+      - ./products.html:/srv/products.html:ro
+      - ./js:/srv/js:ro
+      - ./css:/srv/css:ro
+      - ./assets:/srv/assets:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - backend
+
 volumes:
   boards-data:
+  caddy-data:
+  caddy-config:
