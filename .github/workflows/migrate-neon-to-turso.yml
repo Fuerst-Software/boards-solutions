@@ -1,4 +1,4 @@
-name: Migrate Neon → Turso
+name: Migrate Neon to Turso
 
 on:
   workflow_dispatch:
