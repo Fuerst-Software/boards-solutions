@@ -76,20 +76,19 @@
 <script type="module">
 import { isLoggedIn, setAuth } from './js/auth.js';
 import { resetApiState } from './js/boards-data.js';
+import { API_URL } from './js/config.js';
 
 if (isLoggedIn()) {
   window.location.replace('app.html');
 }
 
-// ── Pre-warm Railway server the moment the page loads ──────────
-// Railway spins down after inactivity. Ping /health immediately so
-// the server is warm by the time the user clicks "Einloggen".
+// Pre-warm server
 (async () => {
   try {
-    await fetch('https://web-production-83480.up.railway.app/api/health', {
+    await fetch(`${API_URL}/health`, {
       signal: AbortSignal.timeout(20000),
     });
-  } catch { /* ignore — purely a wake-up call */ }
+  } catch {}
 })();
 
 // ── Demo Users (offline fallback) ──────────────────────────────
@@ -172,7 +171,7 @@ form.addEventListener('submit', async e => {
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), 20000);
 
-    const res = await fetch('https://web-production-83480.up.railway.app/api/auth/login', {
+    const res = await fetch(`${API_URL}/auth/login`, {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify({ email, password }),

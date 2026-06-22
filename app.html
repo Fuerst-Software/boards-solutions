@@ -370,7 +370,7 @@
   renderRecent();
 
   // ── Design Panel ──────────────────────────────────────────────
-  const API = 'https://web-production-83480.up.railway.app/api';
+  const { API_URL: API } = await import('./js/config.js');
 
   const DP_FIELDS = [
     { field: 'primary',    default: '#2563eb' },

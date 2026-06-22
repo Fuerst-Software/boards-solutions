@@ -1,0 +1,53 @@
+name: Migrate Neon to Turso
+
+on:
+  workflow_dispatch:
+    inputs:
+      neon_url:
+        description: 'Neon Database URL (postgresql://...)'
+        required: true
+        type: string
+      turso_url:
+        description: 'Turso Database URL (libsql://...)'
+        required: true
+        type: string
+      turso_token:
+        description: 'Turso Auth Token'
+        required: true
+        type: string
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        working-directory: backend
+        run: |
+          npm install
+          npm install pg
+
+      - name: Run migration
+        working-directory: backend
+        env:
+          NEON_DATABASE_URL: ${{ inputs.neon_url }}
+          TURSO_DATABASE_URL: ${{ inputs.turso_url }}
+          TURSO_AUTH_TOKEN: ${{ inputs.turso_token }}
+        run: node migrate-from-neon.js
+
+      - name: Verify migration
+        working-directory: backend
+        env:
+          TURSO_DATABASE_URL: ${{ inputs.turso_url }}
+          TURSO_AUTH_TOKEN: ${{ inputs.turso_token }}
+        run: |
+          echo "✅ Migration completed!"
+          echo "Your data is now in Turso. Next steps:"
+          echo "1. Deploy backend to Railway"
+          echo "2. Update js/config.js with new URL"

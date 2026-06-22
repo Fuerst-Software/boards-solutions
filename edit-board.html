@@ -796,7 +796,7 @@ import { showToast } from './js/app.js';
 if (!requireAuth()) throw new Error('auth');
 updateSidebar();
 
-const API = 'https://web-production-83480.up.railway.app/api';
+const { API_URL: API } = await import('./js/config.js');
 const params = new URLSearchParams(location.search);
 const boardId = params.get('id') || params.get('edit');
 
