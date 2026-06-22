@@ -16,8 +16,7 @@ if (NODE_ENV === 'production') {
     console.warn('⚠️  WARNUNG: JWT_SECRET ist der Default! Bitte ändern für Production.');
   }
   if (!process.env.TURSO_DATABASE_URL) {
-    console.error('❌ FEHLER: TURSO_DATABASE_URL muss in Production gesetzt sein');
-    process.exit(1);
+    console.warn('ℹ️  Kein TURSO_DATABASE_URL gesetzt — verwende lokale SQLite-Datenbank.');
   }
 }
 

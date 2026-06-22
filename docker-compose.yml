@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: boards-backend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - boards-data:/app/data
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - JWT_SECRET=boards-sol-imac-2026-secure-key
+      - TURSO_DATABASE_URL=file:./data/boards.db
+
+volumes:
+  boards-data:
