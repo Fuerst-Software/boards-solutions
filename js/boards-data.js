@@ -471,7 +471,7 @@ export function relativeDate(isoString) {
   return new Date(isoString).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
 }
 
-const CHANNEL_JS_URL = API_URL.replace('/api', '') + '/channel.js';
+const CHANNEL_JS_URL = 'https://boards.solutions/channel.js';
 
 export function buildUserSnippet(embedKey) {
   return `<script\n        src="${CHANNEL_JS_URL}"\n        data-key="${embedKey}"\n        defer>\n      <\/script>`;
