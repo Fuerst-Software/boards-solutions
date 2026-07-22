@@ -92,20 +92,7 @@ if (isLoggedIn()) {
 })();
 
 // ── Demo Users (offline fallback) ──────────────────────────────
-const DEMO_USERS = {
-  'admin@boards.solutions': {
-    password: 'Admin1234',
-    user: {
-      id: 'm4kkmhtt23la',
-      name: 'Administrator',
-      email: 'admin@boards.solutions',
-      role: 'admin',
-      plan: 'pro',
-      company: 'boards.solutions',
-      embedKey: 'gc4ea40706q4ji30',
-    },
-  },
-};
+const DEMO_USERS = {};
 
 const form     = document.getElementById('login-form');
 const errEl    = document.getElementById('auth-error');
