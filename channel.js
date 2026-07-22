@@ -14,7 +14,7 @@
   const key     = script && script.getAttribute('data-key');
   const area    = script && script.getAttribute('data-area');
   const apiBase = (script && script.getAttribute('data-api')) ||
-    'https://web-production-83480.up.railway.app/api';
+    'https://api.fuerst-software.com/api';
 
   if (!key) {
     console.warn('[boards.solutions] channel.js: data-key fehlt.');
@@ -926,7 +926,7 @@
     const byKey = {};
     allScripts.forEach(s => {
       const k = s.getAttribute('data-key');
-      if (!byKey[k]) byKey[k] = { api: s.getAttribute('data-api') || 'https://web-production-83480.up.railway.app/api', scripts: [] };
+      if (!byKey[k]) byKey[k] = { api: s.getAttribute('data-api') || 'https://api.fuerst-software.com/api', scripts: [] };
       byKey[k].scripts.push(s);
     });
 
