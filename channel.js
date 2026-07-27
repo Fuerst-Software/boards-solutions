@@ -1046,7 +1046,11 @@
         const urlBoardId = new URLSearchParams(window.location.search).get('board');
         if (urlBoardId) {
           const board = allBoards.find(b => b.embedId === urlBoardId);
-          if (board) setTimeout(() => openModal(board, null), 100);
+          if (board) {
+            const card = container.querySelector(`[data-bs-id="${board.id}"]`);
+            if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(() => openModal(board, null), 350);
+          }
         }
       });
     }));
