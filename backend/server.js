@@ -766,6 +766,54 @@ app.delete('/api/admin/customers/:id', auth, adminOnly, async (req, res) => {
 });
 
 // ═════════════════════════════════════════════════════════════════
+//  Backup
+// ═════════════════════════════════════════════════════════════════
+
+import { writeFileSync, unlinkSync, existsSync, readFileSync } from 'fs';
+import { join } from 'path';
+
+const BACKUP_PATH = join('/app/data', 'backup.json');
+
+app.post('/api/admin/backup', auth, adminOnly, async (_req, res) => {
+  try {
+    const [users, boards, areas] = await Promise.all([
+      db.execute('SELECT * FROM users'),
+      db.execute('SELECT * FROM boards'),
+      db.execute('SELECT * FROM areas'),
+    ]);
+
+    const backup = {
+      createdAt: now(),
+      version: 1,
+      users: users.rows,
+      boards: boards.rows,
+      areas: areas.rows,
+    };
+
+    writeFileSync(BACKUP_PATH, JSON.stringify(backup, null, 2), 'utf8');
+    res.json({ message: 'Backup erstellt', createdAt: backup.createdAt, boards: boards.rows.length, users: users.rows.length });
+  } catch (err) {
+    console.error('Backup error:', err);
+    res.status(500).json({ error: 'Backup fehlgeschlagen' });
+  }
+});
+
+app.get('/api/admin/backup', auth, adminOnly, (_req, res) => {
+  if (!existsSync(BACKUP_PATH)) return res.status(404).json({ error: 'Kein Backup vorhanden' });
+  const data = readFileSync(BACKUP_PATH, 'utf8');
+  const parsed = JSON.parse(data);
+  res.setHeader('Content-Disposition', `attachment; filename="boards-backup-${parsed.createdAt?.slice(0,10) || 'latest'}.json"`);
+  res.setHeader('Content-Type', 'application/json');
+  res.send(data);
+});
+
+app.get('/api/admin/backup/info', auth, adminOnly, (_req, res) => {
+  if (!existsSync(BACKUP_PATH)) return res.json({ exists: false });
+  const data = JSON.parse(readFileSync(BACKUP_PATH, 'utf8'));
+  res.json({ exists: true, createdAt: data.createdAt, boards: data.boards?.length, users: data.users?.length });
+});
+
+// ═════════════════════════════════════════════════════════════════
 //  Seed admin user if no users exist
 // ═════════════════════════════════════════════════════════════════
 

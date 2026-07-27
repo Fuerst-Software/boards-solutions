@@ -219,6 +219,23 @@
         </p>
       </div>
 
+      <!-- Backup Panel (Admin only) -->
+      <div class="dashboard-panel" style="margin-top:2.5rem" id="backup-panel" data-admin-only hidden>
+        <div class="dashboard-panel__header">
+          <div>
+            <h2 class="dashboard-panel__title">Datensicherung</h2>
+            <p class="dashboard-panel__description">Erstelle ein Backup aller Boards und Kundendaten. Es wird immer nur das letzte Backup gespeichert.</p>
+          </div>
+        </div>
+        <div style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap;margin-top:.5rem">
+          <button type="button" id="btn-create-backup" class="btn btn--primary">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:.4rem"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Backup erstellen &amp; herunterladen
+          </button>
+          <span id="backup-info" style="font-size:.82rem;color:var(--color-text-muted)">Lade Backup-Info…</span>
+        </div>
+      </div>
+
     </main>
   </div>
 </div>
@@ -724,6 +741,60 @@ document.getElementById('new-area-name')?.addEventListener('keydown', e => {
 });
 
 initAreasManager();
+
+// ── Backup ──────────────────────────────────────────────────────
+(async () => {
+  const { isAdmin } = await import('./js/auth.js');
+  if (!isAdmin()) return;
+
+  const { API_URL } = await import('./js/config.js');
+  const { authHeaders } = await import('./js/auth.js');
+
+  async function loadBackupInfo() {
+    try {
+      const r = await fetch(`${API_URL}/admin/backup/info`, { headers: authHeaders() });
+      const d = await r.json();
+      const el = document.getElementById('backup-info');
+      if (!el) return;
+      if (d.exists) {
+        const date = new Date(d.createdAt).toLocaleString('de-AT');
+        el.textContent = `Letztes Backup: ${date} · ${d.boards} Boards · ${d.users} Nutzer`;
+      } else {
+        el.textContent = 'Noch kein Backup vorhanden.';
+      }
+    } catch { /* silent */ }
+  }
+
+  document.getElementById('btn-create-backup')?.addEventListener('click', async () => {
+    const btn = document.getElementById('btn-create-backup');
+    btn.disabled = true;
+    btn.textContent = 'Backup wird erstellt…';
+    try {
+      const r = await fetch(`${API_URL}/admin/backup`, { method: 'POST', headers: authHeaders() });
+      if (!r.ok) throw new Error();
+
+      // Download
+      const dl = await fetch(`${API_URL}/admin/backup`, { headers: authHeaders() });
+      const blob = await dl.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `boards-backup-${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+
+      showToast('Backup erstellt und heruntergeladen', 'success');
+      loadBackupInfo();
+    } catch {
+      showToast('Backup fehlgeschlagen', 'error');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:.4rem"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Backup erstellen &amp; herunterladen`;
+    }
+  });
+
+  loadBackupInfo();
+})();
 
 })();
 </script>
