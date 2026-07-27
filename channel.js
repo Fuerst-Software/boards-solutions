@@ -954,6 +954,16 @@
   async function init() {
     injectStyles();
 
+    // Fast path: if direct board link, fetch and open that board immediately
+    // without waiting for the full channel to load
+    const urlBoardId = new URLSearchParams(window.location.search).get('board');
+    if (urlBoardId) {
+      fetch(`${apiBase}/embed/board/${encodeURIComponent(urlBoardId)}`)
+        .then(r => r.ok ? r.json() : null)
+        .then(board => { if (board && !_modalOpen) openModal(board, null); })
+        .catch(() => {});
+    }
+
     // Find all channel.js script tags on this page
     const allScripts = Array.from(
       document.querySelectorAll('script[data-key][src*="channel.js"]:not([data-bs-init])')
@@ -1042,14 +1052,14 @@
           if (board) openModal(board, null);
         });
 
-        // Auto-open board from URL ?board=embedId
-        const urlBoardId = new URLSearchParams(window.location.search).get('board');
+        // Scroll to card if opened via direct link
         if (urlBoardId) {
           const board = allBoards.find(b => b.embedId === urlBoardId);
           if (board) {
             const card = container.querySelector(`[data-bs-id="${board.id}"]`);
             if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            setTimeout(() => openModal(board, null), 350);
+            // Only open modal if fast-path above didn't already open it
+            if (!_modalOpen) setTimeout(() => openModal(board, null), 200);
           }
         }
       });
