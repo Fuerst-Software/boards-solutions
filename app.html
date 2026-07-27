@@ -649,10 +649,12 @@
     const btn = document.getElementById('btn-backup-home');
     btn.disabled = true;
     btn.textContent = 'Wird gesichert…';
+    const { isAdmin } = await import('./js/auth.js');
+    const backupBase = isAdmin() ? `${API}/admin/backup` : `${API}/backup`;
     try {
-      const r = await fetch(`${API}/admin/backup`, { method: 'POST', headers: authHeaders() });
+      const r = await fetch(backupBase, { method: 'POST', headers: authHeaders() });
       if (!r.ok) throw new Error();
-      const dl = await fetch(`${API}/admin/backup`, { headers: authHeaders() });
+      const dl = await fetch(backupBase, { headers: authHeaders() });
       const blob = await dl.blob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');

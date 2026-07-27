@@ -774,6 +774,7 @@ import { join } from 'path';
 
 const BACKUP_PATH = join('/app/data', 'backup.json');
 
+// Admin: vollständiges Backup aller Daten
 app.post('/api/admin/backup', auth, adminOnly, async (_req, res) => {
   try {
     const [users, boards, areas] = await Promise.all([
@@ -781,15 +782,7 @@ app.post('/api/admin/backup', auth, adminOnly, async (_req, res) => {
       db.execute('SELECT * FROM boards'),
       db.execute('SELECT * FROM areas'),
     ]);
-
-    const backup = {
-      createdAt: now(),
-      version: 1,
-      users: users.rows,
-      boards: boards.rows,
-      areas: areas.rows,
-    };
-
+    const backup = { createdAt: now(), version: 1, users: users.rows, boards: boards.rows, areas: areas.rows };
     writeFileSync(BACKUP_PATH, JSON.stringify(backup, null, 2), 'utf8');
     res.json({ message: 'Backup erstellt', createdAt: backup.createdAt, boards: boards.rows.length, users: users.rows.length });
   } catch (err) {
@@ -811,6 +804,33 @@ app.get('/api/admin/backup/info', auth, adminOnly, (_req, res) => {
   if (!existsSync(BACKUP_PATH)) return res.json({ exists: false });
   const data = JSON.parse(readFileSync(BACKUP_PATH, 'utf8'));
   res.json({ exists: true, createdAt: data.createdAt, boards: data.boards?.length, users: data.users?.length });
+});
+
+// User: eigene Boards sichern (für alle eingeloggten Nutzer)
+app.post('/api/backup', auth, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const [boards, areas] = await Promise.all([
+      db.execute({ sql: 'SELECT * FROM boards WHERE userId = ?', args: [userId] }),
+      db.execute({ sql: 'SELECT * FROM areas WHERE userId = ?', args: [userId] }),
+    ]);
+    const backup = { createdAt: now(), version: 1, userId, boards: boards.rows, areas: areas.rows };
+    const userBackupPath = join('/app/data', `backup-${userId}.json`);
+    writeFileSync(userBackupPath, JSON.stringify(backup, null, 2), 'utf8');
+    res.json({ message: 'Backup erstellt', createdAt: backup.createdAt, boards: boards.rows.length });
+  } catch (err) {
+    res.status(500).json({ error: 'Backup fehlgeschlagen' });
+  }
+});
+
+app.get('/api/backup', auth, (req, res) => {
+  const userBackupPath = join('/app/data', `backup-${req.user.id}.json`);
+  if (!existsSync(userBackupPath)) return res.status(404).json({ error: 'Kein Backup vorhanden' });
+  const data = readFileSync(userBackupPath, 'utf8');
+  const parsed = JSON.parse(data);
+  res.setHeader('Content-Disposition', `attachment; filename="boards-backup-${parsed.createdAt?.slice(0,10) || 'latest'}.json"`);
+  res.setHeader('Content-Type', 'application/json');
+  res.send(data);
 });
 
 // ═════════════════════════════════════════════════════════════════
