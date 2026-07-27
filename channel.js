@@ -955,18 +955,14 @@
   async function init() {
     injectStyles();
 
-    // Fast path: if direct board link, fetch and open that board immediately
-    // without waiting for the full channel to load
+    // Fast path: if direct board link, fetch and open that board immediately.
+    // window._bsUrlBoardOpened is shared across all channel.js instances on the page.
     const urlBoardId = new URLSearchParams(window.location.search).get('board');
-    if (urlBoardId) {
+    if (urlBoardId && !window._bsUrlBoardOpened) {
+      window._bsUrlBoardOpened = true;
       fetch(`${apiBase}/embed/board/${encodeURIComponent(urlBoardId)}`)
         .then(r => r.ok ? r.json() : null)
-        .then(board => {
-          if (board && !_urlBoardOpened) {
-            _urlBoardOpened = true;
-            openModal(board, null);
-          }
-        })
+        .then(board => { if (board) openModal(board, null); })
         .catch(() => {});
     }
 
@@ -1058,15 +1054,15 @@
           if (board) openModal(board, null);
         });
 
-        // Scroll to card if opened via direct link (runs once across all instances)
+        // Scroll to card if opened via direct link
         if (urlBoardId) {
           const board = allBoards.find(b => b.embedId === urlBoardId);
           if (board) {
             const card = container.querySelector(`[data-bs-id="${board.id}"]`);
             if (card) {
               card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-              if (!_urlBoardOpened) {
-                _urlBoardOpened = true;
+              if (!window._bsUrlBoardOpened) {
+                window._bsUrlBoardOpened = true;
                 setTimeout(() => openModal(board, null), 200);
               }
             }
