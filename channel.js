@@ -633,6 +633,7 @@
 
   // ── Modal ────────────────────────────────────────────────────────
   let _modalOpen = false;
+  let _urlBoardOpened = false;
 
   function getBoardUrl(embedId) {
     const u = new URL(window.location.href);
@@ -960,7 +961,12 @@
     if (urlBoardId) {
       fetch(`${apiBase}/embed/board/${encodeURIComponent(urlBoardId)}`)
         .then(r => r.ok ? r.json() : null)
-        .then(board => { if (board && !_modalOpen) openModal(board, null); })
+        .then(board => {
+          if (board && !_urlBoardOpened) {
+            _urlBoardOpened = true;
+            openModal(board, null);
+          }
+        })
         .catch(() => {});
     }
 
@@ -1052,14 +1058,18 @@
           if (board) openModal(board, null);
         });
 
-        // Scroll to card if opened via direct link
+        // Scroll to card if opened via direct link (runs once across all instances)
         if (urlBoardId) {
           const board = allBoards.find(b => b.embedId === urlBoardId);
           if (board) {
             const card = container.querySelector(`[data-bs-id="${board.id}"]`);
-            if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            // Only open modal if fast-path above didn't already open it
-            if (!_modalOpen) setTimeout(() => openModal(board, null), 200);
+            if (card) {
+              card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              if (!_urlBoardOpened) {
+                _urlBoardOpened = true;
+                setTimeout(() => openModal(board, null), 200);
+              }
+            }
           }
         }
       });
