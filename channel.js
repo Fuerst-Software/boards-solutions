@@ -53,6 +53,28 @@
       transform: translateY(-5px);
       border-color: rgba(11,79,216,.25);
     }
+    .bs-card { position: relative; }
+    .bs-share-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.6);
+      background: rgba(255,255,255,.85);
+      backdrop-filter: blur(4px);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity .2s, background .2s;
+      z-index: 2;
+      color: #334155;
+    }
+    .bs-card:hover .bs-share-btn { opacity: 1; }
+    .bs-share-btn:hover { background: #fff; }
 
     /* ── Card image wrapper with gradient overlay ── */
     .bs-card-img-wrap {
@@ -612,9 +634,19 @@
   // ── Modal ────────────────────────────────────────────────────────
   let _modalOpen = false;
 
+  function getBoardUrl(embedId) {
+    const u = new URL(window.location.href);
+    u.searchParams.set('board', embedId);
+    return u.toString();
+  }
+
   function openModal(b, triggerBtn) {
     if (_modalOpen) return;
     _modalOpen = true;
+    // Update URL so this board can be shared directly
+    if (b.embedId) {
+      history.replaceState(null, '', getBoardUrl(b.embedId));
+    }
 
     // Show loading state on the button immediately
     if (triggerBtn) {
@@ -648,6 +680,10 @@
       document.removeEventListener('keydown', onKey);
       document.body.style.overflow = '';
       _modalOpen = false;
+      // Remove ?board= from URL when modal closes
+      const u = new URL(window.location.href);
+      u.searchParams.delete('board');
+      history.replaceState(null, '', u.toString());
     }
     function onKey(e) { if (e.key === 'Escape') close(); }
 
@@ -898,7 +934,10 @@
         <h3>${esc(b.boardName || b.title || 'Board')}</h3>
       </div>`;
     }
-    return `<article class="bs-card" data-bs-id="${esc(b.id)}">${inner}</article>`;
+    const shareBtn = b.embedId ? `<button class="bs-share-btn" data-bs-embed="${esc(b.embedId)}" title="Link kopieren" aria-label="Link kopieren">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+    </button>` : '';
+    return `<article class="bs-card" data-bs-id="${esc(b.id)}">${inner}${shareBtn}</article>`;
   }
 
   // ── Main ─────────────────────────────────────────────────────────
@@ -985,11 +1024,30 @@
         }
         container.innerHTML = `<div class="bs-channel-grid">${boards.map(renderCard).join('')}</div>`;
         container.addEventListener('click', e => {
+          // Share button
+          const shareBtn = e.target.closest('.bs-share-btn');
+          if (shareBtn) {
+            e.stopPropagation();
+            const embedId = shareBtn.dataset.bsEmbed;
+            const url = getBoardUrl(embedId);
+            navigator.clipboard?.writeText(url).then(() => {
+              shareBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`;
+              setTimeout(() => { shareBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>`; }, 1500);
+            });
+            return;
+          }
           const card = e.target.closest('.bs-card');
           if (!card) return;
           const board = boardsData.find(b => b.id === card.dataset.bsId);
           if (board) openModal(board, null);
         });
+
+        // Auto-open board from URL ?board=embedId
+        const urlBoardId = new URLSearchParams(window.location.search).get('board');
+        if (urlBoardId) {
+          const board = allBoards.find(b => b.embedId === urlBoardId);
+          if (board) setTimeout(() => openModal(board, null), 100);
+        }
       });
     }));
   }
