@@ -654,15 +654,7 @@
     try {
       const r = await fetch(backupBase, { method: 'POST', headers: authHeaders() });
       if (!r.ok) throw new Error();
-      const dl = await fetch(backupBase, { headers: authHeaders() });
-      const blob = await dl.blob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `boards-backup-${new Date().toISOString().slice(0,10)}.json`;
-      a.click();
-      URL.revokeObjectURL(url);
-      showToast('Backup erstellt & heruntergeladen', 'success');
+      showToast('Backup auf Server gespeichert', 'success');
     } catch {
       showToast('Backup fehlgeschlagen', 'error');
     } finally {
