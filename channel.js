@@ -349,6 +349,38 @@
       background: #f8fafc;
     }
 
+    /* Share button inside modal */
+    .bs-modal-share-btn {
+      width: 34px; height: 34px;
+      border: 1.5px solid var(--bs-border, #e5e7eb);
+      border-radius: 10px;
+      background: #f8fafc;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: #64748b;
+      transition: background .15s, border-color .15s, color .15s;
+      flex-shrink: 0;
+    }
+    .bs-modal-share-btn:hover { background: #e5e7eb; border-color: #cbd5e1; color: #0b4fd8; }
+
+    /* Floating share button over hero */
+    .bs-modal-share-float {
+      position: absolute;
+      top: 14px; left: 14px;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: rgba(0,0,0,.45);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border: 1px solid rgba(255,255,255,.2);
+      color: #fff;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .15s;
+      z-index: 2;
+    }
+    .bs-modal-share-float:hover { background: rgba(0,0,0,.65); }
+
     /* Floating close button over hero (when hero present) */
     .bs-modal-close-float {
       position: absolute;
@@ -691,6 +723,15 @@
     overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
     modal.addEventListener('click', e => {
       if (e.target.closest('.bs-modal-close') || e.target.closest('.bs-modal-close-float')) close();
+      const shareBtn = e.target.closest('.bs-modal-share-btn, .bs-modal-share-float');
+      if (shareBtn) {
+        const url = shareBtn.dataset.shareUrl;
+        navigator.clipboard?.writeText(url).then(() => {
+          const orig = shareBtn.innerHTML;
+          shareBtn.innerHTML = checkIcon;
+          setTimeout(() => { shareBtn.innerHTML = orig; }, 1500);
+        });
+      }
     });
     document.addEventListener('keydown', onKey);
     document.body.appendChild(overlay);
@@ -726,12 +767,17 @@
     const img = b.image || b.blogImage || b.affImage || b.revImage || '';
     const isProduct = b.type === 'affiliate' || b.type === 'review';
 
+    const shareIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>`;
+    const checkIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`;
+    const shareUrl  = b.embedId ? getBoardUrl(b.embedId) : '';
+
     // Hero image block
     const heroHtml = img ? `
       <div class="bs-modal-hero-wrap">
         <img class="bs-modal-hero${isProduct ? ' bs-modal-hero--product' : ''}"
              src="${esc(img)}" alt="${esc(b.boardName || b.title || b.productName || '')}">
         <button class="bs-modal-close-float" aria-label="Schließen">✕</button>
+        ${shareUrl ? `<button class="bs-modal-share-float" data-share-url="${esc(shareUrl)}" aria-label="Link kopieren">${shareIcon}</button>` : ''}
       </div>` : '';
 
     // Title (different field per type)
@@ -826,9 +872,15 @@
         ${!heroHtml ? `
           <div class="bs-modal-topbar">
             <span class="bs-type-badge">${esc(typeName(b.type))}</span>
-            <button class="bs-modal-close" aria-label="Schließen">✕</button>
+            <div style="display:flex;gap:6px;align-items:center">
+              ${shareUrl ? `<button class="bs-modal-share-btn" data-share-url="${esc(shareUrl)}" aria-label="Link kopieren">${shareIcon}</button>` : ''}
+              <button class="bs-modal-close" aria-label="Schließen">✕</button>
+            </div>
           </div>` : `
-          <span class="bs-type-badge" style="width:fit-content">${esc(typeName(b.type))}</span>`}
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="bs-type-badge" style="width:fit-content">${esc(typeName(b.type))}</span>
+            ${shareUrl ? `<button class="bs-modal-share-btn" data-share-url="${esc(shareUrl)}" aria-label="Link kopieren">${shareIcon}</button>` : ''}
+          </div>`}
         <h2>${esc(title)}</h2>
         ${content}
         ${tags.length ? `
