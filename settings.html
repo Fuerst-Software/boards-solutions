@@ -261,6 +261,12 @@
                 </div>
 
                 <div class="form-group">
+                  <label for="profile-website-url" class="form-label">Website-URL <span class="form-label__optional">Optional</span></label>
+                  <input id="profile-website-url" type="url" class="form-input" placeholder="https://deine-website.de" autocomplete="url">
+                  <p class="form-hint">Wird als „Zurück zur Website" Link auf deinen geteilten Board-Seiten angezeigt.</p>
+                </div>
+
+                <div class="form-group">
                   <label for="profile-email" class="form-label">E-Mail-Adresse</label>
                   <input id="profile-email" type="email" class="form-input" readonly aria-readonly="true"
                     aria-describedby="profile-email-hint">
@@ -829,6 +835,7 @@ const profileForm    = document.getElementById('profile-form');
 const fName          = document.getElementById('profile-name');
 const fCompany       = document.getElementById('profile-company');
 const fEmail         = document.getElementById('profile-email');
+const fWebsiteUrl    = document.getElementById('profile-website-url');
 const profileSaveBtn = document.getElementById('profile-save-btn');
 const profileSaveTxt = document.getElementById('profile-save-text');
 const profileSuccess = document.getElementById('profile-success');
@@ -944,8 +951,9 @@ profileForm.addEventListener('submit', async e => {
   profileSuccess.hidden = true;
   profileError.hidden   = true;
 
-  const name    = fName.value.trim();
-  const company = fCompany.value.trim();
+  const name       = fName.value.trim();
+  const company    = fCompany.value.trim();
+  const websiteUrl = fWebsiteUrl?.value.trim() || '';
 
   if (!name) {
     profileErrText.textContent = 'Name ist erforderlich.';
@@ -956,6 +964,15 @@ profileForm.addEventListener('submit', async e => {
 
   setProfileSaving(true);
   try {
+    // Save websiteUrl to brand settings alongside profile
+    if (websiteUrl !== undefined) {
+      fetch(`${API}/settings/brand`, {
+        method:  'PUT',
+        headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ websiteUrl }),
+      }).catch(() => {});
+    }
+
     const res  = await fetch(`${API}/auth/profile`, {
       method:  'PUT',
       headers: { ...authHeaders(), 'Content-Type': 'application/json' },
@@ -1154,6 +1171,7 @@ init();
       if (data.websiteUrl) {
         const urlInput = document.getElementById('design-website-url');
         if (urlInput) urlInput.value = data.websiteUrl;
+        if (fWebsiteUrl) fWebsiteUrl.value = data.websiteUrl;
       }
 
       const colors = data.brandColors || {};
