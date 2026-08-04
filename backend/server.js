@@ -932,7 +932,11 @@ function renderBoardPage(board, websiteUrl) {
   const ogImg      = isRealUrl(rawImg) ? rawImg : isRealUrl(thumbImg) ? thumbImg : '';
   const img        = displayImg; // kept for template compatibility
   const boardUrl = `${BOARD_BASE}/${board.slug || board.embedId}`;
-  const backUrl  = websiteUrl || 'https://boards.solutions';
+  const baseUrl  = websiteUrl || 'https://boards.solutions';
+  const backUrl  = board.embedId
+    ? `${baseUrl}${baseUrl.includes('?') ? '&' : '?'}board=${board.embedId}`
+    : baseUrl;
+  const backHost = (() => { try { return new URL(baseUrl).hostname.replace(/^www\./,''); } catch { return baseUrl; } })();
   const typeName = { blog:'Blog', affiliate:'Empfehlung', review:'Review', faq:'FAQ' }[board.type] || board.type;
 
   // ── Content HTML (crawler-visible) ────────────────────────────
@@ -1006,9 +1010,10 @@ ${ogImg?`<meta property="og:image" content="${escHtml(ogImg)}">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#0f172a;background:#f8fafc;line-height:1.75}
-.back{background:#fff;border-bottom:1px solid #e2e8f0;padding:12px 20px}
-.back a{color:#64748b;text-decoration:none;font-size:13px}
-.back a:hover{color:#0b4fd8}
+.back{background:#fff;border-bottom:1px solid #e2e8f0;padding:12px 20px;display:flex;align-items:center}
+.back a{display:inline-flex;align-items:center;gap:7px;text-decoration:none;font-size:13px;font-weight:500;color:#475569;background:#f8fafc;border:1px solid #e2e8f0;border-radius:999px;padding:6px 14px 6px 10px;transition:background .15s,border-color .15s,color .15s}
+.back a:hover{background:#eff3fd;border-color:#bfcbf7;color:#0b4fd8}
+.back a svg{flex-shrink:0;opacity:.7}
 .wrap{max-width:740px;margin:0 auto;padding:36px 20px 64px}
 .badge{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:3px 10px;border-radius:999px;background:#eff3fd;color:#0b4fd8;margin-bottom:16px}
 h1{font-size:clamp(1.4rem,4vw,2rem);font-weight:700;line-height:1.25;letter-spacing:-.02em;margin-bottom:28px}
@@ -1036,7 +1041,7 @@ ul{margin:8px 0 0 18px}li{margin-bottom:4px;font-size:.9rem;color:#374151}
 </style>
 </head>
 <body>
-<div class="back"><a href="${escHtml(backUrl)}">← Zurück zur Website</a></div>
+<div class="back"><a href="${escHtml(backUrl)}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>${escHtml(backHost)}</a></div>
 <div class="wrap">
   <span class="badge">${escHtml(typeName)}</span>
   ${img?`<img class="hero" src="${escHtml(img)}" alt="${escHtml(title)}" loading="eager">`:''}
