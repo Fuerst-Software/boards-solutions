@@ -834,6 +834,191 @@ app.get('/api/backup', auth, (req, res) => {
 });
 
 // ═════════════════════════════════════════════════════════════════
+//  Public Board Pages — SEO + Anti-Spam Landing Pages
+// ═════════════════════════════════════════════════════════════════
+
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function textToHtmlBlocks(text) {
+  if (!text) return '';
+  return text.split(/\n{2,}/).map(p => p.trim()).filter(Boolean)
+    .map(p => `<p>${escHtml(p.replace(/\n/g,' '))}</p>`).join('');
+}
+
+function renderBoardPage(board, websiteUrl) {
+  const BOARD_BASE = 'https://api.fuerst-software.com/board';
+  const title = board.type === 'faq'
+    ? (board.faqTitle || board.boardName)
+    : (board.title || board.productName || board.boardName || 'Board');
+
+  const desc = (() => {
+    if (board.type === 'blog')      return (board.intro || board.content || '').slice(0, 160);
+    if (board.type === 'affiliate') return (board.description || '').slice(0, 160);
+    if (board.type === 'review')    return (board.reviewText || '').slice(0, 160);
+    if (board.type === 'faq')       return (board.faqs?.[0]?.question || '').slice(0, 160);
+    return '';
+  })();
+
+  const img      = board.image || board.blogImage || board.affImage || board.revImage || '';
+  const boardUrl = `${BOARD_BASE}/${board.embedId}`;
+  const backUrl  = websiteUrl || 'https://boards.solutions';
+  const typeName = { blog:'Blog', affiliate:'Empfehlung', review:'Review', faq:'FAQ' }[board.type] || board.type;
+
+  // ── Content HTML (crawler-visible) ────────────────────────────
+  let content = '';
+  if (board.type === 'blog') {
+    if (board.blocks?.length) {
+      content = board.blocks.map(b => {
+        if (b.type === 'text' && b.content?.trim()) return `<div>${textToHtmlBlocks(b.content)}</div>`;
+        if (b.type === 'image' && b.data) return `<figure><img src="${escHtml(b.data)}" alt="" loading="lazy"></figure>`;
+        if (b.type === 'affiliate' && b.url) return `<p><a href="${escHtml(b.url)}" rel="noopener nofollow" target="_blank" class="cta">${escHtml(b.text||'Mehr erfahren')} →</a></p>`;
+        return '';
+      }).join('');
+    } else {
+      content = textToHtmlBlocks(board.content || board.intro || '');
+      (board.affiliateLinks || []).filter(l=>l.url).forEach(l => {
+        content += `<p><a href="${escHtml(l.url)}" rel="noopener nofollow" target="_blank" class="cta">${escHtml(l.text||'Mehr erfahren')} →</a></p>`;
+      });
+    }
+  } else if (board.type === 'affiliate') {
+    if (board.rating) content += `<p class="rating">⭐ ${escHtml(String(board.rating))} / 5 Sterne</p>`;
+    content += textToHtmlBlocks(board.description || '');
+    if (board.price || board.affiliateUrl) {
+      content += `<div class="buybox">${board.price?`<span class="price">${escHtml(board.price)}</span>`:''}${board.affiliateUrl?`<a href="${escHtml(board.affiliateUrl)}" rel="noopener nofollow" target="_blank" class="cta">${escHtml(board.buttonText||'Jetzt ansehen')} →</a>`:''}</div>`;
+    }
+  } else if (board.type === 'review') {
+    if (board.rating) content += `<p class="rating">⭐ ${escHtml(String(board.rating))} / 5 Sterne</p>`;
+    content += textToHtmlBlocks(board.reviewText || '');
+    const pros = (board.pros||[]).filter(Boolean), cons = (board.cons||[]).filter(Boolean);
+    if (pros.length || cons.length) {
+      content += `<div class="pros-cons">`;
+      if (pros.length) content += `<div class="pros"><strong>✓ Vorteile</strong><ul>${pros.map(p=>`<li>${escHtml(p)}</li>`).join('')}</ul></div>`;
+      if (cons.length) content += `<div class="cons"><strong>✗ Nachteile</strong><ul>${cons.map(c=>`<li>${escHtml(c)}</li>`).join('')}</ul></div>`;
+      content += `</div>`;
+    }
+    if (board.verdict) content += `<div class="verdict"><strong>Fazit:</strong> ${escHtml(board.verdict)}</div>`;
+    if (board.affiliateUrl) content += `<div class="buybox">${board.price?`<span class="price">${escHtml(board.price)}</span>`:''}<a href="${escHtml(board.affiliateUrl)}" rel="noopener nofollow" target="_blank" class="cta">${escHtml(board.buttonText||'Preis prüfen')} →</a></div>`;
+  } else if (board.type === 'faq') {
+    content = (board.faqs||[]).map(f=>`<div class="faq-item"><h3>${escHtml(f.question||f.q||'')}</h3><p>${escHtml(f.answer||f.a||'')}</p></div>`).join('');
+  }
+
+  const tags = (board.tags||[]);
+
+  // ── JSON-LD ───────────────────────────────────────────────────
+  const jsonLd = JSON.stringify(board.type === 'faq' ? {
+    '@context':'https://schema.org','@type':'FAQPage',
+    mainEntity: (board.faqs||[]).map(f=>({'@type':'Question','name':f.question||f.q||'',acceptedAnswer:{'@type':'Answer','text':f.answer||f.a||''}}))
+  } : {
+    '@context':'https://schema.org','@type':'Article',
+    headline: title, description: desc, url: boardUrl,
+    ...(img ? {image: img} : {})
+  });
+
+  return `<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${escHtml(title)}</title>
+<meta name="description" content="${escHtml(desc)}">
+<link rel="canonical" href="${escHtml(boardUrl)}">
+<meta property="og:type" content="article">
+<meta property="og:title" content="${escHtml(title)}">
+<meta property="og:description" content="${escHtml(desc)}">
+<meta property="og:url" content="${escHtml(boardUrl)}">
+${img?`<meta property="og:image" content="${escHtml(img)}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="${escHtml(img)}">`:`<meta name="twitter:card" content="summary">`}
+<meta name="twitter:title" content="${escHtml(title)}">
+<meta name="twitter:description" content="${escHtml(desc)}">
+<script type="application/ld+json">${jsonLd}</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#0f172a;background:#f8fafc;line-height:1.75}
+.back{background:#fff;border-bottom:1px solid #e2e8f0;padding:12px 20px}
+.back a{color:#64748b;text-decoration:none;font-size:13px}
+.back a:hover{color:#0b4fd8}
+.wrap{max-width:740px;margin:0 auto;padding:36px 20px 64px}
+.badge{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:3px 10px;border-radius:999px;background:#eff3fd;color:#0b4fd8;margin-bottom:16px}
+h1{font-size:clamp(1.4rem,4vw,2rem);font-weight:700;line-height:1.25;letter-spacing:-.02em;margin-bottom:28px}
+h3{font-size:1rem;font-weight:600;margin-bottom:6px;color:#0f172a}
+.hero{width:100%;height:auto;border-radius:16px;margin-bottom:28px;display:block}
+p{margin-bottom:1em;color:#374151;font-size:1rem}
+figure{margin:20px 0}figure img{width:100%;border-radius:10px}
+.rating{font-size:1rem;margin-bottom:16px}
+.buybox{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:20px;background:#fff;border:1px solid #e2e8f0;border-radius:14px;margin:20px 0}
+.price{font-size:1.5rem;font-weight:700}
+.cta{display:inline-block;padding:10px 22px;background:#0b4fd8;color:#fff;text-decoration:none;border-radius:999px;font-weight:600;font-size:.9rem}
+.pros-cons{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0}
+@media(max-width:500px){.pros-cons{grid-template-columns:1fr}}
+.pros,.cons{background:#fff;border-radius:12px;padding:16px}
+.pros{border-top:3px solid #16a34a}.cons{border-top:3px solid #dc2626}
+.pros strong{color:#16a34a;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em}
+.cons strong{color:#dc2626;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em}
+ul{margin:8px 0 0 18px}li{margin-bottom:4px;font-size:.9rem;color:#374151}
+.verdict{padding:16px;background:#f0f4ff;border-left:3px solid #0b4fd8;border-radius:0 10px 10px 0;margin:20px 0;font-size:.95rem}
+.faq-item{border-bottom:1px solid #e2e8f0;padding:20px 0}.faq-item:first-child{padding-top:0}.faq-item:last-child{border-bottom:none}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:28px;padding-top:20px;border-top:1px solid #e2e8f0}
+.tag{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding:3px 9px;border-radius:999px;background:#f1f5f9;color:#64748b}
+.footer{text-align:center;padding:24px;color:#94a3b8;font-size:.75rem;border-top:1px solid #e2e8f0;margin-top:40px}
+.footer a{color:#94a3b8}
+</style>
+</head>
+<body>
+<div class="back"><a href="${escHtml(backUrl)}">← Zurück zur Website</a></div>
+<div class="wrap">
+  <span class="badge">${escHtml(typeName)}</span>
+  ${img?`<img class="hero" src="${escHtml(img)}" alt="${escHtml(title)}" loading="eager">`:''}
+  <h1>${escHtml(title)}</h1>
+  ${content}
+  ${tags.length?`<div class="tags">${tags.map(t=>`<span class="tag">${escHtml(t)}</span>`).join('')}</div>`:''}
+</div>
+<div class="footer"><a href="https://boards.solutions" rel="noopener">boards.solutions</a></div>
+</body>
+</html>`;
+}
+
+app.get('/board/:embedId', async (req, res) => {
+  try {
+    const result = await db.execute({
+      sql: "SELECT b.*, u.websiteUrl FROM boards b JOIN users u ON b.userId = u.id WHERE b.embedId = ? AND b.status = 'published'",
+      args: [req.params.embedId],
+    });
+    if (!result.rows.length) return res.status(404).send('<h1>Board nicht gefunden</h1>');
+    const row = result.rows[0];
+    const board = boardFromRow(row);
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=300');
+    res.send(renderBoardPage(board, row.websiteUrl || ''));
+  } catch (err) {
+    console.error('Board page error:', err);
+    res.status(500).send('<h1>Serverfehler</h1>');
+  }
+});
+
+app.get('/sitemap.xml', async (_req, res) => {
+  try {
+    const result = await db.execute("SELECT embedId, updatedAt FROM boards WHERE status = 'published' ORDER BY updatedAt DESC");
+    const urls = result.rows.map(r =>
+      `  <url><loc>https://api.fuerst-software.com/board/${r.embedId}</loc><lastmod>${(r.updatedAt||'').slice(0,10)||new Date().toISOString().slice(0,10)}</lastmod><changefreq>weekly</changefreq></url>`
+    ).join('\n');
+    res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    res.send(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>`);
+  } catch {
+    res.status(500).send('<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>');
+  }
+});
+
+app.get('/robots.txt', (_req, res) => {
+  res.setHeader('Content-Type', 'text/plain');
+  res.setHeader('Cache-Control', 'public, max-age=86400');
+  res.send('User-agent: *\nAllow: /board/\nSitemap: https://api.fuerst-software.com/sitemap.xml\n');
+});
+
+// ═════════════════════════════════════════════════════════════════
 //  Seed admin user if no users exist
 // ═════════════════════════════════════════════════════════════════
 
