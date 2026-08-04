@@ -861,7 +861,15 @@ function renderBoardPage(board, websiteUrl) {
     return '';
   })();
 
-  const img      = board.image || board.blogImage || board.affImage || board.revImage || '';
+  // Only use real URLs for OG (base64 doesn't work for social preview)
+  const isRealUrl = s => s && (s.startsWith('http://') || s.startsWith('https://'));
+  const rawImg    = board.image || board.blogImage || board.affImage || board.revImage || '';
+  const thumbImg  = board.imageThumb || '';
+  // For page display: prefer thumb (smaller), fall back to full, skip if base64-only
+  const displayImg = isRealUrl(thumbImg) ? thumbImg : isRealUrl(rawImg) ? rawImg : (thumbImg || rawImg);
+  // For OG/Twitter: must be a real URL
+  const ogImg      = isRealUrl(rawImg) ? rawImg : isRealUrl(thumbImg) ? thumbImg : '';
+  const img        = displayImg; // kept for template compatibility
   const boardUrl = `${BOARD_BASE}/${board.embedId}`;
   const backUrl  = websiteUrl || 'https://boards.solutions';
   const typeName = { blog:'Blog', affiliate:'Empfehlung', review:'Review', faq:'FAQ' }[board.type] || board.type;
@@ -928,9 +936,9 @@ function renderBoardPage(board, websiteUrl) {
 <meta property="og:title" content="${escHtml(title)}">
 <meta property="og:description" content="${escHtml(desc)}">
 <meta property="og:url" content="${escHtml(boardUrl)}">
-${img?`<meta property="og:image" content="${escHtml(img)}">
+${ogImg?`<meta property="og:image" content="${escHtml(ogImg)}">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="${escHtml(img)}">`:`<meta name="twitter:card" content="summary">`}
+<meta name="twitter:image" content="${escHtml(ogImg)}">`:`<meta name="twitter:card" content="summary">`}
 <meta name="twitter:title" content="${escHtml(title)}">
 <meta name="twitter:description" content="${escHtml(desc)}">
 <script type="application/ld+json">${jsonLd}</script>
