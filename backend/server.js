@@ -1059,10 +1059,12 @@ app.get('/board/:slug', async (req, res) => {
 
 app.get('/sitemap.xml', async (_req, res) => {
   try {
-    const result = await db.execute("SELECT embedId, updatedAt FROM boards WHERE status = 'published' ORDER BY updatedAt DESC");
-    const urls = result.rows.map(r =>
-      `  <url><loc>https://api.fuerst-software.com/board/${r.embedId}</loc><lastmod>${(r.updatedAt||'').slice(0,10)||new Date().toISOString().slice(0,10)}</lastmod><changefreq>weekly</changefreq></url>`
-    ).join('\n');
+    const result = await db.execute("SELECT slug, embedId, updatedAt FROM boards WHERE status = 'published' ORDER BY updatedAt DESC");
+    const urls = result.rows.map(r => {
+      const path = r.slug || r.embedId;
+      const date = (r.updatedAt||'').slice(0,10) || new Date().toISOString().slice(0,10);
+      return `  <url><loc>https://api.fuerst-software.com/board/${path}</loc><lastmod>${date}</lastmod><changefreq>weekly</changefreq></url>`;
+    }).join('\n');
     res.setHeader('Content-Type', 'application/xml; charset=utf-8');
     res.setHeader('Cache-Control', 'public, max-age=3600');
     res.send(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>`);
