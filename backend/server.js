@@ -66,6 +66,7 @@ function boardFromRow(row) {
     ...parsed,
     id: row.id,
     embedId: row.embedId,
+    slug: row.slug || '',
     userId: row.userId,
     type: row.type,
     status: row.status,
@@ -75,6 +76,28 @@ function boardFromRow(row) {
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,
   };
+}
+
+function toSlug(str) {
+  return (str || '')
+    .replace(/[äÄ]/g,'ae').replace(/[öÖ]/g,'oe').replace(/[üÜ]/g,'ue').replace(/ß/g,'ss')
+    .replace(/[^\w\s-]/g,'').trim().toLowerCase()
+    .replace(/[\s_]+/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'')
+    .slice(0, 80);
+}
+
+async function generateUniqueSlug(name, excludeId = '') {
+  const base = toSlug(name) || 'board';
+  let slug = base;
+  let n = 2;
+  while (true) {
+    const existing = await db.execute({
+      sql: 'SELECT id FROM boards WHERE slug = ? AND id != ?',
+      args: [slug, excludeId],
+    });
+    if (!existing.rows.length) return slug;
+    slug = `${base}-${n++}`;
+  }
 }
 
 function boardToRow(board) {
@@ -290,11 +313,12 @@ app.post('/api/boards', auth, async (req, res) => {
       clicks: req.body.clicks || 0,
     };
     const row = boardToRow(board);
+    const slug = await generateUniqueSlug(row.boardName, row.id);
 
     await db.execute({
-      sql: `INSERT INTO boards (id, embedId, userId, type, status, boardName, data, views, clicks, createdAt, updatedAt)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      args: [row.id, row.embedId, row.userId, row.type, row.status, row.boardName, row.data, row.views, row.clicks, row.createdAt, row.updatedAt],
+      sql: `INSERT INTO boards (id, embedId, userId, type, status, boardName, slug, data, views, clicks, createdAt, updatedAt)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      args: [row.id, row.embedId, row.userId, row.type, row.status, row.boardName, slug, row.data, row.views, row.clicks, row.createdAt, row.updatedAt],
     });
 
     const result = await db.execute({ sql: 'SELECT * FROM boards WHERE id = ?', args: [row.id] });
@@ -329,13 +353,20 @@ app.put('/api/boards/:id', auth, async (req, res) => {
     if (!existing.rows.length) return res.status(404).json({ error: 'Board nicht gefunden' });
 
     const ts = now();
-    const merged = { ...boardFromRow(existing.rows[0]), ...req.body, updatedAt: ts };
+    const old = boardFromRow(existing.rows[0]);
+    const merged = { ...old, ...req.body, updatedAt: ts };
     const row = boardToRow(merged);
 
+    // Regenerate slug if board name changed
+    const nameChanged = row.boardName !== old.boardName;
+    const slug = nameChanged || !old.slug
+      ? await generateUniqueSlug(row.boardName, req.params.id)
+      : old.slug;
+
     await db.execute({
-      sql: `UPDATE boards SET type = ?, status = ?, boardName = ?, data = ?, views = ?, clicks = ?, updatedAt = ?
+      sql: `UPDATE boards SET type = ?, status = ?, boardName = ?, slug = ?, data = ?, views = ?, clicks = ?, updatedAt = ?
             WHERE id = ? AND userId = ?`,
-      args: [row.type, row.status, row.boardName, row.data, row.views, row.clicks, row.updatedAt, req.params.id, req.user.id],
+      args: [row.type, row.status, row.boardName, slug, row.data, row.views, row.clicks, row.updatedAt, req.params.id, req.user.id],
     });
 
     const result = await db.execute({ sql: 'SELECT * FROM boards WHERE id = ?', args: [req.params.id] });
@@ -399,11 +430,12 @@ app.post('/api/boards/:id/duplicate', auth, async (req, res) => {
       clicks: 0,
     };
     const row = boardToRow(copy);
+    const copySlug = await generateUniqueSlug(row.boardName, row.id);
 
     await db.execute({
-      sql: `INSERT INTO boards (id, embedId, userId, type, status, boardName, data, views, clicks, createdAt, updatedAt)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      args: [row.id, row.embedId, row.userId, row.type, row.status, row.boardName, row.data, row.views, row.clicks, row.createdAt, row.updatedAt],
+      sql: `INSERT INTO boards (id, embedId, userId, type, status, boardName, slug, data, views, clicks, createdAt, updatedAt)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      args: [row.id, row.embedId, row.userId, row.type, row.status, row.boardName, copySlug, row.data, row.views, row.clicks, row.createdAt, row.updatedAt],
     });
 
     res.status(201).json(copy);
@@ -847,15 +879,6 @@ function textToHtmlBlocks(text) {
     .map(p => `<p>${escHtml(p.replace(/\n/g,' '))}</p>`).join('');
 }
 
-function toBoardSlug(name, embedId) {
-  const slug = (name || '')
-    .replace(/[äÄ]/g,'ae').replace(/[öÖ]/g,'oe').replace(/[üÜ]/g,'ue').replace(/ß/g,'ss')
-    .replace(/[^\w\s-]/g,'').trim().toLowerCase()
-    .replace(/[\s_]+/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'')
-    .slice(0, 60);
-  return slug ? `${slug}-${embedId}` : embedId;
-}
-
 function renderBoardPage(board, websiteUrl) {
   const BOARD_BASE = 'https://api.fuerst-software.com/board';
   const title = board.type === 'faq'
@@ -879,7 +902,7 @@ function renderBoardPage(board, websiteUrl) {
   // For OG/Twitter: must be a real URL
   const ogImg      = isRealUrl(rawImg) ? rawImg : isRealUrl(thumbImg) ? thumbImg : '';
   const img        = displayImg; // kept for template compatibility
-  const boardUrl = `${BOARD_BASE}/${toBoardSlug(title, board.embedId)}`;
+  const boardUrl = `${BOARD_BASE}/${board.slug || board.embedId}`;
   const backUrl  = websiteUrl || 'https://boards.solutions';
   const typeName = { blog:'Blog', affiliate:'Empfehlung', review:'Review', faq:'FAQ' }[board.type] || board.type;
 
@@ -999,16 +1022,29 @@ ul{margin:8px 0 0 18px}li{margin-bottom:4px;font-size:.9rem;color:#374151}
 
 app.get('/board/:slug', async (req, res) => {
   try {
-    // Slug format: "board-name-here-embedId" — embedId is the last hyphen-segment
-    // Also supports plain embedId for backward compat (old shared links)
     const slug = req.params.slug;
-    const parts = slug.split('-');
-    const embedId = parts[parts.length - 1];
 
-    const result = await db.execute({
-      sql: "SELECT b.*, u.websiteUrl FROM boards b JOIN users u ON b.userId = u.id WHERE b.embedId = ? AND b.status = 'published'",
-      args: [embedId],
+    // 1. Lookup by slug
+    let result = await db.execute({
+      sql: "SELECT b.*, u.websiteUrl FROM boards b JOIN users u ON b.userId = u.id WHERE b.slug = ? AND b.status = 'published'",
+      args: [slug],
     });
+
+    // 2. Fallback: old links that are plain embedIds or slug-embedId format
+    if (!result.rows.length) {
+      const embedId = slug.split('-').pop();
+      result = await db.execute({
+        sql: "SELECT b.*, u.websiteUrl FROM boards b JOIN users u ON b.userId = u.id WHERE b.embedId = ? AND b.status = 'published'",
+        args: [embedId],
+      });
+      // If found via embedId and board now has a slug, redirect to canonical URL
+      if (result.rows.length) {
+        const board = boardFromRow(result.rows[0]);
+        if (board.slug && board.slug !== slug) {
+          return res.redirect(301, `/board/${board.slug}`);
+        }
+      }
+    }
     if (!result.rows.length) return res.status(404).send('<h1>Board nicht gefunden</h1>');
     const row = result.rows[0];
     const board = boardFromRow(row);
@@ -1076,6 +1112,18 @@ app.use((_req, res) => {
 
 await initDb();
 await seedAdmin();
+
+// Generate slugs for existing boards that don't have one yet
+(async () => {
+  try {
+    const rows = await db.execute("SELECT id, boardName FROM boards WHERE slug IS NULL OR slug = ''");
+    for (const row of rows.rows) {
+      const slug = await generateUniqueSlug(row.boardName, row.id);
+      await db.execute({ sql: 'UPDATE boards SET slug = ? WHERE id = ?', args: [slug, row.id] });
+    }
+    if (rows.rows.length) console.log(`✅ Slugs generiert für ${rows.rows.length} bestehende Boards`);
+  } catch (e) { console.error('Slug migration error:', e); }
+})();
 
 app.listen(PORT, () => {
   console.log(`📡 boards.solutions backend running on port ${PORT}`);

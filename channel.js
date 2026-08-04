@@ -673,17 +673,8 @@
     return u.toString();
   }
 
-  function toBoardSlug(name, embedId) {
-    const slug = (name || '')
-      .replace(/[äÄ]/g,'ae').replace(/[öÖ]/g,'oe').replace(/[üÜ]/g,'ue').replace(/ß/g,'ss')
-      .replace(/[^\w\s-]/g,'').trim().toLowerCase()
-      .replace(/[\s_]+/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'')
-      .slice(0, 60);
-    return slug ? `${slug}-${embedId}` : embedId;
-  }
-
-  function getShareUrl(embedId, boardName) {
-    return `https://api.fuerst-software.com/board/${toBoardSlug(boardName, embedId)}`;
+  function getShareUrl(embedId, boardName, slug) {
+    return `https://api.fuerst-software.com/board/${slug || embedId}`;
   }
 
   function openModal(b, triggerBtn) {
@@ -782,7 +773,7 @@
 
     const shareIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>`;
     const checkIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`;
-    const shareUrl  = b.embedId ? getShareUrl(b.embedId, b.boardName || b.title || b.productName || b.faqTitle || '') : '';
+    const shareUrl  = b.embedId ? getShareUrl(b.embedId, b.boardName || '', b.slug || '') : '';
 
     // Hero image block
     const heroHtml = img ? `
@@ -1000,7 +991,7 @@
         <h3>${esc(b.boardName || b.title || 'Board')}</h3>
       </div>`;
     }
-    const shareBtn = b.embedId ? `<button class="bs-share-btn" data-bs-embed="${esc(b.embedId)}" data-bs-name="${esc(b.boardName || b.title || b.productName || b.faqTitle || '')}" title="Link kopieren" aria-label="Link kopieren">
+    const shareBtn = b.embedId ? `<button class="bs-share-btn" data-bs-embed="${esc(b.embedId)}" data-bs-name="${esc(b.boardName || '')}" data-bs-slug="${esc(b.slug || '')}" title="Link kopieren" aria-label="Link kopieren">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
     </button>` : '';
     return `<article class="bs-card" data-bs-id="${esc(b.id)}">${inner}${shareBtn}</article>`;
@@ -1106,7 +1097,7 @@
           if (shareBtn) {
             e.stopPropagation();
             const embedId = shareBtn.dataset.bsEmbed;
-            const url = getShareUrl(embedId, shareBtn.dataset.bsName || '');
+            const url = getShareUrl(embedId, shareBtn.dataset.bsName || '', shareBtn.dataset.bsSlug || '');
             navigator.clipboard?.writeText(url).then(() => {
               shareBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`;
               setTimeout(() => { shareBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>`; }, 1500);

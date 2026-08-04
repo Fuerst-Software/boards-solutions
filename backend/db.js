@@ -6,6 +6,9 @@ const db = createClient({
 });
 
 export async function initDb() {
+  // Migrations for existing DBs (idempotent)
+  try { await db.execute('ALTER TABLE boards ADD COLUMN slug TEXT'); } catch {}
+
   await db.batch([
     `CREATE TABLE IF NOT EXISTS users (
       id TEXT PRIMARY KEY,
@@ -44,6 +47,7 @@ export async function initDb() {
     )`,
     `CREATE INDEX IF NOT EXISTS idx_boards_userId ON boards(userId)`,
     `CREATE INDEX IF NOT EXISTS idx_boards_embedId ON boards(embedId)`,
+    `CREATE INDEX IF NOT EXISTS idx_boards_slug ON boards(slug)`,
     `CREATE INDEX IF NOT EXISTS idx_boards_status ON boards(status)`,
     `CREATE INDEX IF NOT EXISTS idx_boards_type ON boards(type)`,
     `CREATE INDEX IF NOT EXISTS idx_areas_userId ON areas(userId)`,
