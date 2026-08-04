@@ -86,8 +86,9 @@ function toSlug(str) {
     .slice(0, 80);
 }
 
-async function generateUniqueSlug(name, excludeId = '') {
-  const base = toSlug(name) || 'board';
+async function generateUniqueSlug(boardName, excludeId = '', displayName = '') {
+  // Prefer the actual display title (title/productName/faqTitle) over the internal boardName
+  const base = toSlug(displayName || boardName) || 'board';
   let slug = base;
   let n = 2;
   while (true) {
@@ -98,6 +99,13 @@ async function generateUniqueSlug(name, excludeId = '') {
     if (!existing.rows.length) return slug;
     slug = `${base}-${n++}`;
   }
+}
+
+function getBestName(row) {
+  try {
+    const d = JSON.parse(row.data || '{}');
+    return d.title || d.productName || d.faqTitle || row.boardName || '';
+  } catch { return row.boardName || ''; }
 }
 
 function boardToRow(board) {
@@ -313,7 +321,7 @@ app.post('/api/boards', auth, async (req, res) => {
       clicks: req.body.clicks || 0,
     };
     const row = boardToRow(board);
-    const slug = await generateUniqueSlug(row.boardName, row.id);
+    const slug = await generateUniqueSlug(row.boardName, row.id, getBestName(row));
 
     await db.execute({
       sql: `INSERT INTO boards (id, embedId, userId, type, status, boardName, slug, data, views, clicks, createdAt, updatedAt)
@@ -357,10 +365,10 @@ app.put('/api/boards/:id', auth, async (req, res) => {
     const merged = { ...old, ...req.body, updatedAt: ts };
     const row = boardToRow(merged);
 
-    // Regenerate slug if board name changed
-    const nameChanged = row.boardName !== old.boardName;
+    // Regenerate slug if board name or title changed
+    const nameChanged = row.boardName !== old.boardName || getBestName(row) !== getBestName(existing.rows[0]);
     const slug = nameChanged || !old.slug
-      ? await generateUniqueSlug(row.boardName, req.params.id)
+      ? await generateUniqueSlug(row.boardName, req.params.id, getBestName(row))
       : old.slug;
 
     await db.execute({
@@ -430,7 +438,7 @@ app.post('/api/boards/:id/duplicate', auth, async (req, res) => {
       clicks: 0,
     };
     const row = boardToRow(copy);
-    const copySlug = await generateUniqueSlug(row.boardName, row.id);
+    const copySlug = await generateUniqueSlug(row.boardName, row.id, getBestName(row));
 
     await db.execute({
       sql: `INSERT INTO boards (id, embedId, userId, type, status, boardName, slug, data, views, clicks, createdAt, updatedAt)
@@ -893,21 +901,25 @@ function renderBoardPage(board, websiteUrl) {
     .slice(0, 160);
 
   const desc = (() => {
+    let raw = '';
     if (board.type === 'blog') {
-      // prefer intro, else extract plain text from first content block
-      const raw = board.intro || (() => {
+      raw = board.intro || (() => {
         if (board.blocks?.length) {
           const textBlock = board.blocks.find(b => b.type === 'text' && b.content?.trim());
           return textBlock?.content || '';
         }
         return board.content || '';
       })();
-      return cleanDesc(raw);
-    }
-    if (board.type === 'affiliate') return cleanDesc(board.description);
-    if (board.type === 'review')    return cleanDesc(board.reviewText);
-    if (board.type === 'faq')       return cleanDesc(board.faqs?.[0]?.question);
-    return '';
+    } else if (board.type === 'affiliate') raw = board.description || '';
+    else if (board.type === 'review')      raw = board.reviewText || '';
+    else if (board.type === 'faq')         raw = board.faqs?.[0]?.question || '';
+
+    const cleaned = cleanDesc(raw);
+    if (cleaned) return cleaned;
+
+    // Fallback: build description from title + tags
+    const tags = (board.tags || []).join(', ');
+    return cleanDesc(`${title}${tags ? ' – ' + tags : ''}`);
   })();
 
   // Only use real URLs for OG (base64 doesn't work for social preview)
@@ -1135,9 +1147,9 @@ await seedAdmin();
 // Generate slugs for existing boards that don't have one yet
 (async () => {
   try {
-    const rows = await db.execute("SELECT id, boardName FROM boards WHERE slug IS NULL OR slug = ''");
+    const rows = await db.execute("SELECT id, boardName, data FROM boards WHERE slug IS NULL OR slug = ''");
     for (const row of rows.rows) {
-      const slug = await generateUniqueSlug(row.boardName, row.id);
+      const slug = await generateUniqueSlug(row.boardName, row.id, getBestName(row));
       await db.execute({ sql: 'UPDATE boards SET slug = ? WHERE id = ?', args: [slug, row.id] });
     }
     if (rows.rows.length) console.log(`✅ Slugs generiert für ${rows.rows.length} bestehende Boards`);
