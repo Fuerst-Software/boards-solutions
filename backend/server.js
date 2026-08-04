@@ -847,6 +847,15 @@ function textToHtmlBlocks(text) {
     .map(p => `<p>${escHtml(p.replace(/\n/g,' '))}</p>`).join('');
 }
 
+function toBoardSlug(name, embedId) {
+  const slug = (name || '')
+    .replace(/[äÄ]/g,'ae').replace(/[öÖ]/g,'oe').replace(/[üÜ]/g,'ue').replace(/ß/g,'ss')
+    .replace(/[^\w\s-]/g,'').trim().toLowerCase()
+    .replace(/[\s_]+/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'')
+    .slice(0, 60);
+  return slug ? `${slug}-${embedId}` : embedId;
+}
+
 function renderBoardPage(board, websiteUrl) {
   const BOARD_BASE = 'https://api.fuerst-software.com/board';
   const title = board.type === 'faq'
@@ -870,7 +879,7 @@ function renderBoardPage(board, websiteUrl) {
   // For OG/Twitter: must be a real URL
   const ogImg      = isRealUrl(rawImg) ? rawImg : isRealUrl(thumbImg) ? thumbImg : '';
   const img        = displayImg; // kept for template compatibility
-  const boardUrl = `${BOARD_BASE}/${board.embedId}`;
+  const boardUrl = `${BOARD_BASE}/${toBoardSlug(title, board.embedId)}`;
   const backUrl  = websiteUrl || 'https://boards.solutions';
   const typeName = { blog:'Blog', affiliate:'Empfehlung', review:'Review', faq:'FAQ' }[board.type] || board.type;
 
@@ -988,11 +997,17 @@ ul{margin:8px 0 0 18px}li{margin-bottom:4px;font-size:.9rem;color:#374151}
 </html>`;
 }
 
-app.get('/board/:embedId', async (req, res) => {
+app.get('/board/:slug', async (req, res) => {
   try {
+    // Slug format: "board-name-here-embedId" — embedId is the last hyphen-segment
+    // Also supports plain embedId for backward compat (old shared links)
+    const slug = req.params.slug;
+    const parts = slug.split('-');
+    const embedId = parts[parts.length - 1];
+
     const result = await db.execute({
       sql: "SELECT b.*, u.websiteUrl FROM boards b JOIN users u ON b.userId = u.id WHERE b.embedId = ? AND b.status = 'published'",
-      args: [req.params.embedId],
+      args: [embedId],
     });
     if (!result.rows.length) return res.status(404).send('<h1>Board nicht gefunden</h1>');
     const row = result.rows[0];
