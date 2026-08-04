@@ -885,11 +885,28 @@ function renderBoardPage(board, websiteUrl) {
     ? (board.faqTitle || board.boardName)
     : (board.title || board.productName || board.boardName || 'Board');
 
+  const cleanDesc = raw => (raw || '')
+    .replace(/^\s*[*\-•]\s*/gm, '')   // strip bullet markers
+    .replace(/\n+/g, ' ')              // newlines → space
+    .replace(/\s{2,}/g, ' ')           // collapse spaces
+    .trim()
+    .slice(0, 160);
+
   const desc = (() => {
-    if (board.type === 'blog')      return (board.intro || board.content || '').slice(0, 160);
-    if (board.type === 'affiliate') return (board.description || '').slice(0, 160);
-    if (board.type === 'review')    return (board.reviewText || '').slice(0, 160);
-    if (board.type === 'faq')       return (board.faqs?.[0]?.question || '').slice(0, 160);
+    if (board.type === 'blog') {
+      // prefer intro, else extract plain text from first content block
+      const raw = board.intro || (() => {
+        if (board.blocks?.length) {
+          const textBlock = board.blocks.find(b => b.type === 'text' && b.content?.trim());
+          return textBlock?.content || '';
+        }
+        return board.content || '';
+      })();
+      return cleanDesc(raw);
+    }
+    if (board.type === 'affiliate') return cleanDesc(board.description);
+    if (board.type === 'review')    return cleanDesc(board.reviewText);
+    if (board.type === 'faq')       return cleanDesc(board.faqs?.[0]?.question);
     return '';
   })();
 
